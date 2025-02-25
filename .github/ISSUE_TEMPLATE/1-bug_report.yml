@@ -3,7 +3,7 @@ description: 用于报告系统中的错误 / Used to report errors in the syste
 title: "[Bug]: "
 labels: ["bug"]
 body:
-  - type: input
+  - type: markdown
     attributes:
       value: |
         **错误描述** / **Bug Description**

@@ -3,7 +3,7 @@ description: 用于不属于 Bug 报告或功能请求的问题 / For issues tha
 title: "[Other]: "
 labels: ["other"]
 body:
-  - type: input
+  - type: markdown
     attributes:
       value: |
         **问题描述** / **Issue Description**
