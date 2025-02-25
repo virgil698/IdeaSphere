@@ -3,7 +3,7 @@ description: 用于报告系统中的错误 / Used to report errors in the syste
 title: "[Bug]: "
 labels: ["bug"]
 body:
-  - type: markdown
+  - type: input
     attributes:
       value: |
         **错误描述** / **Bug Description**
@@ -18,7 +18,7 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: textarea
     id: expected-behavior
     attributes:
       label: "预期行为 / Expected Behavior"
