@@ -3,11 +3,13 @@ description: 用于不属于 Bug 报告或功能请求的问题 / For issues tha
 title: "[Other]: "
 labels: ["other"]
 body:
-  - type: markdown
+  - type: input
     attributes:
-      value: |
-        **问题描述** / **Issue Description**
-        简要描述你的问题或建议。 / A brief description of your issue or suggestion.
+      label: "问题描述 / Issue Description"
+      description: "简要描述你的问题或建议。 / A brief description of your issue or suggestion."
+      placeholder: "简要描述你的问题或建议。"
+    validations:
+      required: false
 
   - type: textarea
     id: related-links
