@@ -136,7 +136,15 @@ python app.py
 
 ## 🤝 贡献指南
 
-欢迎参与 hellobbs 的开发！如果您有任何问题或建议，可以通过以下方式联系我们：
+欢迎参与 HelloBBS 的开发，您需要通过以下方式提交你的贡献
+
+1. Fork 此仓库至自己的 GitHub 账户下
+2. 将自己账户下的仓库克隆至本地
+   `git clone https://github.com/你的用户名/hellobbs.git`
+3. 在本地仓库中进行修改并构建文档测试,无误后 push 至自己的仓库
+4. 回到此仓库,点击 Pull requests -> New pull request 发起 PR
+
+如果您有任何问题或建议，可以通过以下方式联系我们：
 
 - 提交 GitHub Issues
 - 邮箱：virgil698@231s.net
