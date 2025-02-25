@@ -1,0 +1,28 @@
+name: 其他问题 / other problems
+description: 用于不属于 Bug 报告或功能请求的问题 / For issues that are not part of a Bug report or feature request
+title: "[Other]: "
+labels: ["other"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **问题描述** / **Issue Description**
+        简要描述你的问题或建议。 / A brief description of your issue or suggestion.
+
+  - type: input
+    id: related-links
+    attributes:
+      label: "相关链接 / Related Links"
+      description: "如果有相关链接，请提供。 / If there are any related links, please provide them."
+      placeholder: "粘贴链接..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: "附加信息 / Additional Information"
+      description: "其他可能有用的信息。 / Any other information that might be useful."
+      placeholder: "输入附加信息..."
+    validations:
+      required: false

@@ -1,0 +1,78 @@
+name: Bug 报告 / Bug report
+description: 用于报告系统中的错误 / Used to report errors in the system
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **错误描述** / **Bug Description**
+        简要描述错误现象。 / A brief description of the error.
+
+  - type: input
+    id: reproduce-steps
+    attributes:
+      label: "重现步骤 / Steps to Reproduce"
+      description: "请详细描述重现错误的步骤。 / Please describe the steps to reproduce the error."
+      placeholder: "1. 第一步 / Step 1\n2. 第二步 / Step 2\n3. 第三步 / Step 3"
+    validations:
+      required: true
+
+  - type: input
+    id: expected-behavior
+    attributes:
+      label: "预期行为 / Expected Behavior"
+      description: "描述你期望发生的行为。 / Describe what you expected to happen."
+      placeholder: "描述预期行为..."
+    validations:
+      required: true
+
+  - type: input
+    id: actual-behavior
+    attributes:
+      label: "实际行为 / Actual Behavior"
+      description: "描述实际发生的行为。 / Describe what actually happened."
+      placeholder: "描述实际行为..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "截图 / Screenshots"
+      description: "如果可能，请提供截图或录屏。 / If possible, provide screenshots or screen recordings."
+      placeholder: "粘贴截图链接或描述..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: environment
+    attributes:
+      label: "环境信息 / Environment Information"
+      description: "请勾选适用的选项。 / Please check the applicable options."
+      options:
+        - label: "操作系统: Windows"
+          required: true
+        - label: "操作系统: macOS"
+          required: true
+        - label: "操作系统: Linux"
+          required: true
+        - label: "浏览器: Chrome"
+          required: true
+        - label: "浏览器: Firefox"
+          required: true
+        - label: "Python 版本: 3.9"
+          required: true
+        - label: "Hellobbs 版本: v1.0.0"
+          required: true
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: "附加信息 / Additional Information"
+      description: "其他可能有用的信息。 / Any other information that might be useful."
+      placeholder: "输入附加信息..."
+    validations:
+      required: false
