@@ -92,8 +92,8 @@ python app.py
 
 欢迎参与 hellobbs 的开发！如果您有任何问题或建议，可以通过以下方式联系我们：
 
-提交 GitHub Issues
-邮箱：virgil698@231s.net
+- 提交 GitHub Issues
+- 邮箱：virgil698@231s.net
 
 ## 许可证
 
