@@ -4,14 +4,14 @@
   主打简单实用易于配置的论坛程序，基于python3完成
 </p>
 
-<p>
+<div align="center">
 [![GitHub stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/network)
 [![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-1.1.4-blueviolet)](https://pypi.org/project/Flask/)
 [![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange)](https://www.sqlite.org/index.html)
-</p>
+</div>
 
 hellobbs 是一款基于 Python 3.11 和 Flask 框架开发的轻量级论坛程序，具有简单易用、易于配置、性能高效等特点。
 
