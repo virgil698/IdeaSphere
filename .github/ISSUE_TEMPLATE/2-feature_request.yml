@@ -3,11 +3,14 @@ description: 用于提议新功能或改进 / Used to suggest new features or im
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
-  - type: markdown
+  - type: input
+    id: miaoshu-2
     attributes:
-      value: |
-        **功能描述** / **Feature Description**
-        简要描述你希望添加的功能。 / A brief description of the feature you want to add.
+      label: "功能描述 / Feature Description"
+      description: "简要描述你希望添加的功能。 / A brief description of the feature you want to add."
+      placeholder: "简要描述你希望添加的功能。"
+    validations:
+      required: true
 
   - type: input
     id: motivation
