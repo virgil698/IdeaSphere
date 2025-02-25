@@ -17,6 +17,35 @@ hellobbs 是一款基于 Python 3.11 和 Flask 框架开发的轻量级论坛程
 - **轻量级**：基于 Flask 框架开发，性能高效。
 - **模块化设计**：代码结构清晰，方便扩展和维护。
 
+## 🌟 实现功能
+
+| 任务大概 | 目前情况 | 实现版本  |
+|---|---|---|
+| **🔌 登录** | ✅ | v0.1.0 |
+| **⌨️ 注册** | ✅ | v0.1.0 |
+| **🔐 发帖** | ✅ | v0.1.0 |
+| **🎈 超级管理员**  | ✅ | v0.1.0 |
+| **🖼 版主管理员** | ✅ | v0.1.0 |
+| **👤 点赞** | ✅ | v0.1.0 |
+| **🧱 举报系统** | ✅ | v0.1.0 |
+| **📦 在线用户** | ✅ | v0.1.0 |
+| **⭐ 帖子回复** | ✅ | v0.1.0 |
+| **⭐ 内容回复** | 🚧 |        |
+| **🔬 内容反应** | 🚧 |        |
+| **🚀 搜索** | 🚧 |        |
+| **🚀 私信** | ⏳ |        |
+| **🚀 模板** | ⏳ |        |
+| **🚀 插件** | ⏳ |        |
+| **🚀 SEO优化** | ⏳ |        |
+
+以下是图例的翻译，供您参考：
+
+- ✅：任务已完成。太棒了！🎉
+- 🚧：任务正在进行中。我们正在努力！💪
+- ⏳：任务即将开始。令人期待的事情即将到来！🌠
+
+
+
 ## 📚 项目结构
 ```bash
 hellobbs/
@@ -99,6 +128,12 @@ python app.py
 
 - 提交 GitHub Issues
 - 邮箱：virgil698@231s.net
+
+[![Contrib](https://contrib.rocks/image?repo=virgil698/hellobbs)](https://github.com/virgil698/hellobbs/graphs/contributors)
+
+## ⭐ 历史图
+
+[![Stargazers over time](https://starchart.cc/virgil698/hellobbs.svg?variant=adaptive)](https://starchart.cc/virgil698/hellobbs)
 
 ## 😊 免责声明
 
