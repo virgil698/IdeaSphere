@@ -1,3 +1,6 @@
+<br />
+
+<div align="center">
 <h3 align="center">HelloBBS</h3>
 
 <p align="center">
@@ -10,6 +13,8 @@
 [![Python version](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-1.1.4-blueviolet)](https://pypi.org/project/Flask/)
 [![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange)](https://www.sqlite.org/index.html)
+
+</div>
 
 hellobbs 是一款基于 Python 3.11 和 Flask 框架开发的轻量级论坛程序，具有简单易用、易于配置、性能高效等特点。
 
