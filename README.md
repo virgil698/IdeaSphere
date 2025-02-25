@@ -77,11 +77,8 @@ hellobbs/
 │   ├── index.html              # 首页
 │   ├── install.html            # 安装页面
 │   ├── login.html              # 登录页面
-│   ├── online_users.html       # 在线用户页面
 │   ├── post.html               # 发帖页面
 │   ├── register.html           # 注册页面
-│   ├── report_comment.html     # 举报评论页面
-│   ├── report_post.html        # 举报帖子页面
 │   └── view_post.html          # 查看帖子页面
 ├── app.py                      # 主程序入口
 ├── config.yml                  # 配置文件
