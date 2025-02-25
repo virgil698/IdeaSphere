@@ -1,21 +1,23 @@
-# hellobbs: 一个简单实用的论坛程序
+<h3 align="center">HelloBBS</h3>
 
-[![GitHub stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/network)
-[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/release/python-3110/)
-[![Flask](https://img.shields.io/badge/Flask-1.1.4-blueviolet)](https://pypi.org/project/Flask/)
-[![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange)](https://www.sqlite.org/index.html)
+<p align="center">
+  主打简单实用易于配置的论坛程序，基于python3完成
+</p>
 
-`hellobbs` 是一个基于 Python 3.11 和 Flask 框架开发的简单实用的论坛程序。它易于配置，适合快速搭建一个轻量级的论坛系统。默认使用 SQLite3 数据库存储数据（适用于测试环境），正式环境推荐使用 MariaDB。
+hellobbs 是一款基于 Python 3.11 和 Flask 框架开发的轻量级论坛程序，具有简单易用、易于配置、性能高效等特点。
 
-## 项目特点
+## 📖 项目介绍
+
+`hellobbs` 是一个基于 Python 3.11 和 Flask 框架开发的简单实用的论坛程序。它易于配置，适合快速搭建一个轻量级的论坛系统。
+
+## 🌟 核心特点
+
 - **简单易用**：界面简洁，功能实用，易于上手。
 - **易于配置**：通过 `config.yml` 文件即可完成大部分配置。
 - **轻量级**：基于 Flask 框架开发，性能高效。
 - **模块化设计**：代码结构清晰，方便扩展和维护。
 
-## 项目结构
+## 📚 项目结构
 ```bash
 hellobbs/
 ├── instance/
@@ -37,65 +39,74 @@ hellobbs/
 └── requirements.txt            # 依赖文件
 ```
 
-## 安装指南
+## 🛠️ 安装指南
 
-### 1. 环境准备
-- **Python 版本**：3.11
-- **依赖安装**：
+1. 环境要求
+
+- **Python 版本**：3.11 或更高
+- **操作系统**：Windows, Linux, macOS
+
+2. 下载项目
+
 ```bash
-  pip install -r requirements.txt
+git clone https://github.com/virgil698/hellobbs.git
+cd hellobbs
 ```
 
-### 2. 配置文件
+3. 安装依赖
 
-修改 config.yml 文件以适配您的环境：
-
-```yaml
-PORT: 5000  # 程序运行端口
+```bash
+pip install -r requirements.txt
 ```
-### 3. 数据库
-- 测试环境：默认使用 SQLite3，数据库文件为 instance/forum.db。
-- 正式环境：推荐使用 MariaDB，需自行配置数据库连接信息。
-### 4. 启动程序
 
-运行以下命令启动论坛：
+4. 配置参数
+
+修改 `config.yml` 文件以适配您的环境：
+
+```bash
+port: 5000  # 程序运行端口
+```
+
+5. 启动程序
 
 ```bash
 python app.py
 ```
 
-默认访问地址为：http://localhost:5000
+默认访问地址为：`http://localhost:5000`
 
-## 使用说明
+## 🎯 使用说明
 
-### 1. 安装向导
+1. 安装向导
 
-首次访问论坛时，会自动进入安装向导页面（install.html），按照提示完成安装。
+首次访问论坛时，会自动进入安装向导页面（`install.html`），按照提示完成安装。
 
-### 2. 用户注册与登录
+2. 用户注册与登录
 
-用户可以通过 /register 页面注册新账号。
+用户可以通过 `/registe`r 页面注册新账号。注册完成后，使用 `/login` 页面登录。
 
-注册完成后，使用 /login 页面登录。
+3. 发布帖子与评论
 
-### 3. 发帖与评论
+登录后，用户可以访问 `/post` 页面发布新帖子。在帖子详情页（`/view_post`），用户可以发表评论。
 
-登录后，用户可以访问 /post 页面发布新帖子。
+4. 管理后台
 
-在帖子详情页（/view_post），用户可以发表评论。
+管理员可以通过 `/admin` 页面管理用户、帖子和评论。
 
-### 4. 管理后台
-
-管理员可以通过 /admin 页面管理用户、帖子和评论。
-
-## 贡献指南
+## 🤝 贡献指南
 
 欢迎参与 hellobbs 的开发！如果您有任何问题或建议，可以通过以下方式联系我们：
 
 - 提交 GitHub Issues
 - 邮箱：virgil698@231s.net
 
-## 许可证
+## 😊 免责声明
+
+本项目仅供学习和参考使用。在使用过程中，请确保遵守相关法律法规和网站服务条款。
+
+## 🎫 许可证
+
+本项目采用 `MIT License` 许可证。有关详细信息，请参阅 `LICENSE` 文件。
 
 ```
 MIT License
