@@ -4,10 +4,13 @@ title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown
+    id: miaoshu-1
     attributes:
-      value: |
-        **错误描述** / **Bug Description**
-        简要描述错误现象。 / A brief description of the error.
+      label: "错误描述 / Bug Description"
+      description: "简要描述错误现象。 / A brief description of the error."
+      placeholder: "简要描述错误现象。"
+    validations:
+      required: true
 
   - type: input
     id: reproduce-steps
