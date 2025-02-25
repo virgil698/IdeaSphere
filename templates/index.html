@@ -7,9 +7,11 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ post.title }}</h5>
-                <p class="card-text">{{ remove_markdown(post.content[:150]) }}</p> <!-- 过滤 Markdown -->
+                <p class="card-text">{{ remove_markdown(post.content[:150]) }}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">查看详情</a>
+                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> 查看详情
+                    </a>
                     <span class="text-success">点赞: {{ post.like_count }}</span>
                 </div>
             </div>
@@ -22,7 +24,9 @@
 
 {% if 'user_id' in session %}
 <div class="text-center mt-5">
-    <a href="{{ url_for('create_post') }}" class="btn btn-success btn-lg">创建新帖子</a>
+    <a href="{{ url_for('create_post') }}" class="btn btn-success btn-lg">
+        <i class="fas fa-plus"></i> 创建新帖子
+    </a>
 </div>
 {% endif %}
 {% endblock %}

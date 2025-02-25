@@ -11,15 +11,21 @@
                 <form method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="mb-3">
-                        <label for="username" class="form-label">用户名</label>
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user"></i> 用户名
+                        </label>
                         <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">密码</label>
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i> 密码
+                        </label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success btn-block">注册</button>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fas fa-user-plus"></i> 注册
+                        </button>
                     </div>
                 </form>
             </div>
