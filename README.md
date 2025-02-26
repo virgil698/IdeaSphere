@@ -7,12 +7,13 @@
   主打简单实用易于配置的论坛程序，基于python3完成
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/network)
-[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/release/python-3110/)
-[![Flask](https://img.shields.io/badge/Flask-1.1.4-blueviolet)](https://pypi.org/project/Flask/)
-[![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange)](https://www.sqlite.org/index.html)
+[![Stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/stargazers)  
+[![Issues](https://img.shields.io/github/issues/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/issues)
+[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/network)
+[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
+[![Python version](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
+[![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
+[![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange?style=for-the-badge)](https://www.sqlite.org/index.html)
 
 </div>
 
