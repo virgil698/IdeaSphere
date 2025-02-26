@@ -8,8 +8,8 @@ from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 import re
 
+from bleach import clean
 from bs4 import BeautifulSoup
-from html_sanitizer import Sanitizer
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
@@ -100,17 +100,16 @@ def initialize_database(app):
 
 # Markdown转换 + XSS过滤
 def convert_markdown_to_html(markdown_text):
-    # 使用 markdown 库的安全模式
-    html = markdown.markdown(markdown_text, safe_mode='escape')
+    # 使用 markdown 库将 Markdown 转换为 HTML
+    html = markdown.markdown(markdown_text)
 
-    # 定义允许的标签和属性
+    # 使用 bleach 清洗 HTML
     allowed_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'hr', 'br', 'div',
                     'span', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'blockquote',
                     'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td']
     allowed_attributes = {
         'a': ['href', 'title', 'target'],
         'img': ['src', 'alt', 'width', 'height'],
-        '*': ['class', 'style'],
         'div': ['class', 'style'],
         'span': ['class', 'style'],
         'table': ['class', 'style'],
@@ -122,12 +121,12 @@ def convert_markdown_to_html(markdown_text):
         'blockquote': ['class', 'style']
     }
 
-    # 使用 html-sanitizer 进行清理
-    sanitizer = Sanitizer(
+    sanitized_html = clean(
+        html,
         tags=allowed_tags,
-        attributes=allowed_attributes
+        attributes=allowed_attributes,
+        strip=True
     )
-    sanitized_html = sanitizer.sanitize(html)
 
     # 使用 BeautifulSoup 再次清理和一致化
     soup = BeautifulSoup(sanitized_html, 'html.parser')
@@ -138,13 +137,13 @@ def convert_markdown_to_html(markdown_text):
 
 def remove_markdown(text):
     text = re.sub(r'\*\*', '', text)  # 去除粗体
-    text = re.sub(r'\*', '', text)  # 去除斜体
-    text = re.sub(r'`', '', text)  # 去除代码块
-    text = re.sub(r'#', '', text)  # 去除标题
+    text = re.sub(r'\*', '', text)    # 去除斜体
+    text = re.sub(r'`', '', text)     # 去除代码块
+    text = re.sub(r'#', '', text)     # 去除标题
     text = re.sub(r'\n-{3,}', '', text)  # 去除水平线
     text = re.sub(r'\n={3,}', '', text)  # 去除水平线
     text = re.sub(r'\n\* \n', '', text)  # 去除列表
-    text = re.sub(r'\n\d\.', '', text)  # 去除有序列表
+    text = re.sub(r'\n\d\.', '', text)   # 去除有序列表
     text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # 去除图片
     return text
 
@@ -160,7 +159,7 @@ def before_request():
             return redirect(url_for('install'))
 
     if 'user_id' in session:
-        user = User.query.get(session['user_id'])
+        user = db.session.get(User, session['user_id'])
         if user:
             g.user = user
             g.role = user.role
@@ -316,7 +315,6 @@ def view_post(post_id):
         flash('评论添加成功！', 'success')
         return redirect(url_for('view_post', post_id=post.id))
 
-    # 使用 SQLAlchemy 的 ORM 查询过滤评论
     comments = db.session.query(Comment).filter(
         Comment.post_id == post.id,
         Comment.deleted == False
@@ -340,7 +338,7 @@ def report_post(post_id):
     if not g.user:
         return jsonify({'success': False, 'message': '请登录后再进行举报'}), 403
 
-    reason = request.form.get('reason', '')
+    reason = request.json.get('reason', '')
     if not reason:
         return jsonify({'success': False, 'message': '举报原因不能为空'}), 400
 
@@ -359,7 +357,7 @@ def report_comment(comment_id):
     if not g.user:
         return jsonify({'success': False, 'message': '请登录后再进行举报'}), 403
 
-    reason = request.form.get('reason', '')
+    reason = request.json.get('reason', '')
     if not reason:
         return jsonify({'success': False, 'message': '举报原因不能为空'}), 400
 
@@ -371,6 +369,42 @@ def report_comment(comment_id):
     db.session.add(new_report)
     db.session.commit()
     return jsonify({'success': True, 'message': '举报成功！'}), 200
+
+
+@app.route('/like_post/<int:post_id>', methods=['POST'])
+def like_post(post_id):
+    if not g.user:
+        return jsonify({'success': False, 'message': '未登录'})
+
+    existing_like = Like.query.filter_by(user_id=g.user.id, post_id=post_id).first()
+    if existing_like:
+        return jsonify({'success': False, 'message': '您已经点过赞了'})
+
+    new_like = Like(user_id=g.user.id, post_id=post_id)
+    db.session.add(new_like)
+    db.session.query(Post).filter_by(id=post_id).update({'like_count': Post.like_count + 1})
+    db.session.commit()
+
+    post = db.session.get(Post, post_id)
+    return jsonify({'success': True, 'like_count': post.like_count})
+
+
+@app.route('/like_comment/<int:comment_id>', methods=['POST'])
+def like_comment(comment_id):
+    if not g.user:
+        return jsonify({'success': False, 'message': '未登录'})
+
+    existing_like = Like.query.filter_by(user_id=g.user.id, comment_id=comment_id).first()
+    if existing_like:
+        return jsonify({'success': False, 'message': '您已经点过赞了'})
+
+    new_like = Like(user_id=g.user.id, comment_id=comment_id)
+    db.session.add(new_like)
+    db.session.query(Comment).filter_by(id=comment_id).update({'like_count': Comment.like_count + 1})
+    db.session.commit()
+
+    comment = db.session.get(Comment, comment_id)
+    return jsonify({'success': True, 'like_count': comment.like_count})
 
 
 @app.route('/upgrade_user/<int:user_id>')
@@ -434,42 +468,6 @@ def handle_report(report_id):
         report.resolved_by = g.user.id
         db.session.commit()
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})
-
-
-@app.route('/like_post/<int:post_id>', methods=['POST'])
-def like_post(post_id):
-    if not g.user:
-        return jsonify({'success': False, 'message': '未登录'})
-
-    existing_like = Like.query.filter_by(user_id=g.user.id, post_id=post_id).first()
-    if existing_like:
-        return jsonify({'success': False, 'message': '您已经点过赞了'})
-
-    new_like = Like(user_id=g.user.id, post_id=post_id)
-    db.session.add(new_like)
-    db.session.query(Post).filter_by(id=post_id).update({'like_count': Post.like_count + 1})
-    db.session.commit()
-
-    post = Post.query.get(post_id)
-    return jsonify({'success': True, 'like_count': post.like_count})
-
-
-@app.route('/like_comment/<int:comment_id>', methods=['POST'])
-def like_comment(comment_id):
-    if not g.user:
-        return jsonify({'success': False, 'message': '未登录'})
-
-    existing_like = Like.query.filter_by(user_id=g.user.id, comment_id=comment_id).first()
-    if existing_like:
-        return jsonify({'success': False, 'message': '您已经点过赞了'})
-
-    new_like = Like(user_id=g.user.id, comment_id=comment_id)
-    db.session.add(new_like)
-    db.session.query(Comment).filter_by(id=comment_id).update({'like_count': Comment.like_count + 1})
-    db.session.commit()
-
-    comment = Comment.query.get(comment_id)
-    return jsonify({'success': True, 'like_count': comment.like_count})
 
 
 if __name__ == '__main__':

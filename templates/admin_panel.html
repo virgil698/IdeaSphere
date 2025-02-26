@@ -112,7 +112,24 @@ function handleReport(reportId, status) {
         return;
     }
     if (confirm('确定要处理该举报吗？')) {
-        window.location.href = `/handle_report/${reportId}?status=${status}`;
+        fetch(`/handle_report/${reportId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // 刷新页面以更新举报状态
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
 </script>

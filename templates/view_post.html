@@ -30,6 +30,15 @@
         max-width: 100%;
         height: auto;
     }
+
+    .like-count {
+        color: #2AFD6D;
+    }
+
+    .comment-like-count {
+        color: #FFF120; /* 金黄色 */
+        font-weight: bold;
+    }
 </style>
 {% endblock %}
 
@@ -70,11 +79,14 @@
                     {% if not comment.deleted %}
                         <div class="media mb-4">
                             <div class="media-body">
-                                <h6 class="mt-0">{{ comment.author.username }} 说：</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mt-0">{{ comment.author.username }} 说：</h6>
+                                    <span class="text-success comment-like-count">点赞: {{ comment.like_count }}</span>
+                                </div>
                                 <div class="markdown-content">
                                     {{ comment.html_content | safe }}
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center mt-2">
                                     {% if g.user %}
                                         <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}')">
                                             <i class="fas fa-thumbs-up"></i> 点赞
@@ -106,19 +118,102 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.Prism = window.Prism || {};
-        window.Prism.manual = true;
-        Prism.highlightAll();
+// 定义点赞函数
+function incrementLike(postId) {
+    fetch(`/like_post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 更新点赞计数
+            const likeCountElement = document.querySelector('.like-count');
+            likeCountElement.textContent = `点赞: ${data.like_count}`;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-        document.querySelectorAll('.markdown-content a').forEach(link => {
-            if (link.href && !link.href.startsWith(window.location.origin)) {
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-            }
-        });
-    });
+// 定义举报帖子函数
+function reportPost(postId) {
+    const reason = prompt('请输入举报原因');
+    if (!reason) {
+        alert('举报原因不能为空');
+        return;
+    }
 
-    // JavaScript 函数保持不变
+    fetch(`/report_post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reason })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// 定义评论点赞函数
+function incrementLikeComment(commentId) {
+    fetch(`/like_comment/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 更新评论的点赞计数
+            const likeCountElement = document.querySelector(`.comment-like-count-${commentId}`);
+            likeCountElement.textContent = `点赞: ${data.like_count}`;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// 定义举报评论函数
+function reportComment(commentId) {
+    const reason = prompt('请输入举报原因');
+    if (!reason) {
+        alert('举报原因不能为空');
+        return;
+    }
+
+    fetch(`/report_comment/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reason })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
 {% endblock %}
