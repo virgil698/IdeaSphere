@@ -12,7 +12,7 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: textarea
     id: reproduce-steps
     attributes:
       label: "重现步骤 / Steps to Reproduce"
