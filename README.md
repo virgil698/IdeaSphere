@@ -13,7 +13,6 @@
 [![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
-[![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange?style=for-the-badge)](https://www.sqlite.org/index.html)
 
 </div>
 
