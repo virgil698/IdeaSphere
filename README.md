@@ -8,7 +8,6 @@
 </p>
 
 [![Stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/stargazers)  
-[![Issues](https://img.shields.io/github/issues/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/issues)
 [![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/network)
 [![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
