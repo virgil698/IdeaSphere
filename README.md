@@ -7,12 +7,11 @@
   主打简单实用易于配置的论坛程序，基于python3完成
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/network)
-[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/release/python-3110/)
-[![Flask](https://img.shields.io/badge/Flask-1.1.4-blueviolet)](https://pypi.org/project/Flask/)
-[![SQLite3](https://img.shields.io/badge/SQLite3-3.35.0-orange)](https://www.sqlite.org/index.html)
+[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/network)
+[![Stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/stargazers)  
+[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
+[![Python version](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
+[![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
 
 </div>
 
@@ -32,34 +31,34 @@
 
 | 任务大概 | 目前情况 | 实现版本  |
 |---|---|---|
-| **🔌 登录** | ✅ | v0.1.0 |
+| **⌨️ 登录** | ✅ | v0.1.0 |
 | **⌨️ 注册** | ✅ | v0.1.0 |
-| **🔐 发帖** | ✅ | v0.1.0 |
-| **🎈 超级管理员**  | ✅ | v0.1.0 |
+| **⌨️ 发帖** | ✅ | v0.1.0 |
+| **🖼 超级管理员**  | ✅ | v0.1.0 |
 | **🖼 版主管理员** | ✅ | v0.1.0 |
 | **👤 点赞** | ✅ | v0.1.0 |
 | **🧱 举报系统** | ✅ | v0.1.0 |
 | **📦 在线用户** | ✅ | v0.1.0 |
 | **⭐ 帖子回复** | ✅ | v0.1.0 |
 | **⭐ 内容回复** | 🚧 |        |
-| **🔬 内容反应** | 🚧 |        |
-| **🚀 搜索** | 🚧 |        |
+| **⭐ 内容反应** | 🚧 |        |
+| **🔬 删除帖子** | 🚧 |        |
+| **🔬 搜索** | 🚧 |        |
 | **🚀 管理面板** | 🚧 |        |
-| **🚀 Emjoy表情支持** | 🚧 |        |
-| **🚀 私信** | ⏳ |        |
-| **🚀 富文本编辑器** | ⏳ |        |
-| **🚀 帖子板块** | ⏳ |        |
-| **🚀 帖子发布时间、点赞数量排列** | ⏳ |        |
-| **🚀 回复时间、点赞数量排列** | ⏳ |        |
-| **🚀 私信系统** | ⏳ |        |
-| **🚀 站点统计** | ⏳ |        |
-| **🚀 用户自定义设置** | ⏳ |        |
-| **🚀 用户页面** | ⏳ |        |
-| **🚀 邮箱注册、重置密码** | ⏳ |        |
-| **🚀 模板** | ⏳ |        |
-| **🚀 插件** | ⏳ |        |
-| **🚀 数据安全** | ⏳ |        |
-| **🚀 SEO优化** | ⏳ |        |
+| **📦 Emjoy表情支持** | 🚧 |        |
+| **🎈 富文本编辑器** | ⏳ |        |
+| **🎈 帖子板块** | ⏳ |        |
+| **👤 帖子发布时间、点赞数量排列** | ⏳ |        |
+| **👤 回复时间、点赞数量排列** | ⏳ |        |
+| **📦 私信系统** | ⏳ |        |
+| **👤 站点统计** | ⏳ |        |
+| **📦 用户自定义设置** | ⏳ |        |
+| **📦 用户页面** | ⏳ |        |
+| **🔐 邮箱注册、重置密码** | ⏳ |        |
+| **🔌 模板** | ⏳ |        |
+| **🔌 插件** | ⏳ |        |
+| **🔐 数据安全** | ⏳ |        |
+| **🔐 SEO优化** | ⏳ |        |
 
 以下是图例的翻译，供您参考：
 
