@@ -3,15 +3,15 @@ import yaml
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, g, abort
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-import markdown
+from markdown import markdown
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 from bleach import clean
 from bs4 import BeautifulSoup
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
@@ -22,7 +22,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-# 数据库模型定义
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -84,7 +83,6 @@ class Like(db.Model):
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)
 
 
-# 配置文件读取
 def get_config():
     config_path = 'config.yml'
     if not os.path.exists(config_path):
@@ -94,29 +92,13 @@ def get_config():
         return yaml.safe_load(f)
 
 
-default_keywords = ['python', 'flask', 'markdown', 'xss', 'database', 'admin', 'moderator', 'user',
-                    'report', 'like']
-
-# 初始化数据库
 def initialize_database(app):
     with app.app_context():
         db.create_all()
-        # 初始化搜索关键词
-        if not db.session.query(SearchModel).first():
-
-            # 遍历关键词
-            for keyword in default_keywords:
-                new_keyword = SearchModel(keyword=keyword)
-                db.session.add(new_keyword)
-            db.session.commit()
 
 
-# Markdown转换 + XSS过滤
 def convert_markdown_to_html(markdown_text):
-    # 使用 markdown 库将 Markdown 转换为 HTML
-    html = markdown.markdown(markdown_text)
-
-    # 使用 bleach 清洗 HTML
+    html = markdown(markdown_text)
     allowed_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'hr', 'br', 'div',
                     'span', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'blockquote',
                     'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td']
@@ -133,38 +115,28 @@ def convert_markdown_to_html(markdown_text):
         'code': ['class', 'style'],
         'blockquote': ['class', 'style']
     }
-
-    sanitized_html = clean(
-        html,
-        tags=allowed_tags,
-        attributes=allowed_attributes,
-        strip=True
-    )
-
-    # 使用 BeautifulSoup 再次清理和一致化
+    sanitized_html = clean(html, tags=allowed_tags, attributes=allowed_attributes, strip=True)
     soup = BeautifulSoup(sanitized_html, 'html.parser')
     cleaned_html = str(soup)
-
     return cleaned_html
 
 
 def remove_markdown(text):
-    text = re.sub(r'\*\*', '', text)  # 去除粗体
-    text = re.sub(r'\*', '', text)  # 去除斜体
-    text = re.sub(r'`', '', text)  # 去除代码块
-    text = re.sub(r'#', '', text)  # 去除标题
-    text = re.sub(r'\n-{3,}', '', text)  # 去除水平线
-    text = re.sub(r'\n={3,}', '', text)  # 去除水平线
-    text = re.sub(r'\n\* \n', '', text)  # 去除列表
-    text = re.sub(r'\n\d\.', '', text)  # 去除有序列表
-    text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # 去除图片
+    text = re.sub(r'\*\*', '', text)
+    text = re.sub(r'\*', '', text)
+    text = re.sub(r'`', '', text)
+    text = re.sub(r'#', '', text)
+    text = re.sub(r'\n-{3,}', '', text)
+    text = re.sub(r'\n={3,}', '', text)
+    text = re.sub(r'\n\* \n', '', text)
+    text = re.sub(r'\n\d\.', '', text)
+    text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
     return text
 
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
 
-# 前置请求
 @app.before_request
 def before_request():
     if 'user_id' not in session:
@@ -483,26 +455,17 @@ def handle_report(report_id):
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})
 
 
-"""
-关键词数据库
-@Dev JasonHan
-"""
-# 继承一个数据库模型
 class SearchModel(db.Model):
     __tablename__ = 'search_keywords'
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(100), unique=True, nullable=False)
 
-"""
-Main Search
-@Dev JasonHan
-"""
+
 @app.route('/search/<keywords>', methods=['GET'])
 def search(keywords):
     if not keywords:
         return redirect(url_for('index'))
 
-    # 优先匹配预存关键词
     keyword_results = SearchModel.query.filter(SearchModel.keyword.ilike(f'%{keywords}%')).all()
     if keyword_results:
         return jsonify({
@@ -511,24 +474,29 @@ def search(keywords):
             'results': [k.keyword for k in keyword_results]
         })
 
-    # 全站内容匹配
     data = get_data()
-    threshold = 0.1  # 相似度阈值
+    threshold = 0.1
 
     results = {
-        '帖子标题': find_matches(data['titles'], '帖子标题', keywords, threshold),
-        '帖子内容': find_matches(data['contents'], '帖子内容', keywords, threshold),
-        '作者': find_matches(data['authors'], '作者', keywords, threshold),
-        '评论内容': find_matches(data['comments_contents'], '评论内容', keywords, threshold),
-        '评论作者': find_matches(data['comments_authors'], '评论作者', keywords, threshold)
+        '帖子标题': find_matches(data['posts'], '帖子标题', keywords, threshold),
+        '帖子内容': find_matches(data['posts'], '帖子内容', keywords, threshold),
+        '作者': find_matches(data['posts'], '作者', keywords, threshold),
+        '评论内容': find_matches(data['comments'], '评论内容', keywords, threshold),
+        '评论作者': find_matches(data['comments'], '评论作者', keywords, threshold)
     }
 
-    # 合并所有结果并按相似度排序
-    all_results = sorted(
-        [item for sublist in results.values() for item in sublist],
-        key=lambda x: x['similarity'],
-        reverse=True
-    )[:20]  # 最多返回20条结果
+    all_results = []
+    for result_type, matches in results.items():
+        for match in matches:
+            all_results.append({
+                'source': result_type,
+                'content': match['content'],
+                'similarity': match['similarity'],
+                'postId': match.get('postId'),
+                'commentId': match.get('commentId')
+            })
+
+    all_results = sorted(all_results, key=lambda x: x['similarity'], reverse=True)[:20]
 
     if all_results:
         return jsonify({
@@ -539,63 +507,52 @@ def search(keywords):
 
     return jsonify({'success': False, 'message': '未找到相关结果'})
 
-"""
-Cosine Simulator Fx
-@Dev JasonHan
-"""
+
 def consine_simulator(s1, s2):
     vectorizer = TfidfVectorizer().fit_transform([s1, s2])
     vectors = vectorizer.toarray()
     return cosine_similarity(vectors)[0, 1]
 
-"""
-查找相似
-@Dev JasonHan
-"""
-def find_matches(field_data, field_name, keywords, threshold):
+
+def find_matches(data_field, field_name, keywords, threshold):
     matches = []
-    for text in field_data:
-        if not text:  # 跳过空内容
-            continue
-        similarity = consine_simulator(keywords, text)
+    for item in data_field:
+        text = item.get('content') if field_name == '帖子内容' else item.get('title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get('content')
+        similarity = consine_simulator(keywords, text) if text else 0.0
         if similarity > threshold:
-            # 截断长文本并保留关键部分
             preview = text[:100] + "..." if len(text) > 100 else text
             matches.append({
                 'content': preview,
                 'similarity': round(similarity, 2),
-                'source': field_name
+                'source': field_name,
+                'postId': item.get('id'),
+                'commentId': item.get('commentId')
             })
-    return sorted(matches, key=lambda x: x['similarity'], reverse=True)[:5]  # 每个领域取前5个
+    return sorted(matches, key=lambda x: x['similarity'], reverse=True)[:5]
 
 
-"""
-获取数据
-@Dev JasonHan
-"""
 def get_data():
-    # 获取所有帖子数据
-    posts = db.session.query(
-        Post.title,
-        Post.content,
-        User.username.label('author_name')  # 获取用户名而不是ID
-    ).join(User, Post.author_id == User.id).all()
+    posts = Post.query.filter_by(deleted=False).all()
+    comments = Comment.query.filter_by(deleted=False).all()
 
-    # 获取所有评论数据
-    comments = db.session.query(
-        Comment.content,
-        User.username.label('comment_author')  # 获取评论者用户名
-    ).join(User, Comment.author_id == User.id).all()
+    posts_data = [{
+        'id': post.id,
+        'title': post.title,
+        'content': post.content,
+        'author': post.author.username
+    } for post in posts]
 
-    # 构建数据集
-    data = {
-        'titles': [post.title for post in posts],
-        'contents': [post.content for post in posts],
-        'authors': [post.author_name for post in posts],
-        'comments_contents': [comment.content for comment in comments],
-        'comments_authors': [comment.comment_author for comment in comments]
+    comments_data = [{
+        'id': comment.id,
+        'content': comment.content,
+        'author': comment.author.username,
+        'postId': comment.post.id
+    } for comment in comments]
+
+    return {
+        'posts': posts_data,
+        'comments': comments_data
     }
-    return data
 
 
 if __name__ == '__main__':

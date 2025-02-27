@@ -24,6 +24,78 @@
         .card:hover {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
+        /* 搜索框样式 */
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background-color: #f8f9fa;
+            padding: 0 5px;
+        }
+
+        .search-input {
+            width: 200px;
+            padding: 5px;
+            border: none;
+            border-radius: 20px;
+            cursor: text;
+            font-size: 14px;
+            color: #333;
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        .search-icon {
+            margin-right: 10px;
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        /* 搜索结果弹窗样式 */
+        .search-results-popup {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-results-content {
+            padding: 10px;
+        }
+
+        .search-result-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 创建新帖子按钮样式 */
+        .create-post-btn {
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +123,19 @@
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
+                    <!-- 搜索框 -->
+                    <li class="nav-item search-box">
+                        <div class="search-box">
+                            <div class="search-input-wrapper">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="search-input" placeholder="搜索" id="searchInput">
+                            </div>
+                            <div class="search-results-popup" id="searchResultsPopup">
+                                <div class="search-results-content" id="searchResultsContent">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     {% if 'user_id' in session %}
                     <li class="nav-item">
                         <a class="nav-link" href="#" style="color: white;">
@@ -85,6 +170,13 @@
                 {% block content %}{% endblock %}
             </div>
             <div class="col-md-4 sidebar">
+                <!-- 创建新帖子按钮 -->
+                <div class="create-post-btn">
+                    <a href="{{ url_for('create_post') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> 发新帖
+                    </a>
+                </div>
+                <!-- 在线会员模块 -->
                 <div class="card">
                     <div class="card-header">
                         <h5 class="text-center">在线会员</h5>
@@ -116,5 +208,64 @@
         </script>
         {% endif %}
     {% endwith %}
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsPopup = document.getElementById('searchResultsPopup');
+        const searchResultsContent = document.getElementById('searchResultsContent');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            if (!query) {
+                searchResultsPopup.style.display = 'none';
+                return;
+            }
+
+            // 发送 AJAX 请求到后端
+            fetch(`/search/${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const results = data.results;
+                        const resultsHtml = results.map(item => `
+                            <div class="search-result-item" data-post-id="${item.postId}">
+                                <strong>${item.source}</strong><br>
+                                ${item.content} (${item.similarity} 相似度)
+                            </div>
+                        `).join('');
+                        searchResultsContent.innerHTML = resultsHtml;
+                        searchResultsPopup.style.display = 'block';
+                    } else {
+                        searchResultsContent.innerHTML = '<div>未找到相关结果</div>';
+                        searchResultsPopup.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('搜索失败:', error);
+                    searchResultsContent.innerHTML = '<div>搜索失败，请稍后重试</div>';
+                    searchResultsPopup.style.display = 'block';
+                });
+        });
+
+        // 点击搜索结果项
+        searchResultsContent.addEventListener('click', function(event) {
+            const target = event.target.closest('.search-result-item');
+            if (target) {
+                const postId = target.dataset.postId;
+                if (postId) {
+                    // 跳转到帖子页面
+                    window.location.href = `/post/${postId}`;
+                }
+            }
+        });
+
+        // 点击外部关闭弹窗
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.search-box')) {
+                searchResultsPopup.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
