@@ -7,6 +7,8 @@ import markdown
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 from bleach import clean
 from bs4 import BeautifulSoup
@@ -92,10 +94,21 @@ def get_config():
         return yaml.safe_load(f)
 
 
+default_keywords = ['python', 'flask', 'markdown', 'xss', 'database', 'admin', 'moderator', 'user',
+                    'report', 'like']
+
 # 初始化数据库
 def initialize_database(app):
     with app.app_context():
         db.create_all()
+        # 初始化搜索关键词
+        if not db.session.query(SearchModel).first():
+
+            # 遍历关键词
+            for keyword in default_keywords:
+                new_keyword = SearchModel(keyword=keyword)
+                db.session.add(new_keyword)
+            db.session.commit()
 
 
 # Markdown转换 + XSS过滤
@@ -137,13 +150,13 @@ def convert_markdown_to_html(markdown_text):
 
 def remove_markdown(text):
     text = re.sub(r'\*\*', '', text)  # 去除粗体
-    text = re.sub(r'\*', '', text)    # 去除斜体
-    text = re.sub(r'`', '', text)     # 去除代码块
-    text = re.sub(r'#', '', text)     # 去除标题
+    text = re.sub(r'\*', '', text)  # 去除斜体
+    text = re.sub(r'`', '', text)  # 去除代码块
+    text = re.sub(r'#', '', text)  # 去除标题
     text = re.sub(r'\n-{3,}', '', text)  # 去除水平线
     text = re.sub(r'\n={3,}', '', text)  # 去除水平线
     text = re.sub(r'\n\* \n', '', text)  # 去除列表
-    text = re.sub(r'\n\d\.', '', text)   # 去除有序列表
+    text = re.sub(r'\n\d\.', '', text)  # 去除有序列表
     text = re.sub(r'!\[.*?\]\(.*?\)', '', text)  # 去除图片
     return text
 
@@ -468,6 +481,121 @@ def handle_report(report_id):
         report.resolved_by = g.user.id
         db.session.commit()
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})
+
+
+"""
+关键词数据库
+@Dev JasonHan
+"""
+# 继承一个数据库模型
+class SearchModel(db.Model):
+    __tablename__ = 'search_keywords'
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String(100), unique=True, nullable=False)
+
+"""
+Main Search
+@Dev JasonHan
+"""
+@app.route('/search/<keywords>', methods=['GET'])
+def search(keywords):
+    if not keywords:
+        return redirect(url_for('index'))
+
+    # 优先匹配预存关键词
+    keyword_results = SearchModel.query.filter(SearchModel.keyword.ilike(f'%{keywords}%')).all()
+    if keyword_results:
+        return jsonify({
+            'success': True,
+            'type': '关键词匹配',
+            'results': [k.keyword for k in keyword_results]
+        })
+
+    # 全站内容匹配
+    data = get_data()
+    threshold = 0.1  # 相似度阈值
+
+    results = {
+        '帖子标题': find_matches(data['titles'], '帖子标题', keywords, threshold),
+        '帖子内容': find_matches(data['contents'], '帖子内容', keywords, threshold),
+        '作者': find_matches(data['authors'], '作者', keywords, threshold),
+        '评论内容': find_matches(data['comments_contents'], '评论内容', keywords, threshold),
+        '评论作者': find_matches(data['comments_authors'], '评论作者', keywords, threshold)
+    }
+
+    # 合并所有结果并按相似度排序
+    all_results = sorted(
+        [item for sublist in results.values() for item in sublist],
+        key=lambda x: x['similarity'],
+        reverse=True
+    )[:20]  # 最多返回20条结果
+
+    if all_results:
+        return jsonify({
+            'success': True,
+            'type': '内容匹配',
+            'results': all_results
+        })
+
+    return jsonify({'success': False, 'message': '未找到相关结果'})
+
+"""
+Cosine Simulator Fx
+@Dev JasonHan
+"""
+def consine_simulator(s1, s2):
+    vectorizer = TfidfVectorizer().fit_transform([s1, s2])
+    vectors = vectorizer.toarray()
+    return cosine_similarity(vectors)[0, 1]
+
+"""
+查找相似
+@Dev JasonHan
+"""
+def find_matches(field_data, field_name, keywords, threshold):
+    matches = []
+    for text in field_data:
+        if not text:  # 跳过空内容
+            continue
+        similarity = consine_simulator(keywords, text)
+        if similarity > threshold:
+            # 截断长文本并保留关键部分
+            preview = text[:100] + "..." if len(text) > 100 else text
+            matches.append({
+                'content': preview,
+                'similarity': round(similarity, 2),
+                'source': field_name
+            })
+    return sorted(matches, key=lambda x: x['similarity'], reverse=True)[:5]  # 每个领域取前5个
+
+
+"""
+获取数据
+@Dev JasonHan
+"""
+def get_data():
+    # 获取所有帖子数据
+    posts = db.session.query(
+        Post.title,
+        Post.content,
+        User.username.label('author_name')  # 获取用户名而不是ID
+    ).join(User, Post.author_id == User.id).all()
+
+    # 获取所有评论数据
+    comments = db.session.query(
+        Comment.content,
+        User.username.label('comment_author')  # 获取评论者用户名
+    ).join(User, Comment.author_id == User.id).all()
+
+    # 构建数据集
+    data = {
+        'titles': [post.title for post in posts],
+        'contents': [post.content for post in posts],
+        'authors': [post.author_name for post in posts],
+        'comments_contents': [comment.content for comment in comments],
+        'comments_authors': [comment.comment_author for comment in comments]
+    }
+    return data
 
 
 if __name__ == '__main__':
