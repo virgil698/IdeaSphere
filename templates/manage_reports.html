@@ -1,0 +1,83 @@
+{% extends "admin_panel.html" %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-center">管理举报</h5>
+    </div>
+    <div class="card-body">
+        {% if reports %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>用户</th>
+                        <th>帖子 ID</th>
+                        <th>评论 ID</th>
+                        <th>原因</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.user.username }}</td>
+                        <td>{{ report.post_id }}</td>
+                        <td>{{ report.comment_id }}</td>
+                        <td>{{ report.reason }}</td>
+                        <td>{{ report.status }}</td>
+                        <td>
+                            {% if report.status == 'pending' and (session['role'] == 'admin' or session['role'] == 'moderator') %}
+                                <button class="btn btn-danger btn-sm" onclick="handleReport({{ report.id }}, 'valid')">
+                                    <i class="fas fa-check"></i> 已违规
+                                </button>
+                                <button class="btn btn-success btn-sm" onclick="handleReport({{ report.id }}, 'invalid')">
+                                    <i class="fas fa-times"></i> 未违规
+                                </button>
+                            {% else %}
+                                已处理
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info text-center">
+                暂无举报
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function handleReport(reportId, status) {
+    if (status !== 'valid' && status !== 'invalid') {
+        alert('处理失败：无效的状态值');
+        return;
+    }
+    if (confirm('确定要处理该举报吗？')) {
+        fetch(`/handle_report/${reportId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // 刷新页面以更新举报状态
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+</script>
+{% endblock %}

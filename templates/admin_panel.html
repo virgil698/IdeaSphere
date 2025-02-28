@@ -1,136 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-center">管理用户</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>用户名</th>
-                            <th>角色</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.role }}</td>
-                            <td>
-                                {% if user.role == 'user' and session['role'] == 'admin' %}
-                                    <button class="btn btn-success btn-sm" onclick="upgradeUser({{ user.id }})">
-                                        <i class="fas fa-user-cog"></i> 提升为版主
-                                    </button>
-                                {% elif user.role == 'moderator' and session['role'] == 'admin' %}
-                                    <button class="btn btn-warning btn-sm" onclick="downgradeUser({{ user.id }})">
-                                        <i class="fas fa-user-slash"></i> 降级为普通用户
-                                    </button>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- 顶部菜单 -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4"> <!-- 添加 mb-4 增加间距 -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manage_users') }}">
+                            <i class="fas fa-users"></i> 管理用户
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manage_reports') }}">
+                            <i class="fas fa-shield-alt"></i> 管理举报
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-center">管理举报</h5>
-            </div>
-            <div class="card-body">
-                {% if reports %}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>用户</th>
-                                <th>帖子 ID</th>
-                                <th>评论 ID</th>
-                                <th>原因</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for report in reports %}
-                            <tr>
-                                <td>{{ report.id }}</td>
-                                <td>{{ report.user.username }}</td>
-                                <td>{{ report.post_id }}</td>
-                                <td>{{ report.comment_id }}</td>
-                                <td>{{ report.reason }}</td>
-                                <td>{{ report.status }}</td>
-                                <td>
-                                    {% if report.status == 'pending' and (session['role'] == 'admin' or session['role'] == 'moderator') %}
-                                        <button class="btn btn-danger btn-sm" onclick="handleReport({{ report.id }}, 'valid')">
-                                            <i class="fas fa-check"></i> 已违规
-                                        </button>
-                                        <button class="btn btn-success btn-sm" onclick="handleReport({{ report.id }}, 'invalid')">
-                                            <i class="fas fa-times"></i> 未违规
-                                        </button>
-                                    {% else %}
-                                        已处理
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <div class="alert alert-info text-center">
-                        暂无举报
-                    </div>
-                {% endif %}
-            </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- 内容区域 -->
+            {% block admin_content %}
+            {% endblock %}
         </div>
     </div>
 </div>
-
-<script>
-function upgradeUser(userId) {
-    if (confirm('确定要提升该用户为版主吗？')) {
-        window.location.href = '/upgrade_user/' + userId;
-    }
-}
-
-function downgradeUser(userId) {
-    if (confirm('确定要降级该用户为普通用户吗？')) {
-        window.location.href = '/downgrade_user/' + userId;
-    }
-}
-
-function handleReport(reportId, status) {
-    if (status !== 'valid' && status !== 'invalid') {
-        alert('处理失败：无效的状态值');
-        return;
-    }
-    if (confirm('确定要处理该举报吗？')) {
-        fetch(`/handle_report/${reportId}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status: status })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                location.reload(); // 刷新页面以更新举报状态
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-}
-</script>
 {% endblock %}

@@ -161,8 +161,24 @@ def before_request():
 
 
 @app.context_processor
+def inject_forum_stats():
+    forum_stats = {
+        'topics': Post.query.filter_by(deleted=False).count(),
+        'messages': Comment.query.filter_by(deleted=False).count(),
+        'users': User.query.count(),
+        'latest_user': User.query.order_by(User.id.desc()).first().username if User.query.count() > 0 else "暂无用户"
+    }
+    return {'forum_stats': forum_stats}
+
+
+@app.context_processor
 def inject_online_users():
-    online_users = {'total': 0, 'users': 0, 'guests': 0, 'users_list': []}
+    online_users = {
+        'total': 0,
+        'users': 0,
+        'guests': 0,
+        'users_list': []
+    }
     if g.user:
         online_users['total'] += 1
         online_users['users'] += 1
@@ -170,7 +186,7 @@ def inject_online_users():
     else:
         online_users['total'] += 1
         online_users['guests'] += 1
-    return dict(online_users=online_users)
+    return {'online_users': online_users}
 
 
 @app.route('/install', methods=['GET', 'POST'])
@@ -318,42 +334,60 @@ def admin_panel():
     return render_template('admin_panel.html', reports=reports, users=users)
 
 
+@app.route('/manage_users')
+def manage_users():
+    if g.role not in ['admin', 'moderator']:
+        abort(403)
+
+    users = User.query.all()
+    return render_template('manage_users.html', users=users)
+
+
+@app.route('/manage_reports')
+def manage_reports():
+    if g.role not in ['admin', 'moderator']:
+        abort(403)
+
+    reports = Report.query.all()
+    return render_template('manage_reports.html', reports=reports)
+
+
 @app.route('/report_post/<int:post_id>', methods=['POST'])
 def report_post(post_id):
     if not g.user:
-        return jsonify({'success': False, 'message': '请登录后再进行举报'}), 403
+        return jsonify({'success': False, 'message': '请登录后再进行举报'})
 
     reason = request.json.get('reason', '')
     if not reason:
-        return jsonify({'success': False, 'message': '举报原因不能为空'}), 400
+        return jsonify({'success': False, 'message': '举报原因不能为空'})
 
     existing_report = Report.query.filter_by(post_id=post_id, user_id=g.user.id).first()
     if existing_report:
-        return jsonify({'success': False, 'message': '您已经举报过此帖子'}), 400
+        return jsonify({'success': False, 'message': '您已经举报过此帖子'})
 
     new_report = Report(post_id=post_id, user_id=g.user.id, reason=reason)
     db.session.add(new_report)
     db.session.commit()
-    return jsonify({'success': True, 'message': '举报成功！'}), 200
+    return jsonify({'success': True, 'message': '举报成功！'})
 
 
 @app.route('/report_comment/<int:comment_id>', methods=['POST'])
 def report_comment(comment_id):
     if not g.user:
-        return jsonify({'success': False, 'message': '请登录后再进行举报'}), 403
+        return jsonify({'success': False, 'message': '请登录后再进行举报'})
 
     reason = request.json.get('reason', '')
     if not reason:
-        return jsonify({'success': False, 'message': '举报原因不能为空'}), 400
+        return jsonify({'success': False, 'message': '举报原因不能为空'})
 
     existing_report = Report.query.filter_by(comment_id=comment_id, user_id=g.user.id).first()
     if existing_report:
-        return jsonify({'success': False, 'message': '您已经举报过此评论'}), 400
+        return jsonify({'success': False, 'message': '您已经举报过此评论'})
 
     new_report = Report(comment_id=comment_id, user_id=g.user.id, reason=reason)
     db.session.add(new_report)
     db.session.commit()
-    return jsonify({'success': True, 'message': '举报成功！'}), 200
+    return jsonify({'success': True, 'message': '举报成功！'})
 
 
 @app.route('/like_post/<int:post_id>', methods=['POST'])
@@ -404,7 +438,7 @@ def upgrade_user(user_id):
     user.role = 'moderator'
     db.session.commit()
     flash('用户已提升为版主', 'success')
-    return redirect(url_for('admin_panel'))
+    return redirect(url_for('manage_users'))
 
 
 @app.route('/downgrade_user/<int:user_id>')
@@ -419,7 +453,7 @@ def downgrade_user(user_id):
     user.role = 'user'
     db.session.commit()
     flash('版主已降级为普通用户', 'success')
-    return redirect(url_for('admin_panel'))
+    return redirect(url_for('manage_users'))
 
 
 @app.route('/handle_report/<int:report_id>', methods=['POST'])
@@ -433,7 +467,7 @@ def handle_report(report_id):
 
     status = request.json.get('status')
     if status not in ['valid', 'invalid']:
-        return jsonify({'success': False, 'message': '无效的状态值'}), 400
+        return jsonify({'success': False, 'message': '无效的状态值'})
 
     if status == 'valid':
         if report.post:
@@ -535,19 +569,19 @@ def get_data():
     posts = Post.query.filter_by(deleted=False).all()
     comments = Comment.query.filter_by(deleted=False).all()
 
-    posts_data = [{
+    posts_data = [ {
         'id': post.id,
         'title': post.title,
         'content': post.content,
         'author': post.author.username
-    } for post in posts]
+    } for post in posts ]
 
-    comments_data = [{
+    comments_data = [ {
         'id': comment.id,
         'content': comment.content,
         'author': comment.author.username,
         'postId': comment.post.id
-    } for comment in comments]
+    } for comment in comments ]
 
     return {
         'posts': posts_data,
