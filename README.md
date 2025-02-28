@@ -4,13 +4,13 @@
 <h3 align="center">IdeaSphere</h3>
 
 <p align="center">
-  主打简单实用易于配置的论坛程序，基于python3完成
+  主打简单实用易于配置的论坛程序，基于 Python3 完成
 </p>
 
 [![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/network)
 [![Stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/stargazers)  
 [![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
+[![Python version](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
 
 </div>
