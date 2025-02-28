@@ -129,11 +129,11 @@ python app.py
 
 1. 安装向导
 
-首次访问论坛时，会自动进入安装向导页面（`install`），按照提示完成安装。
+首次访问论坛时，会自动进入安装向导页面（`/install`），按照提示完成安装。
 
 2. 用户注册与登录
 
-用户可以通过 `/registe`r 页面注册新账号。注册完成后，使用 `/login` 页面登录。
+用户可以通过 `/register` 页面注册新账号。注册完成后，使用 `/login` 页面登录。
 
 3. 发布帖子与评论
 
@@ -149,7 +149,7 @@ python app.py
 
 1. Fork 此仓库至自己的 GitHub 账户下
 2. 将自己账户下的仓库克隆至本地
-   `git clone https://github.com/你的用户名/hellobbs.git`
+   `git clone https://github.com/你的用户名/IdeaSphere.git`
 3. 在本地仓库中进行修改并构建文档测试,无误后 push 至自己的仓库
 4. 回到此仓库,点击 Pull requests -> New pull request 发起 PR
 
