@@ -143,7 +143,7 @@ python app.py
 
 管理员可以通过 `/admin` 页面管理用户、帖子和评论。
 
-## 🤝 贡献指南
+## ⬆️ 提交贡献
 
 欢迎参与 HelloBBS 的开发，您需要通过以下方式提交你的贡献
 
@@ -153,10 +153,15 @@ python app.py
 3. 在本地仓库中进行修改并构建文档测试,无误后 push 至自己的仓库
 4. 回到此仓库,点击 Pull requests -> New pull request 发起 PR
 
+## 📞 联系我们
+
 如果您有任何问题或建议，可以通过以下方式联系我们：
 
 - 提交 GitHub Issues
 - 邮箱：virgil698@231s.net
+- QQ交流群：[1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
+
+## 🤝 贡献者
 
 [![Contrib](https://contrib.rocks/image?repo=virgil698/hellobbs)](https://github.com/virgil698/hellobbs/graphs/contributors)
 
