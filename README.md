@@ -1,7 +1,7 @@
 <br />
 
 <div align="center">
-<h3 align="center">HelloBBS</h3>
+<h3 align="center">IdeaSphere</h3>
 
 <p align="center">
   主打简单实用易于配置的论坛程序，基于python3完成
@@ -18,7 +18,7 @@
 
 ## 📖 项目介绍
 
-`hellobbs` 是一个基于 Python 3.11 和 Flask 框架开发的简单实用的论坛程序。它易于配置，适合快速搭建一个轻量级的论坛系统。
+`IdeaSphere` 是一个基于 Python 3.11 和 Flask 框架开发的简单实用的论坛程序。它易于配置，适合快速搭建一个轻量级的论坛系统。
 
 ## 🌟 核心特点
 
@@ -70,7 +70,7 @@
 
 ## 📚 项目结构
 ```bash
-hellobbs/
+IdeaSphere/
 ├── instance/
 │   └── forum.db                # SQLite3 数据库文件（第一次启动程序时自动生成）
 ├── templates/
@@ -129,7 +129,7 @@ python app.py
 
 1. 安装向导
 
-首次访问论坛时，会自动进入安装向导页面（`install.html`），按照提示完成安装。
+首次访问论坛时，会自动进入安装向导页面（`install`），按照提示完成安装。
 
 2. 用户注册与登录
 
@@ -145,7 +145,7 @@ python app.py
 
 ## ⬆️ 提交贡献
 
-欢迎参与 HelloBBS 的开发，您需要通过以下方式提交你的贡献
+欢迎参与 IdeaSphere 的开发，您需要通过以下方式提交你的贡献
 
 1. Fork 此仓库至自己的 GitHub 账户下
 2. 将自己账户下的仓库克隆至本地
@@ -157,8 +157,7 @@ python app.py
 
 如果您有任何问题或建议，可以通过以下方式联系我们：
 
-- 提交 GitHub Issues
-- 邮箱：virgil698@231s.net
+- 提交 [GitHub Issues](https://github.com/virgil698/hellobbs/issues/new/choose)
 - QQ交流群：[1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
 
 ## 🤝 贡献者
