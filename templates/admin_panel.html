@@ -4,27 +4,12 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-12">
-            <!-- 顶部菜单 -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4"> <!-- 添加 mb-4 增加间距 -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('manage_users') }}">
-                            <i class="fas fa-users"></i> 管理用户
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('manage_reports') }}">
-                            <i class="fas fa-shield-alt"></i> 管理举报
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {% include "admin_panel_header.html" %}
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            <!-- 内容区域 -->
             {% block admin_content %}
             {% endblock %}
         </div>

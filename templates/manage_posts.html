@@ -1,0 +1,40 @@
+{% extends "admin_panel.html" %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-center">管理主题</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>发布者</th>
+                    <th>回复数量</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.author.username }}</td>
+                    <td>{{ post.comments | length }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> 编辑主题
+                        </a>
+                        <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> 删除主题
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

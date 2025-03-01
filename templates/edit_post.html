@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .emoji-container {
+        position: relative; /* 创建定位上下文 */
+        display: flex;
+        align-items: center; /* 垂直居中 */
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 576px) {
+        #emojiPopup {
+            left: auto !important;
+            right: 0; /* 小屏幕显示在左侧 */
+        }
+    }
+</style>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="text-center">编辑主题</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('edit_post', post_id=post.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <!-- 标题 -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            <i class="fas fa-heading"></i> 主题标题
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required>
+                    </div>
+
+                    <!-- 内容 -->
+                    <div class="mb-3">
+                        <label for="content" class="form-label">
+                            <i class="fas fa-pencil-alt"></i> 主题内容（支持 Markdown 格式）
+                        </label>
+                        <div class="input-group">
+                            <textarea class="form-control" id="content" name="content" rows="6" placeholder="输入帖子内容" required>{{ post.content }}</textarea>
+                            <span class="input-group-text" id="emojiButton" title="添加表情">
+                                <i class="fas fa-smile"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存修改后的主题
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Emoji 弹出框 -->
+                <div id="emojiPopup"
+                    style="display: none;
+                        position: absolute;
+                        left: 100%;
+                        top: 0;
+                        margin-left: 8px; /* 添加右侧间距 */
+                        /* 保持原有样式 */
+                        background: white;
+                        border: 1px solid #ccc;
+                        padding: 10px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                        z-index: 1000;">
+                        <span class="emoji">😀</span>
+                        <span class="emoji">😎</span>
+                        <span class="emoji">👍</span>
+                        <span class="emoji">❤️</span>
+                        <span class="emoji">🚀</span>
+                        <!-- 更多Unicode Emoji -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 表情按钮交互
+        const emojiBtn = document.getElementById('emojiButton');
+        const emojiPopup = document.getElementById('emojiPopup');
+        const textarea = document.getElementById('content');
+
+        // 修改按钮点击处理
+        emojiBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            emojiPopup.style.display = emojiPopup.style.display === 'block' ? 'none' : 'block';
+            textarea.focus();
+        });
+
+        // 全局点击关闭
+        document.addEventListener('click', (e) => {
+            if (!emojiPopup.contains(e.target) && e.target !== emojiBtn) {
+                emojiPopup.style.display = 'none';
+            }
+        });
+
+        // 表情插入逻辑
+        document.querySelectorAll('#emojiPopup .emoji').forEach(emoji => {
+            emoji.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const symbol = e.target.textContent;
+
+                // 使用现代文本操作API
+                textarea.setRangeText(
+                    symbol,
+                    textarea.selectionStart,
+                    textarea.selectionEnd,
+                    'end'
+                );
+
+                // 触发输入事件以兼容自动保存等功能
+                const event = new Event('input', { bubbles: true });
+                textarea.dispatchEvent(event);
+            });
+        });
+
+        // 键盘交互增强
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && emojiPopup.style.display === 'block') {
+                emojiPopup.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

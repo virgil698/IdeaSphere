@@ -7,6 +7,7 @@ from markdown import markdown
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 import re
+import bleach
 
 from bleach import clean
 from bs4 import BeautifulSoup
@@ -24,6 +25,7 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_uid = db.Column(db.Integer, unique=True, nullable=False)  # 新增UID字段
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(10), default='user')  # user, moderator, admin
@@ -36,6 +38,7 @@ class Post(db.Model):
     html_content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
+    comments = db.relationship('Comment', backref=db.backref('post', lazy=True))  # 修改此处
     deleted = db.Column(db.Boolean, default=False)
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
@@ -49,7 +52,6 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     author = db.relationship('User', backref=db.backref('comments', lazy=True))
-    post = db.relationship('Post', backref=db.backref('comments', lazy=True))
     deleted = db.Column(db.Boolean, default=False)
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
@@ -115,7 +117,13 @@ def convert_markdown_to_html(markdown_text):
         'code': ['class', 'style'],
         'blockquote': ['class', 'style']
     }
-    sanitized_html = clean(html, tags=allowed_tags, attributes=allowed_attributes, strip=True)
+
+    sanitized_html = bleach.clean(
+        html,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip=True
+    )
     soup = BeautifulSoup(sanitized_html, 'html.parser')
     cleaned_html = str(soup)
     return cleaned_html
@@ -197,10 +205,12 @@ def install():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        # 确保第一个用户的UID是1
         new_admin = User(
             username=username,
             password=generate_password_hash(password),
-            role='admin'
+            role='admin',
+            user_uid=1  # 设置UID为1
         )
         db.session.add(new_admin)
         db.session.commit()
@@ -227,9 +237,14 @@ def register():
             flash('用户名已存在', 'danger')
             return redirect(url_for('register'))
 
+        # 获取当前最大的UID并加1
+        last_user = User.query.order_by(User.user_uid.desc()).first()
+        new_uid = 1 if not last_user else last_user.user_uid + 1
+
         new_user = User(
             username=username,
-            password=generate_password_hash(password)
+            password=generate_password_hash(password),
+            user_uid=new_uid  # 分配新的UID
         )
         db.session.add(new_user)
         db.session.commit()
@@ -551,7 +566,9 @@ def consine_simulator(s1, s2):
 def find_matches(data_field, field_name, keywords, threshold):
     matches = []
     for item in data_field:
-        text = item.get('content') if field_name == '帖子内容' else item.get('title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get('content')
+        text = item.get('content') if field_name == '帖子内容' else item.get(
+            'title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get(
+            'content')
         similarity = consine_simulator(keywords, text) if text else 0.0
         if similarity > threshold:
             preview = text[:100] + "..." if len(text) > 100 else text
@@ -569,24 +586,69 @@ def get_data():
     posts = Post.query.filter_by(deleted=False).all()
     comments = Comment.query.filter_by(deleted=False).all()
 
-    posts_data = [ {
+    posts_data = [{
         'id': post.id,
         'title': post.title,
         'content': post.content,
         'author': post.author.username
-    } for post in posts ]
+    } for post in posts]
 
-    comments_data = [ {
+    comments_data = [{
         'id': comment.id,
         'content': comment.content,
         'author': comment.author.username,
         'postId': comment.post.id
-    } for comment in comments ]
+    } for comment in comments]
 
     return {
         'posts': posts_data,
         'comments': comments_data
     }
+
+
+@app.route('/manage_posts')
+def manage_posts():
+    if g.role not in ['admin', 'moderator']:
+        abort(403)
+    posts = Post.query.all()
+    return render_template('manage_posts.html', posts=posts)
+
+
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    if g.role not in ['admin', 'moderator']:
+        abort(403)
+    post = db.session.get(Post, post_id)
+    if not post:
+        abort(404)
+
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        post.html_content = convert_markdown_to_html(post.content)
+        db.session.commit()
+        flash('帖子编辑成功！', 'success')
+        return redirect(url_for('manage_posts'))
+
+    return render_template('edit_post.html', post=post)
+
+
+@app.route('/delete_post/<int:post_id>')
+def delete_post(post_id):
+    if g.role not in ['admin', 'moderator']:
+        abort(403)
+    post = db.session.get(Post, post_id)
+    if not post:
+        abort(404)
+    db.session.delete(post)
+    db.session.commit()
+    flash('帖子删除成功！', 'success')
+    return redirect(url_for('manage_posts'))
+
+
+def initialize_database(app):
+    with app.app_context():
+        db.create_all()
 
 
 if __name__ == '__main__':
