@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # 更新 Python 的依赖
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    allow:
+      # 允许更新所有依赖
+      - dependency-type: "all"
+
+  # 如果你使用了其他语言或包管理工具，可以添加更多配置项
+  # 例如，JavaScript (npm) 的依赖更新
+  # - package-ecosystem: "npm"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   open-pull-requests-limit: 10
+  #   allow:
+  #     - dependency-type: "all"
