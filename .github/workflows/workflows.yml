@@ -3,7 +3,7 @@ name: IdeaSphere CI
 on:
   push:
     branches:
-      - 'main'
+      - main
   pull_request:
     types: [opened, reopened]
 
@@ -30,6 +30,8 @@ jobs:
 
       - name: Run tests
         run: pytest tests/
+        env:
+          PYTHONPATH: .
 
       - name: Check code quality
         run: |

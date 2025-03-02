@@ -16,6 +16,11 @@ def test_index(client):
     assert response.status_code == 200
 
 def test_login(client):
+    # 创建测试用户
+    user = User(username='test_user', password='test_password', role='user')
+    with app.app_context():
+        db.session.add(user)
+        db.session.commit()
     response = client.post('/login', data={
         'username': 'test_user',
         'password': 'test_password'
@@ -35,7 +40,8 @@ def test_create_post(client):
         session['role'] = 'user'
     response = client.post('/post', data={
         'title': 'Test Post',
-        'content': 'This is a test post.'
+        'content': 'This is a test post.',
+        'html_content': ''  # 确保提供 html_content
     })
     assert response.status_code == 302  # Redirect to index
 
@@ -43,7 +49,7 @@ def test_view_post(client):
     with client.session_transaction() as session:
         session['user_id'] = 1
         session['role'] = 'user'
-    post = Post(title='Test Post', content='This is a test post.', author_id=1)
+    post = Post(title='Test Post', content='This is a test post.', html_content='', author_id=1)
     with app.app_context():
         db.session.add(post)
         db.session.commit()
@@ -54,7 +60,7 @@ def test_report_post(client):
     with client.session_transaction() as session:
         session['user_id'] = 1
         session['role'] = 'user'
-    post = Post(title='Test Post', content='This is a test post.', author_id=1)
+    post = Post(title='Test Post', content='This is a test post.', html_content='', author_id=1)
     with app.app_context():
         db.session.add(post)
         db.session.commit()
@@ -66,7 +72,7 @@ def test_like_post(client):
     with client.session_transaction() as session:
         session['user_id'] = 1
         session['role'] = 'user'
-    post = Post(title='Test Post', content='This is a test post.', author_id=1)
+    post = Post(title='Test Post', content='This is a test post.', html_content='', author_id=1)
     with app.app_context():
         db.session.add(post)
         db.session.commit()
