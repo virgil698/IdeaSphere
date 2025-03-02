@@ -5,16 +5,17 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened]
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  deploy:
+    name: Test and Check Code Quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -22,13 +23,10 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run tests
-        run: |
-          pytest
+        run: pytest
 
       - name: Check code quality
         run: |
