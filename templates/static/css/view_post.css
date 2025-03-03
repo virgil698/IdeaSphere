@@ -1,0 +1,52 @@
+
+.markdown-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+code, pre {
+    background-color: #f8f9fa;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+pre {
+    padding: 1rem;
+}
+
+blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1rem;
+    color: #666;
+    margin-left: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.like-count {
+    color: #2AFD6D;
+}
+
+.comment-like-count {
+    color: #FFF120; /* 金黄色 */
+    font-weight: bold;
+}
+
+.comment-emoji-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+    #emojiPopupComment {
+        left: auto !important;
+        right: 100%;
+        margin-left: 0;
+        margin-right: 8px;
+    }
+}

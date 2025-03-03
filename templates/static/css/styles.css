@@ -1,0 +1,107 @@
+.forum-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.navbar {
+    background-color: #007bff;
+    transition: all 0.3s ease;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 搜索框样式 */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f8f9fa;
+    padding: 0 5px;
+}
+
+.search-input {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    border-radius: 20px;
+    cursor: text;
+    font-size: 14px;
+    color: #333;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.search-icon {
+    margin-right: 10px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* 搜索结果弹窗样式 */
+.search-results-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.search-results-content {
+    padding: 10px;
+}
+
+.search-result-item {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* 创建新帖子按钮样式 */
+.create-post-btn {
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.emoji-container {
+    position: relative; /* 创建定位上下文 */
+    display: flex;
+    align-items: center; /* 垂直居中 */
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+    #emojiPopup {
+        left: auto !important;
+        right: 0; /* 小屏幕显示在左侧 */
+    }
+}
