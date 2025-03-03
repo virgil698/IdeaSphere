@@ -1,4 +1,6 @@
 import os
+
+import bleach
 import yaml
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, g, abort
 from flask_sqlalchemy import SQLAlchemy
@@ -7,14 +9,14 @@ from markdown import markdown
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 import re
-import bleach
 
 from bleach import clean
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from fuzzywuzzy import fuzz
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, static_folder="templates/static", static_url_path='/static', template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
 csrf = CSRFProtect(app)
 
@@ -38,7 +40,12 @@ class Post(db.Model):
     html_content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
-    comments = db.relationship('Comment', backref=db.backref('post', lazy=True))  # 修改此处
+    comments = db.relationship(
+        'Comment',
+        backref=db.backref('post', lazy=True),
+        cascade="all, delete-orphan",  # 新增级联删除
+        passive_deletes=True  # 允许数据库级联删除
+    )
     deleted = db.Column(db.Boolean, default=False)
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
@@ -50,7 +57,11 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     html_content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post_id = db.Column(
+        db.Integer,
+        db.ForeignKey('post.id', ondelete='CASCADE'),  # 添加数据库级联
+        nullable=False
+    )
     author = db.relationship('User', backref=db.backref('comments', lazy=True))
     deleted = db.Column(db.Boolean, default=False)
     delete_reason = db.Column(db.Text)
@@ -520,11 +531,15 @@ def search(keywords):
         return jsonify({
             'success': True,
             'type': '关键词匹配',
-            'results': [k.keyword for k in keyword_results]
+            'results': [{
+                'keyword': k.keyword,
+                'similarity': 1.0,
+                'source': '关键词'
+            } for k in keyword_results]
         })
 
     data = get_data()
-    threshold = 0.1
+    threshold = 0.2
 
     results = {
         '帖子标题': find_matches(data['posts'], '帖子标题', keywords, threshold),
@@ -569,15 +584,24 @@ def find_matches(data_field, field_name, keywords, threshold):
         text = item.get('content') if field_name == '帖子内容' else item.get(
             'title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get(
             'content')
-        similarity = consine_simulator(keywords, text) if text else 0.0
-        if similarity > threshold:
+
+        # 同时使用两种匹配算法
+        cosine_sim = consine_simulator(keywords, text) if text else 0.0
+        fuzzy_ratio = fuzz.token_sort_ratio(keywords, text) / 100.0 if text else 0.0
+
+        # 综合评分（可根据需求调整权重）
+        combined_score = max(cosine_sim, fuzzy_ratio)
+
+        if combined_score > threshold:
             preview = text[:100] + "..." if len(text) > 100 else text
             matches.append({
                 'content': preview,
-                'similarity': round(similarity, 2),
+                'similarity': round(combined_score, 2),
                 'source': field_name,
                 'postId': item.get('id'),
-                'commentId': item.get('commentId')
+                'commentId': item.get('commentId'),
+                # 新增匹配类型字段（不影响原有结构）
+                'matchType': 'fuzzy' if fuzzy_ratio > cosine_sim else 'cosine'
             })
     return sorted(matches, key=lambda x: x['similarity'], reverse=True)[:5]
 
@@ -633,18 +657,30 @@ def edit_post(post_id):
     return render_template('edit_post.html', post=post)
 
 
+import logging
+
 @app.route('/delete_post/<int:post_id>')
 def delete_post(post_id):
     if g.role not in ['admin', 'moderator']:
+        print(f"User {g.user_id} attempted to delete post {post_id} without permission.")
         abort(403)
+
     post = db.session.get(Post, post_id)
     if not post:
+        print(f"Attempted to delete non-existent post {post_id}.")
         abort(404)
-    db.session.delete(post)
-    db.session.commit()
-    flash('帖子删除成功！', 'success')
-    return redirect(url_for('manage_posts'))
 
+    try:
+        db.session.delete(post)
+        db.session.commit()
+        print(f"Post {post_id} deleted successfully by user {g.user_id}.")
+        flash('帖子删除成功！', 'success')
+        return redirect(url_for('manage_posts'))
+    except Exception as e:
+        db.session.rollback()
+        print(f"Failed to delete post {post_id}: {str(e)}")
+        flash('删除帖子时发生错误，请重试。', 'danger')
+        return redirect(url_for('manage_posts'))
 
 def initialize_database(app):
     with app.app_context():
