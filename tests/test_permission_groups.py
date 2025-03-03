@@ -1,25 +1,63 @@
+# test_permission_groups.py
+
 import pytest
-from permission_groups import extend_permission, base_dict, basic_perm_dict, read_perm_from_yaml, parse_basic_perm_data, get_perm_dict, parser
+from permission_groups import merge_permissions, get_perm_status, check_admin_perm, show_inherited_perms
 
-def test_extend_permission():
-    @extend_permission(base_dict)
-    def test_func(perm):
-        return perm
-    result = test_func()
-    assert result == base_dict
+# Mock perm module to simulate the permissions structure
+@pytest.fixture(autouse=True)
+def mock_perm(monkeypatch):
+    mock_groups = {
+        "base": {"send_post": True, "edit_post": False},
+        "moderator": {"extends": "base", "delete_post": True},
+        "admin": {"extends": "moderator", "manage_users": True},
+    }
+    monkeypatch.setattr("permission_groups.perm.groups", mock_groups)
 
-def test_read_perm_from_yaml():
-    perm_yaml = read_perm_from_yaml()
-    assert isinstance(perm_yaml, dict)
+def test_merge_permissions():
+    # Test merging for 'admin' group
+    expected_admin_perms = {
+        "send_post": True,
+        "edit_post": False,
+        "delete_post": True,
+        "manage_users": True,
+    }
+    assert merge_permissions("admin") == expected_admin_perms
 
-def test_parse_basic_perm_data():
-    perm_yaml = parse_basic_perm_data()
-    assert 'basic' in perm_yaml
+    # Test merging for 'moderator' group
+    expected_moderator_perms = {
+        "send_post": True,
+        "edit_post": False,
+        "delete_post": True,
+    }
+    assert merge_permissions("moderator") == expected_moderator_perms
 
-def test_get_perm_dict():
-    perm_dict = get_perm_dict()
-    assert isinstance(perm_dict, dict)
+    # Test merging for 'base' group
+    expected_base_perms = {"send_post": True, "edit_post": False}
+    assert merge_permissions("base") == expected_base_perms
 
-def test_parser():
-    parsed_perm_dict = parser()
-    assert isinstance(parsed_perm_dict, dict)
+def test_get_perm_status():
+    # Test fetching the full permission status
+    expected_status = {
+        "base": {"send_post": True, "edit_post": False},
+        "moderator": {"extends": "base", "delete_post": True},
+        "admin": {"extends": "moderator", "manage_users": True},
+    }
+    assert get_perm_status() == expected_status
+
+def test_check_admin_perm():
+    # Test checking permissions for 'admin'
+    assert check_admin_perm("send_post") is True  # Inherited from 'base'
+    assert check_admin_perm("delete_post") is True  # Inherited from 'moderator'
+    assert check_admin_perm("manage_users") is True  # Defined in 'admin'
+    assert check_admin_perm("non_existent_action") is False  # Non-existent action
+
+def test_show_inherited_perms():
+    # Test showing inherited permissions for 'admin'
+    expected_admin_perms = {
+        "send_post": True,
+        "edit_post": False,
+        "delete_post": True,
+        "manage_users": True,
+    }
+    assert show_inherited_perms("admin") == expected_admin_perms
+
