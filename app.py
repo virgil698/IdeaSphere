@@ -1,5 +1,4 @@
 import os
-
 import bleach
 import yaml
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, g, abort
