@@ -29,7 +29,7 @@ jobs:
           pip install pytest  # 确保安装 pytest
 
       - name: Run tests
-        run: pytest tests/
+        run: pytest test_app.py
         env:
           PYTHONPATH: .
 
