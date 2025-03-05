@@ -13,7 +13,7 @@ function handleReport(reportId, status) {
         fetch(`/handle_report/${reportId}`, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': '{{ csrf_token() }}',
+                'X-CSRFToken': getCSRFToken(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ status: status })

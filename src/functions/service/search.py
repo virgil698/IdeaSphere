@@ -1,6 +1,3 @@
-"""
-搜索
-"""
 from flask import url_for, redirect, jsonify
 from fuzzywuzzy import fuzz
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -25,7 +22,6 @@ def find_matches(data_field, field_name, keywords, threshold):
         cosine_sim = cosine_simulator(keywords, text) if text else 0.0
         fuzzy_ratio = fuzz.token_sort_ratio(keywords, text) / 100.0 if text else 0.0
 
-        # 综合评分（可根据需求调整权重）
         combined_score = max(cosine_sim, fuzzy_ratio)
 
         if combined_score > threshold:
@@ -36,7 +32,6 @@ def find_matches(data_field, field_name, keywords, threshold):
                 'source': field_name,
                 'postId': item.get('id'),
                 'commentId': item.get('commentId'),
-                # 新增匹配类型字段（不影响原有结构）
                 'matchType': 'fuzzy' if fuzzy_ratio > cosine_sim else 'cosine'
             })
     return sorted(matches, key=lambda x: x['similarity'], reverse=True)[:5]
@@ -75,11 +70,7 @@ def search_logic(keywords):
         return jsonify({
             'success': True,
             'type': '关键词匹配',
-            'results': [{
-                'keyword': k.keyword,
-                'similarity': 1.0,
-                'source': '关键词'
-            } for k in keyword_results]
+            'results': [{} for k in keyword_results]
         })
 
     data = get_data()
@@ -114,4 +105,3 @@ def search_logic(keywords):
         })
 
     return jsonify({'success': False, 'message': '未找到相关结果'})
-

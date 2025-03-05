@@ -48,26 +48,12 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+  - type: textarea
     id: environment
     attributes:
       label: "环境信息 / Environment Information"
       description: "请勾选适用的选项。 / Please check the applicable options."
-      options:
-        - label: "操作系统: Windows"
-          required: true
-        - label: "操作系统: macOS"
-          required: true
-        - label: "操作系统: Linux"
-          required: true
-        - label: "浏览器: Chrome"
-          required: true
-        - label: "浏览器: Firefox"
-          required: true
-        - label: "Python 版本: 3.9"
-          required: true
-        - label: "Hellobbs 版本: v1.0.0"
-          required: true
+      placeholder: "请在此填写你的运行环境信息..."
     validations:
       required: true
 

@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
-<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
+{#    <script src="{{ url_for('static', filename='js/prism.js') }}"></script>#}
+{#    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/prism-tomorrow.min.css') }}">#}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_post.css') }}">
-
 {% endblock %}
 
 {% block content %}
@@ -22,6 +23,7 @@
                 <div class="markdown-content">
                     {{ post.html_content | safe }}
                 </div>
+                <meta name="csrf-token" content="{{ csrf_token }}">
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     {% if g.user %}
                         <a href="#" class="btn btn-primary" onclick="incrementLike('{{ post.id }}')">
@@ -51,6 +53,7 @@
                                 <div class="markdown-content">
                                     {{ comment.html_content | safe }}
                                 </div>
+                                <meta name="csrf-token" content="{{ csrf_token }}">
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     {% if g.user %}
                                         <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}')">
@@ -67,7 +70,7 @@
                 {% endfor %}
                 {% if g.user %}
                     <form method="POST">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <meta name="csrf-token" content="{{ csrf_token }}">
                         <div class="mb-3">
                             <label for="comment" class="form-label">评论内容</label>
                             <textarea class="form-control" id="comment" name="content" rows="3" placeholder="请输入评论内容"></textarea>
@@ -83,5 +86,4 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/user_control.js') }}"></script>
-
 {% endblock %}

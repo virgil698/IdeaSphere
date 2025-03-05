@@ -1,6 +1,3 @@
-"""
-用户操作
-"""
 from datetime import datetime
 
 from flask import g, jsonify, request, abort, flash, url_for, redirect, render_template
@@ -137,6 +134,7 @@ def handle_report_logic(report_id):
         report.resolved_by = g.user.id
         db.session.commit()
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})
+
 
 def edit_post_logic(post_id):
     if g.role not in ['admin', 'moderator']:

@@ -2,12 +2,22 @@
  * 用户操作
  */
 
+// 从 Cookie 中获取 CSRF 令牌
+function getCSRFToken() {
+    // 检查 document.cookie 是否存在 csrftoken
+    if (document.cookie.indexOf('csrftoken=') === -1) {
+        return ''; // 如果没有找到 csrftoken，返回空字符串
+    }
+    const cookieValue = document.cookie.split('csrftoken=')[1].split(';')[0];
+    return cookieValue || '';
+}
+
 // 定义点赞函数
 function incrementLike(postId) {
     fetch(`/like_post/${postId}`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token() }}',
+            'X-CSRFToken': getCSRFToken(),
             'Content-Type': 'application/json'
         }
     })
@@ -35,7 +45,7 @@ function reportPost(postId) {
     fetch(`/report_post/${postId}`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token() }}',
+            'X-CSRFToken': getCSRFToken(),
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason })
@@ -56,7 +66,7 @@ function incrementLikeComment(commentId) {
     fetch(`/like_comment/${commentId}`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token() }}',
+            'X-CSRFToken': getCSRFToken(),
             'Content-Type': 'application/json'
         }
     })
@@ -84,7 +94,7 @@ function reportComment(commentId) {
     fetch(`/report_comment/${commentId}`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token() }}',
+            'X-CSRFToken': getCSRFToken(),
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason })

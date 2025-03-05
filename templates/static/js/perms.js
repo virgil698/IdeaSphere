@@ -9,6 +9,7 @@
  * @param user_perm
  * @param operation
  */
+
 function send_perm_data_to_backend(user_id, user_perm, operation) {
     // 参数有效性检查
     if (!user_id || !user_perm || !operation) {
@@ -20,7 +21,7 @@ function send_perm_data_to_backend(user_id, user_perm, operation) {
     fetch(`/perm_groups/${encodeURIComponent(user_id)}/${encodeURIComponent(user_perm)}/${encodeURIComponent(operation)}`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token() }}',  // 确保这行代码能正确渲染出CSRF token
+            'X-CSRFToken': getCSRFToken(),
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ user_id, user_perm, operation })

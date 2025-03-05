@@ -1,5 +1,4 @@
 import os
-
 import yaml
 from flask import Flask, request, session, redirect, url_for, g, make_response, jsonify
 from flask_wtf import CSRFProtect
@@ -9,16 +8,12 @@ from src.db_ext import db
 from src.functions.database.models import User, Post, Comment
 from src.functions.index import index_logic
 from src.functions.parser.markdown_parser import remove_markdown
-from src.functions.perm.permission_groups import perm_groups_logic
-from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, \
-    delete_post_logic
+from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, delete_post_logic
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
-from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, \
-    like_comment_logic, upgrade_user_logic, \
-    downgrade_user_logic, handle_report_logic, edit_post_logic
+from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
 
 """
 初始化部分   
@@ -29,8 +24,12 @@ app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# 配置 CSRF 保护
+app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_SSL_STRICT'] = True  # 如果使用 HTTPS，开启严格模式
+
 db.init_app(app)
-CSRFProtect(app)
+csrf = CSRFProtect(app)
 
 def get_config():
     config_path = 'config.yml'
@@ -51,6 +50,15 @@ app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
 @app.before_request
 def before_request():
+    # 设置 CSRF 令牌到 Cookie 中
+    if 'csrf_token' not in session:
+        session['csrf_token'] = generate_csrf()
+
+    # 确保每次请求都设置 CSRF 令牌到 Cookie 中
+    response = make_response()
+    response.set_cookie('csrftoken', session['csrf_token'])
+
+    # 其他逻辑
     if 'user_id' not in session:
         if request.endpoint not in ['install', 'static'] and User.query.count() == 0:
             return redirect(url_for('install'))
@@ -100,10 +108,6 @@ def inject_online_users():
         online_users['guests'] += 1
     return {'online_users': online_users}
 
-
-"""
-END.
-"""
 
 """
 路由部分
@@ -162,20 +166,41 @@ def manage_reports():
 
 @app.route('/report_post/<int:post_id>', methods=['POST'])
 def report_post(post_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return report_post_logic(post_id)
 
 
 @app.route('/report_comment/<int:comment_id>', methods=['POST'])
 def report_comment(comment_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return report_comment_logic(comment_id)
+
 
 @app.route('/like_post/<int:post_id>', methods=['POST'])
 def like_post(post_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return like_post_logic(post_id)
 
 
 @app.route('/like_comment/<int:comment_id>', methods=['POST'])
 def like_comment(comment_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return like_comment_logic(comment_id)
 
 
@@ -191,6 +216,11 @@ def downgrade_user(user_id):
 
 @app.route('/handle_report/<int:report_id>', methods=['POST'])
 def handle_report(report_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return handle_report_logic(report_id)
 
 
@@ -206,6 +236,11 @@ def manage_posts():
 
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
+    # 验证 CSRF 令牌
+    csrf_token = request.cookies.get('csrftoken')
+    if not csrf_token or not validate_csrf(csrf_token):
+        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
+
     return edit_post_logic(post_id)
 
 
@@ -213,9 +248,6 @@ def edit_post(post_id):
 def delete_post(post_id):
     return delete_post_logic(post_id)
 
-@app.route('/perm/<string:user_id>/<string:user_perm>/<string:operation>')
-def perm(user_id, user_perm, operation):
-    return perm_groups_logic(user_id, user_perm, operation)
 
 if __name__ == '__main__':
     config = get_config()

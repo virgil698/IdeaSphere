@@ -1,7 +1,3 @@
-"""
-用户逻辑
-登陆注册等
-"""
 from flask import session, redirect, url_for, request, flash, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -19,20 +15,20 @@ def register_logic():
             flash('用户名已存在', 'danger')
             return redirect(url_for('register'))
 
-        # 获取当前最大的UID并加1
         last_user = User.query.order_by(User.user_uid.desc()).first()
         new_uid = 1 if not last_user else last_user.user_uid + 1
 
         new_user = User(
             username=username,
             password=generate_password_hash(password),
-            user_uid=new_uid  # 分配新的UID
+            user_uid=new_uid
         )
         db.session.add(new_user)
         db.session.commit()
         flash('注册成功！请登录', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
+
 
 def login_logic():
     if 'user_id' in session:
@@ -50,6 +46,7 @@ def login_logic():
         flash('用户名或密码错误', 'danger')
         return redirect(url_for('login'))
     return render_template('login.html')
+
 
 def logout_logic():
     session.pop('user_id', None)

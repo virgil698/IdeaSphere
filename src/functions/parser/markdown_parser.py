@@ -46,4 +46,3 @@ def remove_markdown(text):
     text = re.sub(r'\n\d\.', '', text)
     text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
     return text
-

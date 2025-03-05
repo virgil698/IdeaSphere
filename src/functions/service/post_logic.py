@@ -25,6 +25,7 @@ def create_post_logic():
         return redirect(url_for('index'))
     return render_template('post.html')
 
+
 def view_post_logic(post_id):
     post = db.session.get(Post, post_id)
     if not post:

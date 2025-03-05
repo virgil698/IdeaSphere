@@ -1,6 +1,3 @@
-"""
-管理员
-"""
 from flask import abort, g, render_template, url_for, flash, redirect
 
 from src.functions.database.models import Report, User, Post, db
@@ -14,12 +11,14 @@ def admin_panel_logic():
     users = User.query.all()
     return render_template('admin_panel.html', reports=reports, users=users)
 
+
 def manage_users_logic():
     if g.role not in ['admin', 'moderator']:
         abort(403)
 
     users = User.query.all()
     return render_template('manage_users.html', users=users)
+
 
 def manage_reports_logic():
     if g.role not in ['admin', 'moderator']:
@@ -28,11 +27,13 @@ def manage_reports_logic():
     reports = Report.query.all()
     return render_template('manage_reports.html', reports=reports)
 
+
 def manage_posts_logic():
     if g.role not in ['admin', 'moderator']:
         abort(403)
     posts = Post.query.all()
     return render_template('manage_posts.html', posts=posts)
+
 
 def delete_post_logic(post_id):
     if g.role not in ['admin', 'moderator']:
@@ -55,5 +56,3 @@ def delete_post_logic(post_id):
         print(f"Failed to delete post {post_id}: {str(e)}")
         flash('删除帖子时发生错误，请重试。', 'danger')
         return redirect(url_for('manage_posts'))
-
-
