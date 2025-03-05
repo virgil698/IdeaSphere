@@ -1,32 +1,37 @@
 import os
 
 import yaml
-from flask import Flask, request, session, redirect, url_for, g
+from flask import Flask, request, session, redirect, url_for, g, make_response, jsonify
 from flask_wtf import CSRFProtect
+from flask_wtf.csrf import generate_csrf, validate_csrf
+
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment
 from src.functions.index import index_logic
 from src.functions.parser.markdown_parser import remove_markdown
+from src.functions.perm.permission_groups import perm_groups_logic
 from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, \
     delete_post_logic
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
-from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, \
+from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, \
+    like_comment_logic, upgrade_user_logic, \
     downgrade_user_logic, handle_report_logic, edit_post_logic
 
 """
-初始化部分
+初始化部分   
 """
 app = Flask(__name__, static_folder="templates/static", static_url_path='/static', template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
-csrf = CSRFProtect(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+CSRFProtect(app)
+
 def get_config():
     config_path = 'config.yml'
     if not os.path.exists(config_path):
@@ -42,6 +47,7 @@ def initialize_database():
 
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
+
 
 @app.before_request
 def before_request():
@@ -67,7 +73,6 @@ def before_request():
 
 
 @app.context_processor
-
 def inject_forum_stats():
     forum_stats = {
         'topics': Post.query.filter_by(deleted=False).count(),
@@ -95,6 +100,7 @@ def inject_online_users():
         online_users['guests'] += 1
     return {'online_users': online_users}
 
+
 """
 END.
 """
@@ -102,6 +108,8 @@ END.
 """
 路由部分
 """
+
+
 @app.route('/install', methods=['GET', 'POST'])
 def install():
     return install_logic()
@@ -109,7 +117,8 @@ def install():
 
 @app.route('/')
 def index():
-     return index_logic()
+    return index_logic()
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -160,7 +169,6 @@ def report_post(post_id):
 def report_comment(comment_id):
     return report_comment_logic(comment_id)
 
-
 @app.route('/like_post/<int:post_id>', methods=['POST'])
 def like_post(post_id):
     return like_post_logic(post_id)
@@ -170,9 +178,11 @@ def like_post(post_id):
 def like_comment(comment_id):
     return like_comment_logic(comment_id)
 
+
 @app.route('/upgrade_user/<int:user_id>')
 def upgrade_user(user_id):
     return upgrade_user_logic(user_id)
+
 
 @app.route('/downgrade_user/<int:user_id>')
 def downgrade_user(user_id):
@@ -183,6 +193,7 @@ def downgrade_user(user_id):
 def handle_report(report_id):
     return handle_report_logic(report_id)
 
+
 @app.route('/search/<keywords>', methods=['GET'])
 def search(keywords):
     return search_logic(keywords)
@@ -192,13 +203,19 @@ def search(keywords):
 def manage_posts():
     return manage_posts_logic()
 
+
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
     return edit_post_logic(post_id)
 
+
 @app.route('/delete_post/<int:post_id>')
 def delete_post(post_id):
     return delete_post_logic(post_id)
+
+@app.route('/perm/<string:user_id>/<string:user_perm>/<string:operation>')
+def perm(user_id, user_perm, operation):
+    return perm_groups_logic(user_id, user_perm, operation)
 
 if __name__ == '__main__':
     config = get_config()
