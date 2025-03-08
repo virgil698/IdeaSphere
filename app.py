@@ -8,6 +8,7 @@ from src.db_ext import db
 from src.functions.database.models import User, Post, Comment
 from src.functions.index import index_logic
 from src.functions.parser.markdown_parser import remove_markdown
+from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, delete_post_logic
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
@@ -211,6 +212,10 @@ def edit_post(post_id):
 def delete_post(post_id):
     return delete_post_logic(post_id)
 
+@csrf.exempt
+@app.route('/perm_groups/<int:user_id>/<string:user_perm>/<string:operation>', methods=['GET', 'POST'])
+def perm_groups(user_id, user_perm, operation):
+    return permission_group_logic(user_id, user_perm, operation)
 
 if __name__ == '__main__':
     config = get_config()

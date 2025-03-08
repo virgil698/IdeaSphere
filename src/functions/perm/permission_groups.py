@@ -7,8 +7,9 @@
 以及支持规定某个权限组应当调用哪一个函数
 支持从perm.py里修改权限组
 """
+from src.functions.perm import perm
+from flask import g, jsonify
 
-import perm
 
 def extend_permission(group_name: str) -> any:
     """
@@ -21,7 +22,9 @@ def extend_permission(group_name: str) -> any:
         def wrapper(*args, **kwargs):
             kwargs['perm'] = merged_perm
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
 
@@ -32,12 +35,14 @@ def get_perm_status() -> dict:
     """
     return perm.groups.copy()
 
+
 def merge_permissions(group_name: str) -> dict:
     """
     递归合并权限组
     :param group_name: 目标权限组名称
     :return: 合并后的权限字典
     """
+
     def _merge(g_name, visited=None):
         visited = visited or set()
         if g_name in visited:
@@ -58,19 +63,14 @@ def merge_permissions(group_name: str) -> dict:
 
     return _merge(group_name)
 
-# 使用继承链：admin → moderator → base
-@extend_permission("admin")
-def check_admin_perm(action: str, **kwargs) -> bool:
-    return kwargs['perm'].get(action, False)
 
-print(check_admin_perm("send_post"))   # 输出 True（继承自base）
-print(check_admin_perm("delete_post")) # 输出 True（继承自moderator）
-print(check_admin_perm("manage_users"))# 输出 True（自身权限）
+def permission_group_logic(user_id, group_name, operation):
+    if g.user.id != user_id:
+        return jsonify(success=False, message="Invalid Userid")
 
-def show_inherited_perms(group_name: str) -> dict:
-    """显示指定权限组的完整继承结果"""
-    return merge_permissions(group_name)
+    merged_perm = merge_permissions(group_name)  # 关键修改：使用合并后的权限
 
-# 查看admin组的最终权限
-print(show_inherited_perms("admin"))
-# 输出：{'send_post': True, 'edit_post': False, 'delete_post': True, 'manage_users': True}
+    if operation in merged_perm:  # 检查合并后的权限字典
+        return jsonify(success=merged_perm[operation],
+                     message="Allowed" if merged_perm[operation] else "Forbidden")
+    return jsonify(success=False, message="Undefined operation")
