@@ -113,137 +113,100 @@ def inject_online_users():
 路由部分
 """
 
-
 @app.route('/install', methods=['GET', 'POST'])
 def install():
     return install_logic()
-
 
 @app.route('/')
 def index():
     return index_logic()
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     return register_logic()
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return login_logic()
 
-
 @app.route('/logout')
 def logout():
     return logout_logic()
-
 
 @app.route('/post', methods=['GET', 'POST'])
 def create_post():
     return create_post_logic()
 
-
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def view_post(post_id):
     return view_post_logic(post_id)
 
-
+@csrf.exempt
 @app.route('/admin')
 def admin_panel():
     return admin_panel_logic()
 
-
+@csrf.exempt
 @app.route('/manage_users')
 def manage_users():
     return manage_users_logic()
 
-
+@csrf.exempt
 @app.route('/manage_reports')
 def manage_reports():
     return manage_reports_logic()
 
-
+@csrf.exempt
 @app.route('/report_post/<int:post_id>', methods=['POST'])
 def report_post(post_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return report_post_logic(post_id)
 
-
+@csrf.exempt
 @app.route('/report_comment/<int:comment_id>', methods=['POST'])
 def report_comment(comment_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return report_comment_logic(comment_id)
 
-
+@csrf.exempt
 @app.route('/like_post/<int:post_id>', methods=['POST'])
 def like_post(post_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return like_post_logic(post_id)
 
-
+@csrf.exempt
 @app.route('/like_comment/<int:comment_id>', methods=['POST'])
 def like_comment(comment_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return like_comment_logic(comment_id)
 
-
+@csrf.exempt
 @app.route('/upgrade_user/<int:user_id>')
 def upgrade_user(user_id):
     return upgrade_user_logic(user_id)
 
-
+@csrf.exempt
 @app.route('/downgrade_user/<int:user_id>')
 def downgrade_user(user_id):
     return downgrade_user_logic(user_id)
 
-
+@csrf.exempt
 @app.route('/handle_report/<int:report_id>', methods=['POST'])
 def handle_report(report_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return handle_report_logic(report_id)
 
-
+@csrf.exempt
 @app.route('/search/<keywords>', methods=['GET'])
 def search(keywords):
     return search_logic(keywords)
 
-
+@csrf.exempt
 @app.route('/manage_posts')
 def manage_posts():
     return manage_posts_logic()
 
-
+@csrf.exempt
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
-    # 验证 CSRF 令牌
-    csrf_token = request.cookies.get('csrftoken')
-    if not csrf_token or not validate_csrf(csrf_token):
-        return jsonify({'success': False, 'message': 'CSRF 验证失败'})
-
     return edit_post_logic(post_id)
 
-
+@csrf.exempt
 @app.route('/delete_post/<int:post_id>')
 def delete_post(post_id):
     return delete_post_logic(post_id)
