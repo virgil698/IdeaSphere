@@ -2,16 +2,15 @@
 
 ## Supported Versions | 支持的版本
 
-Use this section to tell people about which versions of your project are currently being supported with security updates.
+The currently supported versions of IdeaSphere are as follows:
 
-在此部分说明哪些项目版本目前正通过安全更新获得支持。
+以下是目前正获得支持的 IdeaSphere 版本：
 
 | Version / 版本 | Supported / 支持状态          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| 1.0.x   | :white_check_mark: |
+| > 0.2.5   | :white_check_mark: |
+| < 0.2.0   | :x:                |
 
 ## Reporting a Vulnerability | 报告漏洞
 
