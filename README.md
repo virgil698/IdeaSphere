@@ -1,7 +1,7 @@
 <br />
 
 <div align="center">
-  <a href="https://github.com/virgil698/IdeaSphere/">
+  <a href="https://github.com/IdeaSphere-team/IdeaSphere/">
     <img src="logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -11,9 +11,9 @@
   主打简单实用易于配置的论坛程序，基于 Python3 完成
 </p>
 
-[![GitHub forks](https://img.shields.io/github/forks/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/network)
-[![Stars](https://img.shields.io/github/stars/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/stargazers)  
-[![GitHub license](https://img.shields.io/github/license/virgil698/hellobbs.svg?style=for-the-badge)](https://github.com/virgil698/hellobbs/blob/main/LICENSE)
+[![GitHub forks](https://img.shields.io/github/forks/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.comIdeaSphere-team/IdeaSphere/network)
+[![Stars](https://img.shields.io/github/stars/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/stargazers)  
+[![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
 
@@ -49,7 +49,9 @@
 | **🚀 管理面板** | ✅ | v0.2.0 |
 | **📦 Emoji表情支持** | ✅ | v0.2.0 |
 | **🔬 删除帖子** | ✅ | v0.2.5 |
-| **👤 权限组** | ✅ | v0.2.5 |
+| **👤 权限组实现** | ✅ | v0.2.5 |
+| **👤 权限组完全完成** | 🚧 |        |
+| **⭐ ICenter（详细信息请见[这里](https://github.com/IdeaSphere-team/IdeaSphere/issues/5)）** | 🚧 |        |
 | **⭐ 内容回复** | 🚧 |        |
 | **⭐ 内容反应** | 🚧 |        |
 | **🎈 富文本编辑器** | 🚧 |        |
@@ -81,7 +83,7 @@
 2. 下载项目
 
 ```bash
-git clone https://github.com/virgil698/IdeaSphere.git
+git clone https://github.com/IdeaSphere-team/IdeaSphere.git
 cd IdeaSphere
 ```
 
@@ -141,16 +143,16 @@ python app.py
 
 如果您有任何问题或建议，可以通过以下方式联系我们：
 
-- 提交 [GitHub Issues](https://github.com/virgil698/hellobbs/issues/new/choose)
+- 提交 [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose)
 - QQ交流群：[1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
 
 ## 🤝 贡献者
 
-[![Contrib](https://contrib.rocks/image?repo=virgil698/hellobbs)](https://github.com/virgil698/hellobbs/graphs/contributors)
+[![Contrib](https://contrib.rocks/image?repo=IdeaSphere-team/IdeaSphere)](https://github.com/IdeaSphere-team/IdeaSphere/graphs/contributors)
 
 ## ⭐ 历史图
 
-[![Stargazers over time](https://starchart.cc/virgil698/hellobbs.svg?variant=adaptive)](https://starchart.cc/virgil698/hellobbs)
+[![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
 ## 😊 免责声明
 
