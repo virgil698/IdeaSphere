@@ -1,9 +1,8 @@
 import os
 import yaml
-from flask import Flask, request, session, redirect, url_for, g, make_response, jsonify
+from flask import Flask, request, session, redirect, url_for, g, make_response
 from flask_wtf import CSRFProtect
-from flask_wtf.csrf import generate_csrf, validate_csrf
-
+from flask_wtf.csrf import generate_csrf
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment
 from src.functions.index import index_logic
@@ -15,6 +14,7 @@ from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
+from src.functions.icenter.icenter_index_page import icenter_index
 
 """
 初始化部分   
@@ -114,30 +114,37 @@ def inject_online_users():
 路由部分
 """
 
+@csrf.exempt
 @app.route('/install', methods=['GET', 'POST'])
 def install():
     return install_logic()
 
+@csrf.exempt
 @app.route('/')
 def index():
     return index_logic()
 
+@csrf.exempt
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     return register_logic()
 
+@csrf.exempt
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return login_logic()
 
+@csrf.exempt
 @app.route('/logout')
 def logout():
     return logout_logic()
 
+@csrf.exempt
 @app.route('/post', methods=['GET', 'POST'])
 def create_post():
     return create_post_logic()
 
+@csrf.exempt
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def view_post(post_id):
     return view_post_logic(post_id)
@@ -216,6 +223,11 @@ def delete_post(post_id):
 @app.route('/perm_groups/<int:user_id>/<string:user_perm>/<string:operation>', methods=['GET', 'POST'])
 def perm_groups(user_id, user_perm, operation):
     return permission_group_logic(user_id, user_perm, operation)
+
+@csrf.exempt
+@app.route('/icenter', methods=['GET', 'POST'])
+def icenter():
+    return icenter_index()
 
 if __name__ == '__main__':
     config = get_config()
