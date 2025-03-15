@@ -14,7 +14,7 @@ from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
-from src.functions.icenter.icenter_index_page import icenter_index
+# from src.functions.icenter.icenter_index_page import icenter_index
 
 """
 初始化部分   
@@ -224,10 +224,10 @@ def delete_post(post_id):
 def perm_groups(user_id, user_perm, operation):
     return permission_group_logic(user_id, user_perm, operation)
 
-@csrf.exempt
-@app.route('/icenter', methods=['GET', 'POST'])
-def icenter():
-    return icenter_index()
+# @csrf.exempt
+# @app.route('/icenter', methods=['GET', 'POST'])
+# def icenter():
+#     return icenter_index()
 
 if __name__ == '__main__':
     config = get_config()
