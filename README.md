@@ -16,6 +16,7 @@
 [![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
 [![Python version](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge)](https://www.python.org/downloads/release/python-3110/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
+[![Discord](https://img.shields.io/discord/:1349304044723765258)
 
 </div>
 
@@ -145,6 +146,7 @@ python app.py
 
 - 提交 [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose)
 - QQ交流群：[1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
+- Discode：[![Discord](https://img.shields.io/discord/:1349304044723765258)
 
 ## 🤝 贡献者
 
