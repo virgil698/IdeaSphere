@@ -31,10 +31,10 @@
 
 ## 🌟 Core feature
 
-- ** Easy to use ** : Simple interface, practical functions, easy to use.
-- ** Easy to configure ** : Most of the configuration can be done through the `config.yml` file.
-- ** Lightweight ** : Based on Flask framework development, high performance.
-- ** Modular design ** : Clear code structure, easy to expand and maintain.
+- **Easy to use** : Simple interface, practical functions, easy to use.
+- **Easy to configure** : Most of the configuration can be done through the `config.yml` file.
+- **Lightweight** : Based on Flask framework development, high performance.
+- **Modular design** : Clear code structure, easy to expand and maintain.
 
 ## 🌟 Realization function
 
