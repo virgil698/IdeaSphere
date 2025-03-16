@@ -18,6 +18,10 @@
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
 [![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
 
+<p align="center">
+  简体中文 | <a href="https://github.com/IdeaSphere-team/IdeaSphere/blob/main/README-en.md">English</a>
+</p>
+
 </div>
 
 
