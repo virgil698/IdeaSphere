@@ -56,7 +56,7 @@
 | **🔬 Delete post** | ✅ | v0.2.5 |
 | **👤 Permission group implementation** | ✅ | v0.2.5 |
 | **👤 Permission group complete** | 🚧 | |
-| **⭐ ICenter (for details see [here] (https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
+| **⭐ ICenter (for details see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
 | **⭐ Replies to** | 🚧 | |
 | **⭐ Reactions** | 🚧 | |
 | **🎈 Rich Text editor** | 🚧 | |
