@@ -8,7 +8,7 @@
 <h3 align="center">IdeaSphere</h3>
 
 <p align="center">
-  The main simple and practical forum program is easy to configure, based on Python3
+  A forum software focusing on simplicity, practicality and easy configuration, built with Python3.
 </p>
 
 [![GitHub forks](https://img.shields.io/github/forks/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.comIdeaSphere-team/IdeaSphere/network)
