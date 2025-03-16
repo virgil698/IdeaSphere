@@ -27,12 +27,12 @@
 
 ## 📖 Project introduction
 
-'IdeaSphere' is a simple and useful forum program based on Python 3.11 and Flask framework. It is easy to configure and suitable for quickly setting up a lightweight forum system.
+`IdeaSphere` is a simple and useful forum program based on Python 3.11 and Flask framework. It is easy to configure and suitable for quickly setting up a lightweight forum system.
 
 ## 🌟 Core feature
 
 - ** Easy to use ** : Simple interface, practical functions, easy to use.
-- ** Easy to configure ** : Most of the configuration can be done through the 'config.yml' file.
+- ** Easy to configure ** : Most of the configuration can be done through the `config.yml` file.
 - ** Lightweight ** : Based on Flask framework development, high performance.
 - ** Modular design ** : Clear code structure, easy to expand and maintain.
 
@@ -40,37 +40,37 @@
 
 | task overview | Current status | implementation version |
 |---|---|---|
-| **⌨️ Go to ** | ✅ | v0.1.0 |
-| **⌨️ Register ** | ✅ | v0.1.0 |
-| **⌨️ Posting ** | ✅ | v0.1.0 |
-| **🖼 Super administrator ** | ✅ | v0.1.0 |
-| **🖼 Moderator ** | ✅ | v0.1.0 |
-| **👤 Like ** | ✅ | v0.1.0 |
-| **🧱 Report System ** | ✅ | v0.1.0 |
-| **📦 For online users ** | ✅ | v0.1.0 |
-| **⭐ Replies to ** | ✅ | v0.1.0 |
-| **🔬 Search for ** | ✅ | v0.1.5 |
-| **👤 Site statistics ** | ✅ | v0.1.5 |
-| **🚀 Management Panel ** | ✅ | v0.2.0 |
-| **📦 Emoji support ** | ✅ | v0.2.0 |
-| **🔬 Delete post ** | ✅ | v0.2.5 |
-| **👤 Permission group implementation ** | ✅ | v0.2.5 |
-| **👤 Permission group complete ** | 🚧 | |
-| ** ⭐ ICenter (for details see [here] (https://github.com/IdeaSphere-team/IdeaSphere/issues/5)) ** | 🚧 | |
-| **⭐ Replies to ** | 🚧 | |
-| **⭐ Reactions ** | 🚧 | |
-| **🎈 Rich Text editor ** | 🚧 | |
-| **🎈 Posts ** | 🚧 | |
-| **👤 Post published time and number of likes ** | 🚧 | |
-| **👤 List by response time and number of likes ** | 🚧 | |
-| **📦 Private Message System ** | ⏳ | |
-| **📦 User-defined Settings ** | ⏳ | |
-| **📦 User page ** | ⏳ | |
-| **🔐 Register email and reset password ** | ⏳ | |
-| **🔌 Template ** | ⏳ | |
-| **🔌 plugin ** | ⏳ | |
-| **🔐 Data Security ** | ⏳ | |
-| **🔐 SEO optimization ** | ⏳ | |
+| **⌨️ Go to** | ✅ | v0.1.0 |
+| **⌨️ Register** | ✅ | v0.1.0 |
+| **⌨️ Posting** | ✅ | v0.1.0 |
+| **🖼 Super administrator** | ✅ | v0.1.0 |
+| **🖼 Moderator** | ✅ | v0.1.0 |
+| **👤 Like** | ✅ | v0.1.0 |
+| **🧱 Report System** | ✅ | v0.1.0 |
+| **📦 For online users** | ✅ | v0.1.0 |
+| **⭐ Replies to** | ✅ | v0.1.0 |
+| **🔬 Search for** | ✅ | v0.1.5 |
+| **👤 Site statistics** | ✅ | v0.1.5 |
+| **🚀 Management Panel** | ✅ | v0.2.0 |
+| **📦 Emoji support** | ✅ | v0.2.0 |
+| **🔬 Delete post** | ✅ | v0.2.5 |
+| **👤 Permission group implementation** | ✅ | v0.2.5 |
+| **👤 Permission group complete** | 🚧 | |
+| ** ⭐ ICenter (for details see [here] (https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
+| **⭐ Replies to** | 🚧 | |
+| **⭐ Reactions** | 🚧 | |
+| **🎈 Rich Text editor** | 🚧 | |
+| **🎈 Posts** | 🚧 | |
+| **👤 Post published time and number of likes** | 🚧 | |
+| **👤 List by response time and number of likes** | 🚧 | |
+| **📦 Private Message System** | ⏳ | |
+| **📦 User-defined Settings** | ⏳ | |
+| **📦 User page** | ⏳ | |
+| **🔐 Register email and reset password** | ⏳ | |
+| **🔌 Template** | ⏳ | |
+| **🔌 plugin** | ⏳ | |
+| **🔐 Data Security** | ⏳ | |
+| **🔐 SEO optimization** | ⏳ | |
 
 The following is a translation of the legend for your reference:
 
@@ -82,57 +82,57 @@ The following is a translation of the legend for your reference:
 
 1. Environmental requirements
 
-- **Python version ** : 3.11 or higher
-- ** Operating system: Windows, Linux, macOS
+- **Python version** : 3.11 or higher
+- **Operating system**: Windows, Linux, macOS
 
 2. Download the project
 
 ```bash
 git clone https://github.com/IdeaSphere-team/IdeaSphere.git
 cd IdeaSphere
-` ` `
+```
 
 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
-` ` `
+```
 
 4. Set parameters
 
-Modify the 'config.yml' file to fit your environment:
+Modify the `config.yml` file to fit your environment:
 
 (In fact, this file is generated automatically the first time you start the program.)
 
 ```bash
 port: 5000 # program run port
-` ` `
+```
 
 5. Start the program
 
 ```bash
 python app.py
-` ` `
+```
 
-The default access address is' http://localhost:5000 '
+The default access address is `http://localhost:5000`
 
 ## 🎯 Instructions for use
 
 1. Install the wizard
 
-When you visit the forum for the first time, the installation wizard page (' /install ') is automatically displayed and the installation is completed as prompted.
+When you visit the forum for the first time, the installation wizard page ( `/install` ) is automatically displayed and the installation is completed as prompted.
 
 2. User registration and login
 
-Users can register a new account through the '/register' page. After registration is complete, login using the '/login' page.
+Users can register a new account through the `/register` page. After registration is complete, login using the `/login` page.
 
 3. Post and comment
 
-Once logged in, the user can visit the '/post' page to post a new post. In the post details page (' /view_post '), users can comment.
+Once logged in, the user can visit the `/post` page to post a new post. In the post details page ( `/view_post` ), users can comment.
 
 4. Manage the background
 
-Administrators can manage users, posts, and comments through the '/admin' page.
+Administrators can manage users, posts, and comments through the `/admin` page.
 
 ## ⬆️ Submit a contribution
 
@@ -140,7 +140,7 @@ To participate in the development of IdeaSphere, you need to submit your contrib
 
 1. Fork the repository to your GitHub account
 2. Clone the warehouse of your account to a local directory
-'git clone https://github.com/ your username /IdeaSphere.git'
+   `git clone https://github.com/yourusername/IdeaSphere.git`
 3. Make changes in the local warehouse and build a document test, then push it to your own warehouse
 4. Go back to the repository and launch the PR by clicking Pull requests -> New pull request
 
@@ -166,7 +166,7 @@ This project is for study and reference purposes only. In the process of use, pl
 
 ## 🎫 License
 
-This project is licensed under the 'MIT License'. See the LICENSE file for more information.
+This project is licensed under the `MIT License`. See the LICENSE file for more information.
 
 ```
 MIT License
