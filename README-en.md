@@ -19,7 +19,7 @@
 [![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
 
 <p align="center">
-  [简体中文](https://github.com/IdeaSphere-team/IdeaSphere/) | English
+  <a href="https://github.com/IdeaSphere-team/IdeaSphere/">简体中文</a> | English
 </p>
 
 </div>
