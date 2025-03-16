@@ -166,7 +166,7 @@ This project is for study and reference purposes only. In the process of use, pl
 
 ## 🎫 License
 
-This project is licensed under the `MIT License`. See the LICENSE file for more information.
+This project is licensed under the `MIT License`. See the `LICENSE` file for more information.
 
 ```
 MIT License
