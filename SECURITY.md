@@ -16,7 +16,7 @@ The currently supported versions of IdeaSphere are as follows:
 
 If you encounter a vulnerability or any serious issue, please head to the IdeaSphere Discord Tickets channel to create a ticket, or contact admin@231s.net. If you have a QQ account, contact the QQ group admin instead of creating an issue in the GitHub repository!
 
-如果遇到漏洞等严重问题，请第一时间前往 IdeaSphere Discord 频道 Tickets 频道下创建票据，亦或者联系邮箱：admin@231s.net，如果有QQ账户请联系QQ交流群群主，而不是在 github 仓库中提 issue！
+如果遇到漏洞等严重问题，请第一时间前往 IdeaSphere Discord 频道 Tickets 频道下创建工单，亦或者联系邮箱：admin@231s.net，如果有QQ账户请联系QQ交流群群主，而不是在 github 仓库中提 issue！
 
 For bugs, feature requests, or other issues, please use the GitHub issue tracker: [https://github.com/IdeaSphere-team/IdeaSphere/issues](https://github.com/IdeaSphere-team/IdeaSphere/issues)
 
