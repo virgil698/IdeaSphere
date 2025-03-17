@@ -40,43 +40,43 @@
 
 | task overview | Current status | implementation version |
 |---|---|---|
-| **⌨️ Go to** | ✅ | v0.1.0 |
-| **⌨️ Register** | ✅ | v0.1.0 |
-| **⌨️ Posting** | ✅ | v0.1.0 |
-| **🖼 Super administrator** | ✅ | v0.1.0 |
-| **🖼 Moderator** | ✅ | v0.1.0 |
-| **👤 Like** | ✅ | v0.1.0 |
-| **🧱 Report System** | ✅ | v0.1.0 |
-| **📦 For online users** | ✅ | v0.1.0 |
-| **⭐ Replies to** | ✅ | v0.1.0 |
-| **🔬 Search for** | ✅ | v0.1.5 |
-| **👤 Site statistics** | ✅ | v0.1.5 |
-| **🚀 Management Panel** | ✅ | v0.2.0 |
-| **📦 Emoji support** | ✅ | v0.2.0 |
-| **🔬 Delete post** | ✅ | v0.2.5 |
-| **👤 Permission group implementation** | ✅ | v0.2.5 |
-| **👤 Permission group complete** | 🚧 | |
-| **⭐ ICenter (for details see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
-| **⭐ Replies to** | 🚧 | |
-| **⭐ Reactions** | 🚧 | |
-| **🎈 Rich Text editor** | 🚧 | |
-| **🎈 Posts** | 🚧 | |
-| **👤 Post published time and number of likes** | 🚧 | |
-| **👤 List by response time and number of likes** | 🚧 | |
-| **📦 Private Message System** | ⏳ | |
-| **📦 User-defined Settings** | ⏳ | |
-| **📦 User page** | ⏳ | |
-| **🔐 Register email and reset password** | ⏳ | |
-| **🔌 Template** | ⏳ | |
-| **🔌 plugin** | ⏳ | |
+| **⌨️ Login** | ✅ | v0.1.0 |
+| **⌨️ Registration** | ✅ | v0.1.0 |
+| **⌨️ Post Creation** | ✅ | v0.1.0 |
+| **🖼 Super Administrator** | ✅ | v0.1.0 |
+| **🖼 Moderator Administrator** | ✅ | v0.1.0 |
+| **👤 Like Functionality** | ✅ | v0.1.0 |
+| **🧱 Reporting System** | ✅ | v0.1.0 |
+| **📦 Online Users** | ✅ | v0.1.0 |
+| **⭐ Post Replies** | ✅ | v0.1.0 |
+| **🔬 Search** | ✅ | v0.1.5 |
+| **👤 Site Statistics** | ✅ | v0.1.5 |
+| **🚀 Admin Panel** | ✅ | v0.2.0 |
+| **📦 Emoji Support** | ✅ | v0.2.0 |
+| **🔬 Post Deletion** | ✅ | v0.2.5 |
+| **👤 Permission Groups** | ✅ | v0.2.5 |
+| **👤 Full Permission Group Implementation** | 🚧 | |
+| **⭐ ICenter (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
+| **⭐ Content Replies** | 🚧 | |
+| **⭐ Content Reactions** | 🚧 | |
+| **🎈 Rich Text Editor** | 🚧 | |
+| **🎈 Post Sections** | 🚧 | |
+| **👤 Post Creation Time and Like Count Sorting** | 🚧 | |
+| **👤 Reply Time and Like Count Sorting** | 🚧 | |
+| **📦 Private Messaging System** | ⏳ | |
+| **📦 User Customization Settings** | ⏳ | |
+| **📦 User Profile Page** | ⏳ | |
+| **🔐 Email Registration and Password Reset** | ⏳ | |
+| **🔌 Templates** | ⏳ | |
+| **🔌 Plugins** | ⏳ | |
 | **🔐 Data Security** | ⏳ | |
-| **🔐 SEO optimization** | ⏳ | |
+| **🔐 SEO Optimization** | ⏳ | |
 
-The following is a translation of the legend for your reference:
+Here is the translation of the legend for your reference:
 
-- ✅ : The task is complete. That's great! 🎉
-- 🚧 : The task is underway. We're working on it! 💪
-- ⏳ : The mission is about to begin. Something to look forward to! 🌠
+- ✅: Task completed. Great job! 🎉
+- 🚧: Task in progress. We're working hard! 💪
+- ⏳: Task upcoming. Something exciting is coming soon! 🌠
 
 ## 🛠️ Installation Guide
 
