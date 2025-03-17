@@ -38,7 +38,7 @@
 
 ## 🌟 Realization function
 
-| task overview | Current status | implementation version |
+| Task Overview | Current Status | Implementation Version |
 |---|---|---|
 | **⌨️ Login** | ✅ | v0.1.0 |
 | **⌨️ Registration** | ✅ | v0.1.0 |
