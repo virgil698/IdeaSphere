@@ -22,9 +22,9 @@ For bugs, feature requests, or other issues, please use the GitHub issue tracker
 
 如果遇到bug，亦或者有功能等其他请求，请到github仓库进行issue：[https://github.com/IdeaSphere-team/IdeaSphere/issues](https://github.com/IdeaSphere-team/IdeaSphere/issues)
 
-To join Discord: [https://discord.gg/ARa9Sz4R](https://discord.gg/ARa9Sz4R)
+To join Discord: [https://discord.gg/eyn9GC88XP](https://discord.gg/eyn9GC88XP)
 
-DIscord加入办法：[https://discord.gg/ARa9Sz4R](https://discord.gg/ARa9Sz4R)
+DIscord加入办法：[https://discord.gg/eyn9GC88XP](https://discord.gg/eyn9GC88XP)
 
 QQ Group: [1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
 
