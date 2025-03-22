@@ -162,11 +162,13 @@ If you have any questions or suggestions, feel free to reach out to us through t
 
 ## 😊 Disclaimer
 
-This project is intended for learning and reference purposes only. When using it, please ensure compliance with relevant laws, regulations, and website service terms.
+> [!NOTE]
+> This project is intended for learning and reference purposes only. When using it, please ensure compliance with relevant laws, regulations, and website service terms.
 
 ## 🎫 License
 
-This project is licensed under the `MIT License`. For more details, please refer to the `LICENSE` file.
+> [!NOTE]
+> This project is licensed under the `MIT License`. For more details, please refer to the `LICENSE` file.
 
 ```
 MIT License
