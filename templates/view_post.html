@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
-    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
-{#    <script src="{{ url_for('static', filename='js/prism.js') }}"></script>#}
-{#    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/prism-tomorrow.min.css') }}">#}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_post.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
+<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_post.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -26,63 +24,74 @@
                 <meta name="csrf-token" content="{{ csrf_token }}">
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     {% if g.user %}
-                        <a href="#" class="btn btn-primary" onclick="incrementLike('{{ post.id }}');  send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')
+                    <a href="#" class="btn btn-primary" onclick="incrementLike('{{ post.id }}');  send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')
                                                ">
-                            <i class="fas fa-thumbs-up"></i> 点赞
-                        </a>
-                        <a href="#" class="btn btn-warning" onclick="reportPost('{{ post.id }}')">
-                            <i class="fas fa-exclamation-triangle"></i> 举报帖子
-                        </a>
+                        <i class="fas fa-thumbs-up"></i> 点赞
+                    </a>
+                    <a href="#" class="btn btn-warning" onclick="reportPost('{{ post.id }}')">
+                        <i class="fas fa-exclamation-triangle"></i> 举报帖子
+                    </a>
                     {% endif %}
                 </div>
             </div>
         </div>
+
+        <div class="comment_box">
+            {% if g.user %}
+            <form method="POST">
+                <meta name="csrf-token" content="{{ csrf_token }}">
+                <div class="mb-3" onmouseover="comment_input_animation()" onmouseout="Rcomment_input_animation()">
+                    <label for="comment" class="form-label">发表评论</label>
+                    <div class="input-group" id="comment-input-group">
+                        <textarea class="form-control" id="comment" name="content" rows="3"
+                            placeholder="让大家来听听你得心声！"></textarea>
+                        <span class="input-group-text" id="emojiButton2" title="添加表情">
+                            <i class="fas fa-smile"></i>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-send">
+                        <i class="fas fa-comment-dots"></i> 提交评论
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+
 
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">评论</h5>
             </div>
             <div class="card-body">
+
                 {% for comment in comments %}
-                    {% if not comment.deleted %}
-                        <div class="media mb-4">
-                            <div class="media-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mt-0">{{ comment.author.username }} 说：</h6>
-                                    <span class="text-success comment-like-count">点赞: {{ comment.like_count }}</span>
-                                </div>
-                                <div class="markdown-content">
-                                    {{ comment.html_content | safe }}
-                                </div>
-                                <meta name="csrf-token" content="{{ csrf_token }}">
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    {% if g.user %}
-                                        <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}');
+                {% if not comment.deleted %}
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mt-0">{{ comment.author.username }} 说：</h6>
+                            <span class="text-success comment-like-count">点赞: {{ comment.like_count }}</span>
+                        </div>
+                        <div class="markdown-content">
+                            {{ comment.html_content | safe }}
+                        </div>
+                        <meta name="csrf-token" content="{{ csrf_token }}">
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            {% if g.user %}
+                            <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}');
                                                 send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')
                                                 ">
-                                            <i class="fas fa-thumbs-up"></i> 点赞
-                                        </a>
-                                        <a href="#" class="btn btn-warning btn-sm" onclick="reportComment('{{ comment.id }}')">
-                                            <i class="fas fa-exclamation-triangle"></i> 举报评论
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            </div>
+                                <i class="fas fa-thumbs-up"></i> 点赞
+                            </a>
+                            <a href="#" class="btn btn-warning btn-sm" onclick="reportComment('{{ comment.id }}')">
+                                <i class="fas fa-exclamation-triangle"></i> 举报评论
+                            </a>
+                            {% endif %}
                         </div>
-                    {% endif %}
-                {% endfor %}
-                {% if g.user %}
-                    <form method="POST">
-                        <meta name="csrf-token" content="{{ csrf_token }}">
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">评论内容</label>
-                            <textarea class="form-control" id="comment" name="content" rows="3" placeholder="请输入评论内容"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-comment-dots"></i> 提交评论
-                        </button>
-                    </form>
+                    </div>
+                </div>
                 {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>

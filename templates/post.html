@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -27,7 +27,8 @@
                             <i class="fas fa-pencil-alt"></i> 内容（支持 Markdown 格式）
                         </label>
                         <div class="input-group">
-                            <textarea class="form-control" id="content" name="content" rows="6" placeholder="输入帖子内容" required></textarea>
+                            <textarea class="form-control" id="content" name="content" rows="6" placeholder="输入帖子内容"
+                                required></textarea>
                             <span class="input-group-text" id="emojiButton" title="添加表情">
                                 <i class="fas fa-smile"></i>
                             </span>
@@ -43,8 +44,7 @@
                 </form>
 
                 <!-- Emoji 弹出框 -->
-                <div id="emojiPopup"
-                    style="display: none;
+                <div id="emojiPopup" style="display: none;
                         position: absolute;
                         left: 100%;
                         top: 0;
@@ -56,12 +56,12 @@
                         border-radius: 8px;
                         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                         z-index: 1000;">
-                        <span class="emoji">😀</span>
-                        <span class="emoji">😎</span>
-                        <span class="emoji">👍</span>
-                        <span class="emoji">❤️</span>
-                        <span class="emoji">🚀</span>
-                        <!-- 更多Unicode Emoji -->
+                    <span class="emoji">😀</span>
+                    <span class="emoji">😎</span>
+                    <span class="emoji">👍</span>
+                    <span class="emoji">❤️</span>
+                    <span class="emoji">🚀</span>
+                    <!-- 更多Unicode Emoji -->
                 </div>
             </div>
         </div>
