@@ -36,7 +36,7 @@ def get_config():
     config_path = 'config.yml'
     if not os.path.exists(config_path):
         with open(config_path, 'w') as f:
-            yaml.dump({'port': 5000}, f)
+            yaml.dump({'port': 5000, 'debug': True}, f)  # 默认配置
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
 
@@ -230,6 +230,10 @@ def perm_groups(user_id, user_perm, operation):
 #     return icenter_index()
 
 if __name__ == '__main__':
+    from livereload import Server
     config = get_config()
     initialize_database()
-    app.run(port=config.get('port', 5000), debug=True)
+    server = Server(app.wsgi_app)
+    # 监控templates文件夹下的所有文件改动
+    server.watch('templates/**/*.*', ignore=None)
+    server.serve(port=config.get('port', 5000), debug=config.get('debug', True))
