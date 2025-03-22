@@ -8,6 +8,17 @@
                 <h5 class="text-center">论坛登录</h5>
             </div>
             <div class="card-body">
+                <!-- 添加闪存消息显示部分 -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <!-- 结束闪存消息显示部分 -->
                 <form method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="mb-3">
