@@ -1,3 +1,11 @@
+* {
+    --comment-input-group: 37px;
+}
+
+body {
+    background: linear-gradient(to right, rgba(127, 127, 225, 0.339), rgba(239, 116, 116, 0.32));
+}
+
 .forum-body {
     max-width: 1200px;
     margin: 0 auto;
@@ -10,13 +18,74 @@
 }
 
 .card {
+    width: 100%;
+    margin-bottom: 60px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    box-shadow: 5px 5px 20px rgba(255, 255, 255, 0.708);
+    border: 1px solid rgba(136, 136, 136, 0.291);
     transition: all 0.3s ease;
 }
 
-.card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.comment_box {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 5px 5px 20px rgba(255, 255, 255, 0.708);
+    margin-bottom: 50px;
+    border: 1px solid rgba(136, 136, 136, 0.291);
+    padding-bottom: 50px;
+}
+
+.comment_box .mb-3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.btn-send {
+    width: 80%;
+    margin-top: 30px;
+    position: relative;
+}
+
+.comment_box .form-label {
+    font-size: 30px;
+}
+
+#comment {
+    height: var(--comment-input-group);
+    resize: none;
+    background: transparent;
+    transition: all 0.5s;
+}
+
+#comment.a {
+    height: 500px;
+    transition: all 0.5s;
+}
+
+#comment-input-group {
+    width: 80%;
+    height: var(--comment-input-group);
+    background: linear-gradient(to left, rgba(127, 127, 225, 0.339), rgba(239, 116, 116, 0.32));
+    border-radius: 0.375rem;
+    transition: all 0.5s;
+}
+
+#comment-input-group.a {
+    height: 500px;
+    transition: all 0.5s;
+}
+
+#emojiButton2 {
+    background: transparent;
+}
+
+.btn-primary {
+    border: 1px solid rgba(0, 0, 255, 0.103);
+    background: linear-gradient(to left, rgba(127, 127, 225, 0.339), rgba(239, 116, 116, 0.32));
+    box-shadow: 5px 5px 10px rgb(148, 148, 148);
 }
 
 /* 搜索框样式 */
@@ -93,15 +162,33 @@
 }
 
 .emoji-container {
-    position: relative; /* 创建定位上下文 */
+    position: relative;
+    /* 创建定位上下文 */
     display: flex;
-    align-items: center; /* 垂直居中 */
+    align-items: center;
+    /* 垂直居中 */
 }
 
 /* 响应式调整 */
 @media (max-width: 576px) {
     #emojiPopup {
         left: auto !important;
-        right: 0; /* 小屏幕显示在左侧 */
+        right: 0;
+        /* 小屏幕显示在左侧 */
     }
+}
+
+.btn-lg {
+    width: 100%;
+    transition: all 0.5s;
+}
+
+.btn-lg:hover {
+    transform: translateY(-20px);
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.341);
+    transition: all 0.5s;
+}
+
+.btn-fb {
+    width: 100%;
 }
