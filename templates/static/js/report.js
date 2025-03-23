@@ -4,13 +4,17 @@
  * @StructRefactor Jason
  */
 
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
 function handleReport(reportId, status) {
     if (status !== 'valid' && status !== 'invalid') {
         alert('处理失败：无效的状态值');
         return;
     }
     if (confirm('确定要处理该举报吗？')) {
-        fetch(`/handle_report/${reportId}`, {
+        fetch(`/api/handle_report/${reportId}`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': getCSRFToken(),
