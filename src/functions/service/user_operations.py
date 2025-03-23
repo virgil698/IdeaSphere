@@ -1,10 +1,8 @@
 from datetime import datetime
 
 from flask import g, jsonify, request, abort, flash, url_for, redirect, render_template
-
 from src.functions.database.models import Report, db, Like, Post, Comment, User
 from src.functions.parser.markdown_parser import convert_markdown_to_html
-
 
 def report_post_logic(post_id):
     if not g.user:
@@ -23,7 +21,6 @@ def report_post_logic(post_id):
     db.session.commit()
     return jsonify({'success': True, 'message': '举报成功！'})
 
-
 def report_comment_logic(comment_id):
     if not g.user:
         return jsonify({'success': False, 'message': '请登录后再进行举报'})
@@ -41,7 +38,6 @@ def report_comment_logic(comment_id):
     db.session.commit()
     return jsonify({'success': True, 'message': '举报成功！'})
 
-
 def like_post_logic(post_id):
     if not g.user:
         return jsonify({'success': False, 'message': '未登录'})
@@ -58,7 +54,6 @@ def like_post_logic(post_id):
     post = db.session.get(Post, post_id)
     return jsonify({'success': True, 'like_count': post.like_count})
 
-
 def like_comment_logic(comment_id):
     if not g.user:
         return jsonify({'success': False, 'message': '未登录'})
@@ -74,7 +69,6 @@ def like_comment_logic(comment_id):
 
     comment = db.session.get(Comment, comment_id)
     return jsonify({'success': True, 'like_count': comment.like_count})
-
 
 def upgrade_user_logic(user_id):
     if g.role != 'admin':

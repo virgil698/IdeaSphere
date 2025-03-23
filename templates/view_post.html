@@ -21,11 +21,10 @@
                 <div class="markdown-content">
                     {{ post.html_content | safe }}
                 </div>
-                <meta name="csrf-token" content="{{ csrf_token }}">
+                <meta name="csrf-token" content="{{ csrf_token() }}">
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     {% if g.user %}
-                    <a href="#" class="btn btn-primary" onclick="incrementLike('{{ post.id }}');  send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')
-                                               ">
+                    <a href="#" class="btn btn-primary" onclick="incrementLike('{{ post.id }}')">
                         <i class="fas fa-thumbs-up"></i> 点赞
                     </a>
                     <a href="#" class="btn btn-warning" onclick="reportPost('{{ post.id }}')">
@@ -39,7 +38,7 @@
         <div class="comment_box">
             {% if g.user %}
             <form method="POST">
-                <meta name="csrf-token" content="{{ csrf_token }}">
+                <meta name="csrf-token" content="{{ csrf_token() }}">
                 <div class="mb-3" onmouseover="comment_input_animation()" onmouseout="Rcomment_input_animation()">
                     <label for="comment" class="form-label">发表评论</label>
                     <div class="input-group" id="comment-input-group">
@@ -49,7 +48,7 @@
                             <i class="fas fa-smile"></i>
                         </span>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-send">
+                    <button type="submit" class="btn btn-primary btn-send" onclick="sendComment('{{ post.id }}')">
                         <i class="fas fa-comment-dots"></i> 提交评论
                     </button>
                 </div>
@@ -75,12 +74,10 @@
                         <div class="markdown-content">
                             {{ comment.html_content | safe }}
                         </div>
-                        <meta name="csrf-token" content="{{ csrf_token }}">
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             {% if g.user %}
-                            <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}');
-                                                send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')
-                                                ">
+                            <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeComment('{{ comment.id }}')">
                                 <i class="fas fa-thumbs-up"></i> 点赞
                             </a>
                             <a href="#" class="btn btn-warning btn-sm" onclick="reportComment('{{ comment.id }}')">
