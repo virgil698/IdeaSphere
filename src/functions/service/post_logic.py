@@ -1,10 +1,8 @@
 from flask import flash, g, redirect, url_for, request, render_template, abort
-from flask_wtf.csrf import CSRFProtect
 
 from src.functions.database.models import Post, db, Comment
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
-csrf = CSRFProtect()
 
 def create_post_logic():
     if not g.user:
@@ -41,9 +39,6 @@ def view_post_logic(post_id):
         if not g.user:
             flash('请先登录再进行评论', 'danger')
             return redirect(url_for('login'))
-
-        # 验证 CSRF Token
-        csrf.validate()
 
         content = request.form['content']
         html_content = convert_markdown_to_html(content)
