@@ -1,12 +1,12 @@
 import os
 import yaml
 from flask import Flask, request, session, redirect, url_for, g, make_response, jsonify, flash
-from flask_wtf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from src.db_ext import db
-from src.functions.database.models import User, Post, Comment
+from src.functions.database.models import User, Post, Comment, Report, Like
 from src.functions.icenter.db_operation import execute_sql_statement
 from src.functions.index import index_logic
-from src.functions.parser.markdown_parser import remove_markdown
+from src.functions.parser.markdown_parser import remove_markdown, convert_markdown_to_html
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, delete_post_logic
 from src.functions.service.intstall import install_logic
@@ -16,8 +16,8 @@ from src.functions.service.user_logic import register_logic, login_logic, logout
 from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
-from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, \
-    return_icenter_execute_sql_templates
+from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, return_icenter_execute_sql_templates
+from src.functions.api.api import api_bp  # 导入API蓝图
 
 """
 初始化部分   
@@ -32,6 +32,9 @@ app.config['WTF_CSRF_SSL_STRICT'] = True  # 如果使用 HTTPS，开启严格模
 
 db.init_app(app)
 csrf = CSRFProtect(app)
+
+# 注册API蓝图
+app.register_blueprint(api_bp, url_prefix='/api')
 
 def get_config():
     config_path = 'config.yml'

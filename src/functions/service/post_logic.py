@@ -1,4 +1,4 @@
-from flask import flash, g, redirect, url_for, request, render_template, abort
+from flask import flash, g, redirect, url_for, request, render_template, abort, jsonify
 
 from src.functions.database.models import Post, db, Comment
 from src.functions.parser.markdown_parser import convert_markdown_to_html
@@ -27,7 +27,7 @@ def create_post_logic():
 
 
 def view_post_logic(post_id):
-    post = db.session.get(Post, post_id)
+    post = Post.query.get(post_id)
     if not post:
         abort(404)
 
@@ -40,7 +40,17 @@ def view_post_logic(post_id):
             flash('请先登录再进行评论', 'danger')
             return redirect(url_for('login'))
 
-        content = request.form['content']
+        # 检查是否是API请求
+        if request.headers.get('Accept') == 'application/json':
+            data = request.get_json()
+            content = data.get('content')
+        else:
+            content = request.form['content']
+
+        if not content:
+            flash('评论内容不能为空', 'danger')
+            return redirect(url_for('view_post', post_id=post.id))
+
         html_content = convert_markdown_to_html(content)
         new_comment = Comment(
             content=content,
@@ -50,12 +60,12 @@ def view_post_logic(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
-        flash('评论添加成功！', 'success')
-        return redirect(url_for('view_post', post_id=post.id))
 
-    comments = db.session.query(Comment).filter(
-        Comment.post_id == post.id,
-        Comment.deleted == False
-    ).all()
+        if request.headers.get('Accept') == 'application/json':
+            return jsonify({'message': 'Comment created successfully', 'comment_id': new_comment.id}), 201
+        else:
+            flash('评论添加成功！', 'success')
+            return redirect(url_for('view_post', post_id=post.id))
 
+    comments = Comment.query.filter_by(post_id=post.id, deleted=False).all()
     return render_template('view_post.html', post=post, comments=comments)

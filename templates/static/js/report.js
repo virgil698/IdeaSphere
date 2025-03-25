@@ -4,16 +4,23 @@
  * @StructRefactor Jason
  */
 
-function handleReport(reportId, status) {
+async function getCSRFToken() {
+    const response = await fetch('/api/csrf-token');
+    const data = await response.json();
+    return data.csrf_token;
+}
+
+async function handleReport(reportId, status) {
     if (status !== 'valid' && status !== 'invalid') {
         alert('处理失败：无效的状态值');
         return;
     }
     if (confirm('确定要处理该举报吗？')) {
+        const csrfToken = await getCSRFToken();
         fetch(`/handle_report/${reportId}`, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': getCSRFToken(),
+                'X-CSRFToken': csrfToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ status: status })
