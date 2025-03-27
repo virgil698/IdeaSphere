@@ -11,10 +11,85 @@
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* 加载动画样式 */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
 
+        .loader {
+            width: 200px;
+            height: 100px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar {
+            width: 15px;
+            height: 100%;
+            border-radius: 5px;
+            background-color: #CCDDFF;
+            animation: loading 1.5s infinite ease-in-out;
+        }
+
+        .bar:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .bar:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .bar:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes loading {
+            0%, 100% {
+                height: 20px;
+                background-color: #CCDDFF;
+            }
+            50% {
+                height: 80px;
+                margin-top: -30px;
+                background-color: #0077CC;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- 加载动画 -->
+    <div class="loader-wrapper" id="loaderWrapper">
+        <div class="loader">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('index') }}" style="color: white; font-weight: bold">
@@ -136,6 +211,24 @@
     {#
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>#}
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面加载时淡入显示加载动画
+            const loaderWrapper = document.getElementById('loaderWrapper');
+            loaderWrapper.style.opacity = '1';
+            loaderWrapper.style.visibility = 'visible';
+
+            // 页面加载完成后显示加载动画2秒，然后淡入主页面
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    loaderWrapper.style.opacity = '0';
+                    setTimeout(function() {
+                        loaderWrapper.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            });
+        });
+    </script>
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %}
     <script src="{{ url_for('static', filename='js/tips_on_browser.js') }}">

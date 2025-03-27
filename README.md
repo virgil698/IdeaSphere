@@ -22,156 +22,155 @@
 [![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
 
 <p align="center">
-  <a href="https://github.com/IdeaSphere-team/IdeaSphere/blob/main/README-CN.md">简体中文</a> | English
+  简体中文 | <a href="https://github.com/IdeaSphere-team/IdeaSphere/blob/main/README-EN.md">English</a>
 </p>
 
 </div>
 
 
-## 📖 Project introduction
+## 📖 项目介绍
 
-`IdeaSphere` is a simple and useful forum program based on Python 3.11 and Flask framework. It is easy to configure and suitable for quickly setting up a lightweight forum system.
+`IdeaSphere` 是一个基于 Python 3.11 和 Flask 框架开发的简单实用的论坛程序。它易于配置，适合快速搭建一个轻量级的论坛系统。
 
-# 🌟 Core Features
+## 🌟 核心特点
 
-- **Simple and Easy to Use**: Clean interface, practical functions, and easy to get started.
-- **Easy to Configure**: Most configurations can be completed through the `config.yml` file.
-- **Lightweight**: Developed with the Flask framework, ensuring high performance.
-- **Modular Design**: Clear code structure for easy expansion and maintenance.
+- **简单易用**：界面简洁，功能实用，易于上手。
+- **易于配置**：通过 `config.yml` 文件即可完成大部分配置。
+- **轻量级**：基于 Flask 框架开发，性能高效。
+- **模块化设计**：代码结构清晰，方便扩展和维护。
 
-## 🌟 Realization function
+## 🌟 实现功能
 
-| Task Overview | Current Status | Implementation Version |
+| 任务大概 | 目前情况 | 实现版本  |
 |---|---|---|
-| **⌨️ Login** | ✅ | v0.1.0 |
-| **⌨️ Registration** | ✅ | v0.1.0 |
-| **⌨️ Post Creation** | ✅ | v0.1.0 |
-| **🖼 Super Administrator** | ✅ | v0.1.0 |
-| **🖼 Moderator Administrator** | ✅ | v0.1.0 |
-| **👤 Like Functionality** | ✅ | v0.1.0 |
-| **🧱 Reporting System** | ✅ | v0.1.0 |
-| **📦 Online Users** | ✅ | v0.1.0 |
-| **⭐ Post Replies** | ✅ | v0.1.0 |
-| **🔬 Search** | ✅ | v0.1.5 |
-| **👤 Site Statistics** | ✅ | v0.1.5 |
-| **🚀 Admin Panel** | ✅ | v0.2.0 |
-| **📦 Emoji Support** | ✅ | v0.2.0 |
-| **🔬 Post Deletion** | ✅ | v0.2.5 |
-| **👤 Permission Groups** | ✅ | v0.2.5 |
-| **👤 Full Permission Group Implementation** | 🚧 | |
-| **⭐ ICenter (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
-| **⭐ Content Replies** | 🚧 | |
-| **⭐ Content Reactions** | 🚧 | |
-| **🎈 Rich Text Editor** | 🚧 | |
-| **🎈 Post Sections** | 🚧 | |
-| **👤 Post Creation Time and Like Count Sorting** | 🚧 | |
-| **👤 Reply Time and Like Count Sorting** | 🚧 | |
-| **📦 Private Messaging System** | ⏳ | |
-| **📦 User Customization Settings** | ⏳ | |
-| **📦 User Profile Page** | ⏳ | |
-| **🔐 Email Registration and Password Reset** | ⏳ | |
-| **🔌 Templates** | ⏳ | |
-| **🔌 Plugins** | ⏳ | |
-| **🔐 Data Security** | ⏳ | |
-| **🔐 SEO Optimization** | ⏳ | |
+| **⌨️ 登录** | ✅ | v0.1.0 |
+| **⌨️ 注册** | ✅ | v0.1.0 |
+| **⌨️ 发帖** | ✅ | v0.1.0 |
+| **🖼 超级管理员**  | ✅ | v0.1.0 |
+| **🖼 版主管理员** | ✅ | v0.1.0 |
+| **👤 点赞** | ✅ | v0.1.0 |
+| **🧱 举报系统** | ✅ | v0.1.0 |
+| **📦 在线用户** | ✅ | v0.1.0 |
+| **⭐ 帖子回复** | ✅ | v0.1.0 |
+| **🔬 搜索** | ✅ | v0.1.5 |
+| **👤 站点统计** | ✅ | v0.1.5 |
+| **🚀 管理面板** | ✅ | v0.2.0 |
+| **📦 Emoji表情支持** | ✅ | v0.2.0 |
+| **🔬 删除帖子** | ✅ | v0.2.5 |
+| **👤 权限组实现** | ✅ | v0.2.5 |
+| **👤 权限组完全完成** | 🚧 |        |
+| **⭐ ICenter（详细信息请见[这里](https://github.com/IdeaSphere-team/IdeaSphere/issues/5)）** | 🚧 |        |
+| **⭐ 内容回复** | 🚧 |        |
+| **⭐ 内容反应** | 🚧 |        |
+| **🎈 富文本编辑器** | 🚧 |        |
+| **🎈 帖子板块** | 🚧 |        |
+| **👤 帖子发布时间、点赞数量排列** | 🚧 |        |
+| **👤 回复时间、点赞数量排列** | 🚧 |        |
+| **📦 私信系统** | ⏳ |        |
+| **📦 用户自定义设置** | ⏳ |        |
+| **📦 用户页面** | ⏳ |        |
+| **🔐 邮箱注册、重置密码** | ⏳ |        |
+| **🔌 模板** | ⏳ |        |
+| **🔌 插件** | ⏳ |        |
+| **🔐 数据安全** | ⏳ |        |
+| **🔐 SEO优化** | ⏳ |        |
 
-Here is the translation of the legend for your reference:
+以下是图例的翻译，供您参考：
 
-- ✅: Task completed. Great job! 🎉
-- 🚧: Task in progress. We're working hard! 💪
-- ⏳: Task upcoming. Something exciting is coming soon! 🌠
+- ✅：任务已完成。太棒了！🎉
+- 🚧：任务正在进行中。我们正在努力！💪
+- ⏳：任务即将开始。令人期待的事情即将到来！🌠
 
-# 🛠️ Installation Guide
+## 🛠️ 安装指南
 
-## 1. Environment Requirements
+1. 环境要求
 
-- **Python Version**: 3.11 or higher
-- **Operating System**: Windows, Linux, macOS
+- **Python 版本**：3.11 或更高
+- **操作系统**：Windows, Linux, macOS
 
-## 2. Download the Project
+2. 下载项目
 
 ```bash
-git clone https://github.com/IdeaSphere-team/IdeaSphere.git  
+git clone https://github.com/IdeaSphere-team/IdeaSphere.git
 cd IdeaSphere
 ```
 
-## 3. Install Dependencies
+3. 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 4. Configure Parameters
+4. 配置参数
 
-Modify the `config.yml` file to suit your environment:
+修改 `config.yml` 文件以适配您的环境：
 
-(It will be generated automatically on the first program launch)
+（事实上，第一次启动程序时会自动生成该文件）
 
 ```bash
-port: 5000  # Program runtime port
+port: 5000  # 程序运行端口
 ```
 
-## 5. Start the Program
+5. 启动程序
 
 ```bash
 python app.py
 ```
 
-Default access address: `http://localhost:5000`
+默认访问地址为：`http://localhost:5000`
 
-# 🎯 Usage Instructions
+## 🎯 使用说明
 
-## 1. Installation Wizard
+1. 安装向导
 
-On your first visit to the forum, you'll automatically enter the installation wizard page (`/install`). Follow the prompts to complete the installation.
+首次访问论坛时，会自动进入安装向导页面（`/install`），按照提示完成安装。
 
-## 2. User Registration and Login
+2. 用户注册与登录
 
-Users can register for a new account via the `/register` page. After registration, use the `/login` page to log in.
+用户可以通过 `/register` 页面注册新账号。注册完成后，使用 `/login` 页面登录。
 
-## 3. Posting and Commenting
+3. 发布帖子与评论
 
-After logging in, users can access the `/post` page to create new posts. On the post details page (`/view_post`), users can post comments.
+登录后，用户可以访问 `/post` 页面发布新帖子。在帖子详情页（`/view_post`），用户可以发表评论。
 
-## 4. Admin Backend
+4. 管理后台
 
-Administrators can manage users, posts, and comments via the `/admin` page.
+管理员可以通过 `/admin` 页面管理用户、帖子和评论。
 
-# ⬆️ Contributing
+## ⬆️ 提交贡献
 
-We welcome your participation in IdeaSphere's development. Follow these steps to submit your contributions:
+欢迎参与 IdeaSphere 的开发，您需要通过以下方式提交你的贡献
 
-1. Fork this repository to your GitHub account
-2. Clone your account's repository to your local machine
-   `git clone https://github.com/  your_username/IdeaSphere.git`
-3. Make changes, build, and test the documentation locally. Once verified, push to your repository
-4. Return to this repository, click Pull requests -> New pull request to initiate a PR
+1. Fork 此仓库至自己的 GitHub 账户下
+2. 将自己账户下的仓库克隆至本地
+   `git clone https://github.com/你的用户名/IdeaSphere.git`
+3. 在本地仓库中进行修改并构建文档测试,无误后 push 至自己的仓库
+4. 回到此仓库,点击 Pull requests -> New pull request 发起 PR
 
-# 📞 Contact Us
+## 📞 联系我们
 
-If you have any questions or suggestions, feel free to reach out to us through the following methods:
+如果您有任何问题或建议，可以通过以下方式联系我们：
 
-- Submit [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose  )
-- QQ Group: [![QQ](https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-1036347298-20B2AA?style=for-the-badge  )](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298  )
-- Discord: [![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord  )](https://discord.gg/eyn9GC88XP  )
+- 提交 [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose)
+- QQ交流群：[![QQ](https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-1036347298-20B2AA?style=for-the-badge)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
+- Discode：[![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
 
-## 🤝 Contributor
+## 🤝 贡献者
 
 [![Contrib](https://contrib.rocks/image?repo=IdeaSphere-team/IdeaSphere)](https://github.com/IdeaSphere-team/IdeaSphere/graphs/contributors)
 
-## ⭐ Star history chart
+## ⭐ Star 历史图
 
 [![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
-## 😊 Disclaimer
+## 😊 免责声明
 
 > [!NOTE]
-> This project is intended for learning and reference purposes only. When using it, please ensure compliance with relevant laws, regulations, and website service terms.
+> 本项目仅供学习和参考使用。在使用过程中，请确保遵守相关法律法规和网站服务条款。
 
-## 🎫 License
-
+## 🎫 许可证
 > [!NOTE]
-> This project is licensed under the `MIT License`. For more details, please refer to the `LICENSE` file.
+> 本项目采用 `MIT License` 许可证。有关详细信息，请参阅 `LICENSE` 文件。
 
 ```
 MIT License
