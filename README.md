@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/IdeaSphere-team/IdeaSphere/">
-    <img src="/templates/static/img/logo-white.png.png" alt="Logo" width="80" height="80">
+    <img src="/templates/static/img/logo-white.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">IdeaSphere</h3>
