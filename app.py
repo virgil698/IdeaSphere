@@ -76,8 +76,9 @@ def before_request():
 
     # 其他逻辑
     if 'user_id' not in session:
-        if request.endpoint not in ['install', 'static', 'login']:
-            return redirect(url_for('install'))
+        # 如果未登录，且访问的不是登录页、注册页或静态资源，则重定向到登录页
+        if request.endpoint not in ['login', 'register', 'static', 'index']:
+            return redirect(url_for('index'))
 
     if 'user_id' in session:
         user = db.session.get(User, session['user_id'])
