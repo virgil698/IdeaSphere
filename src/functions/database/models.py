@@ -79,3 +79,8 @@ class SearchModel(db.Model):
     table_name = 'search_keywords'
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(100), unique=True, nullable=False)
+
+
+class InstallationStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    is_installed = db.Column(db.Boolean, default=False)
