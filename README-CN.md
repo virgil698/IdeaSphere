@@ -8,6 +8,9 @@
 <h3 align="center">IdeaSphere</h3>
 
 <p align="center">
+  A forum software focusing on simplicity, practicality and easy configuration, built with Python3.
+</p>
+<p align="center">
   主打简单实用易于配置的论坛程序，基于 Python3 完成
 </p>
 
