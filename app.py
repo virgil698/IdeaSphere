@@ -17,38 +17,31 @@ from src.functions.service.user_operations import report_post_logic, like_post_l
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
 from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, return_icenter_execute_sql_templates
-from src.functions.api.api import api_bp  # 导入API蓝图
+from src.functions.api.api import api_bp
+from src.functions.config.config import get_config, initialize_database
 
 """
 初始化部分   
 """
 app = Flask(__name__, static_folder="templates/static", static_url_path='/static', template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['WTF_CSRF_ENABLED'] = True
-app.config['WTF_CSRF_SSL_STRICT'] = True  # 如果使用 HTTPS，开启严格模式
+# 从配置文件中读取配置
+config = get_config()
+
+# 数据库配置
+app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['database']['track_modifications']
+
+# CSRF配置
+app.config['WTF_CSRF_ENABLED'] = config['csrf']['enabled']
+app.config['WTF_CSRF_SSL_STRICT'] = config['csrf']['ssl_strict']
 
 db.init_app(app)
 csrf = CSRFProtect(app)
 
 # 注册API蓝图
 app.register_blueprint(api_bp, url_prefix='/api')
-
-def get_config():
-    config_path = 'config.yml'
-    if not os.path.exists(config_path):
-        with open(config_path, 'w') as f:
-            yaml.dump({'port': 5000, 'debug': True}, f)  # 默认配置
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
-
-
-def initialize_database():
-    with app.app_context():
-        db.create_all()
-
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
@@ -222,8 +215,7 @@ def sql_execute_page():
 
 if __name__ == '__main__':
     from livereload import Server
-    config = get_config()
-    initialize_database()
+    initialize_database(app)  # 调用数据库初始化函数
     server = Server(app.wsgi_app)
     # 监控templates文件夹下的所有文件改动
     server.watch('templates/**/*.*', ignore=None)
