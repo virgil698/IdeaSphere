@@ -1,6 +1,7 @@
 """
 数据库模型
 """
+from email.policy import default
 
 from src.db_ext import db
 
@@ -10,7 +11,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(10), default='user')  # user, moderator, admin
-
+    icenter_user = db.Column(db.String)
+    icenter_pwd = db.Column(db.String)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,7 +78,6 @@ class Like(db.Model):
 
 
 class SearchModel(db.Model):
-    table_name = 'search_keywords'
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(100), unique=True, nullable=False)
 

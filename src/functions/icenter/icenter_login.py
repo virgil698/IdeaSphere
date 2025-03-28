@@ -17,7 +17,7 @@ def icenter_login_logic():
                 else:
                     return redirect(url_for('index'))
             else:
-                return jsonify(success=False, message="Invalid username or password")
+                return jsonify(success=False, message="你的名字或密码或者权限组错误！")
         except:
-            return jsonify(success=False, message="Invalid username or password")
+            return jsonify(success=False, message="你的名字或密码或者权限组错误！")
 
