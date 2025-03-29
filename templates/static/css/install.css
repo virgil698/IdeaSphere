@@ -1,12 +1,42 @@
 body {
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
 }
 
 .install-container {
+    max-width: 100%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-container img {
+    max-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.logo-container h2 {
+    margin: 0;
+    color: #4dabf7;
+    font-weight: 600;
+}
+
+.tagline {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 5px;
 }
 
 .install-header {
@@ -14,15 +44,9 @@ body {
     margin-bottom: 30px;
 }
 
-.install-header h1 {
-    color: #4dabf7;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
 .install-header p {
     color: #6c757d;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .install-step {
@@ -30,10 +54,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-    padding: 35px;
+    padding: 30px;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .step-title {
@@ -94,6 +116,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: auto;
 }
 
 .dependency-table th, .dependency-table td {
@@ -145,8 +168,8 @@ body {
 
 .form-control {
     border-radius: 5px;
-    padding: 15px 20px;
-    font-size: 1rem;
+    padding: 12px 15px;
+    font-size: 0.95rem;
     border: 1px solid #ced4da;
     transition: border-color 0.3s ease;
 }
@@ -157,27 +180,59 @@ body {
 }
 
 .btn-primary {
-    background-color: #4dabf7;
-    border-color: #4dabf7;
-    padding: 12px 25px;
-    font-size: 1rem;
+    background: linear-gradient(135deg, #4dabf7 0%, #3a9bf3 100%);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
     border-radius: 5px;
     transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary:hover {
-    background-color: #3a9bf3;
-    border-color: #3a9bf3;
+    background: linear-gradient(135deg, #3a9bf3 0%, #2a8bf0 100%);
 }
 
-.logo-container {
-    text-align: center;
-    margin-bottom: 30px;
+.btn-primary i {
+    margin-right: 8px;
 }
 
-.logo-container img {
-    max-width: 200px;
-    height: auto;
+.text-muted {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.password-strength {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.strength-meter {
+    height: 4px;
+    background-color: #e9ecef;
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    background-color: #dc3545;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.strength-fill.medium {
+    background-color: #ffc107;
+}
+
+.strength-fill.strong {
+    background-color: #28a745;
 }
 
 /* 优化后的步骤指示器样式 */
@@ -197,8 +252,8 @@ body {
 }
 
 .step-circle {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: #e9ecef;
     display: flex;
@@ -215,48 +270,19 @@ body {
 }
 
 .step-label {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #6c757d;
 }
 
 .step-divider {
     flex-grow: 1;
-    height: 4px;
+    height: 3px;
     background-color: #e9ecef;
     position: relative;
-    top: 20px;
+    top: 15px;
     z-index: 0;
 }
 
 .step.active + .step-divider {
     background-color: #4dabf7;
-}
-
-.password-strength {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-.strength-meter {
-    height: 6px;
-    background-color: #e9ecef;
-    border-radius: 3px;
-    margin-top: 5px;
-    overflow: hidden;
-}
-
-.strength-fill {
-    height: 100%;
-    background-color: #dc3545;
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
-.strength-fill.medium {
-    background-color: #ffc107;
-}
-
-.strength-fill.strong {
-    background-color: #28a745;
 }

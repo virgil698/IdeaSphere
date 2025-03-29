@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IdeaSphere论坛程序安装向导</title>
+    <title>IdeaSphere - 安装向导</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/install.css') }}">
@@ -12,11 +12,14 @@
     <div class="install-container">
         <div class="logo-container">
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="论坛Logo">
+            <h2>IdeaSphere</h2>
+            <p class="tagline">开始您的创意之旅</p>
+
         </div>
 
         <div class="install-header">
-            <h1>IdeaSphere论坛程序安装向导</h1>
             <p>请按照以下步骤完成论坛的初始设置</p>
+
         </div>
 
         <!-- 优化后的步骤指示器 -->
@@ -61,12 +64,12 @@
                                     <i class="fas fa-times-circle error"></i>
                                 {% endif %}
                             </div>
-                            <div class="check-name">Python版本</div>
+                            <div class="check-name">本机环境</div>
                             <div class="check-result">
                                 <table class="dependency-table">
                                     <thead>
                                         <tr>
-                                            <th>当前版本</th>
+                                            <th>Python当前版本</th>
                                             <th>要求版本</th>
                                             <th>状态</th>
                                         </tr>
@@ -182,6 +185,7 @@
                 <div class="form-group">
                     <label for="adminUsername"><i class="fas fa-user"></i> 管理员用户名</label>
                     <input type="text" class="form-control" id="adminUsername" name="username" placeholder="输入管理员用户名" required>
+                    <small class="text-muted">管理员将拥有论坛的最高权限</small>
                 </div>
 
                 <div class="form-group">
@@ -191,6 +195,7 @@
                     <div class="strength-meter">
                         <div class="strength-fill" id="passwordStrengthMeter"></div>
                     </div>
+                    <small class="text-muted">请使用强密码以保护您的账户安全</small>
                 </div>
 
                 <div class="form-group">
@@ -203,7 +208,7 @@
                         <i class="fas fa-arrow-left"></i> 上一步
                     </button>
                     <button type="submit" class="btn btn-primary" style="margin-left: 20px;">
-                        <i class="fas fa-check"></i> 完成安装
+                        <i class="fas fa-check"></i> 初始化论坛
                     </button>
                 </div>
             </div>
