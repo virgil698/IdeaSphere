@@ -1,28 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // 更新步骤指示器状态
+    function updateStepsIndicator(currentStep) {
+        const steps = ['step1-indicator', 'step2-indicator', 'step3-indicator'];
+        steps.forEach(step => {
+            document.getElementById(step).classList.remove('active');
+        });
+        document.getElementById(steps[currentStep - 1]).classList.add('active');
+    }
+
     document.getElementById('nextToStep2').addEventListener('click', function () {
         document.getElementById('step1').style.display = 'none';
         document.getElementById('step2').style.display = 'block';
-        document.getElementById('progressFill').className = 'progress-fill step-completed';
+        updateStepsIndicator(2);
     });
 
     document.getElementById('prevToStep1').addEventListener('click', function () {
         document.getElementById('step2').style.display = 'none';
         document.getElementById('step1').style.display = 'block';
-        document.getElementById('progressFill').className = 'progress-fill';
+        updateStepsIndicator(1);
     });
 
     document.getElementById('nextToStep3').addEventListener('click', function () {
         document.getElementById('step2').style.display = 'none';
         document.getElementById('step3').style.display = 'block';
-        document.getElementById('progressFill').className = 'progress-fill all-steps-completed';
+        updateStepsIndicator(3);
     });
 
     document.getElementById('prevToStep2').addEventListener('click', function () {
         document.getElementById('step3').style.display = 'none';
         document.getElementById('step2').style.display = 'block';
-        document.getElementById('progressFill').className = 'progress-fill step-completed';
+        updateStepsIndicator(2);
     });
 
+    // 密码强度检测
     const passwordInput = document.getElementById('adminPassword');
     const passwordConfirmInput = document.getElementById('adminPasswordConfirm');
     const strengthText = document.getElementById('passwordStrengthText');

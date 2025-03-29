@@ -40,21 +40,6 @@ body {
     color: #333;
     font-size: 1.5rem;
     margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.step-title .step-number {
-    width: 30px;
-    height: 30px;
-    background-color: #e9ecef;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    font-weight: bold;
-    color: #495057;
 }
 
 .environment-check {
@@ -195,31 +180,56 @@ body {
     height: auto;
 }
 
-.progress-container {
-    margin: 25px 0;
-    text-align: center;
+/* 优化后的步骤指示器样式 */
+.steps-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    position: relative;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 6px;
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     background-color: #e9ecef;
-    border-radius: 3px;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    z-index: 1;
+    transition: background-color 0.3s ease;
 }
 
-.progress-fill {
-    height: 100%;
+.step.active .step-circle {
     background-color: #4dabf7;
-    width: 33%;
+    color: white;
 }
 
-.step-completed .progress-fill {
-    width: 66%;
+.step-label {
+    font-size: 0.9rem;
+    color: #6c757d;
 }
 
-.all-steps-completed .progress-fill {
-    width: 100%;
+.step-divider {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #e9ecef;
+    position: relative;
+    top: 20px;
+    z-index: 0;
+}
+
+.step.active + .step-divider {
+    background-color: #4dabf7;
 }
 
 .password-strength {
