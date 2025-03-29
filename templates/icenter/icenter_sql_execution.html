@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <!--
@@ -14,11 +15,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/sql.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/icenter_sql.css') }}">
 </head>
 <body>
 <div class="main-container">
-    <!-- 侧边栏 -->
     <div class="sidebar">
         <a href="/real_icenter_index">
             <button class="sidebar-button">仪表盘主页</button>
@@ -27,7 +26,6 @@
             <button class="sidebar-button">ExecuteSQL</button>
         </a>
     </div>
-
     <!-- 内容区域 -->
     <div class="content-area">
         <div id="editorContainer" data-placeholder="Please input your SQL Statement">
