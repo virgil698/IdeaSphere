@@ -25,16 +25,24 @@
         <a href="/sql_execute_page">
             <button class="sidebar-button">ExecuteSQL</button>
         </a>
+        <a href="/editor">
+            <button class="sidebar-button">编辑器</button>
+        </a>
     </div>
-    <!-- 内容区域 -->
+    <!-- 修改后的内容区域 -->
     <div class="content-area">
-        <div id="editorContainer" data-placeholder="Please input your SQL Statement">
-            <pre><code id="codeEditor" contenteditable="true" class="language-sql"></code></pre>
-        </div>
-        <div class="button-container">
-            <button id="submit-sql-statement-to-backend">▶️ Execute SQL</button>
+        <div class="sql-editor-section">
+            <div id="editorContainer" data-placeholder="Please input your SQL Statement">
+                <pre><code id="codeEditor" contenteditable="true" class="language-sql"></code></pre>
+            </div>
+            <div class="button-container">
+                <button id="submit-sql-statement-to-backend" class="execute-btn">
+                    ▶️ Execute SQL
+                </button>
+            </div>
         </div>
     </div>
+
 </div>
 
 <script src="{{ url_for('static', filename='js/execute_sql.js') }}"></script>

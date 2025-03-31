@@ -1,7 +1,39 @@
-document.addEventListener('DOMContentLoaded', () => {
+async function getCSRFToken() {
+    const response = await fetch('/api/csrf-token');
+    const data = await response.json();
+    return data.csrf_token;
+}
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+
     // 将 editor 提升到全局作用域
     window.editor = document.getElementById('codeEditor');
     const submitButton = document.getElementById('submit-sql-statement-to-backend');
+
+    submitButton.addEventListener('click', async (e) => {
+        const csrfToken = await getCSRFToken();
+
+        e.preventDefault(); // 阻止默认表单提交行为
+        // 获取编辑器中的SQL语句
+        const sql = editor.textContent.trim();
+        fetch('/execute_sql', {
+            'method': 'POST',
+            'headers': {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({sql})
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(`执行SQL语句失败！${data.message}`);
+                } else {
+                    alert(data.message);
+                }
+            })
+    })
 
     editor.contentEditable = 'true';
     editor.className = 'language-sql';

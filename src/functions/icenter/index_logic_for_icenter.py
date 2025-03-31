@@ -6,3 +6,6 @@ def return_icenter_index_templates():
 
 def return_icenter_execute_sql_templates():
     return render_template('icenter/icenter_sql_execution.html')
+
+def return_icenter_editor():
+    return render_template('icenter/icenter_editor.html')

@@ -1,5 +1,4 @@
 import os
-import yaml
 from flask import Flask, request, session, redirect, url_for, g
 from flask_wtf.csrf import CSRFProtect
 from src.db_ext import db
@@ -9,6 +8,7 @@ from src.functions.index import index_logic
 from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, delete_post_logic
+from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
@@ -16,9 +16,11 @@ from src.functions.service.user_logic import register_logic, login_logic, logout
 from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
-from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, return_icenter_execute_sql_templates
+from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, \
+    return_icenter_execute_sql_templates, return_icenter_editor
 from src.functions.api.api import api_bp
 from src.functions.config.config import get_config, initialize_database
+from src.functions.service import monitor
 
 """
 初始化部分   
@@ -212,6 +214,30 @@ def execute_sql():
 @app.route('/sql_execute_page')
 def sql_execute_page():
     return return_icenter_execute_sql_templates()
+
+@app.route('/system_monitor/<string:mode>')
+def system_monitor(mode):
+    match (mode):
+        case 'cpu':
+            return monitor.SystemMonitor().get_cpu_usage_percent()
+        case 'physics_info':
+            return monitor.SystemMonitor().get_real_physics_usage()
+        case 'memory':
+            return monitor.SystemMonitor().get_memory_usage()
+        case 'info':
+            return monitor.SystemMonitor().get_basic_info_for_machine()
+
+@app.route('/editor')
+def editor():
+    return return_icenter_editor()
+
+@app.route('/directory_tree_api', methods=['GET'])
+def directory_tree_api():
+    return editor_tool().directory_tree()
+
+@app.route('/get_file_content', methods=['POST'])
+def get_file_content():
+    return editor_tool().get_file_content()
 
 if __name__ == '__main__':
     from livereload import Server
