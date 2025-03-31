@@ -11,7 +11,7 @@ body {
 .top-welcome {
     background-color: #6C63FF;
     color: white;
-    padding: 5px 20px;
+    padding: 15px 20px;
     text-align: center;
     font-size: 14px;
 }
@@ -20,7 +20,7 @@ body {
 .navbar {
     background-color: white;
     border-bottom: 1px solid #e9ecef;
-    padding: 0.5rem 1rem;
+    padding: 1rem 20rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     width: 100%;
 }
