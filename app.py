@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, session, redirect, url_for, g
+from flask import Flask, request, session, redirect, url_for, g, jsonify
 from flask_wtf.csrf import CSRFProtect
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment
@@ -21,6 +21,7 @@ from src.functions.icenter.index_logic_for_icenter import return_icenter_index_t
 from src.functions.api.api import api_bp
 from src.functions.config.config import get_config, initialize_database
 from src.functions.service import monitor
+from src.functions.utils.logger import Logger
 
 """
 初始化部分   
@@ -239,7 +240,33 @@ def directory_tree_api():
 def get_file_content():
     return editor_tool().get_file_content()
 
+@app.route('/front_end_log_interface/<string:message>', methods=['POST', 'GET'])
+def front_end_log_interface(message):
+    log_thread = Logger(
+        threadID=1,
+        name="FrontEnd",
+        counter=1,
+        msg=message,
+        mode="info",
+        module_name="FrontEndInterface",
+        log_path='./logs'
+    )
+    log_thread.start()
+    return jsonify({"message": "Success"})
+
 if __name__ == '__main__':
+    # 初始化日志
+    log_thread = Logger(
+        threadID=1,
+        name="LogThread",
+        counter=1,
+        msg="Initialize Log",
+        mode="info",
+        module_name="Server",
+        log_path='./logs'
+    )
+    log_thread.start()
+    log_thread.package(config.get('log-size', 1000000000))
     from livereload import Server
     initialize_database(app)  # 调用数据库初始化函数
     server = Server(app.wsgi_app)
