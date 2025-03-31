@@ -20,11 +20,11 @@ class Logger(threading.Thread):
             msg: str,
             mode: str,
             module_name: str = '',
-            log_path:str = ""
-        ):
+            log_path: str = ""
+    ):
         super().__init__()
         now = datetime.now()
-        self.path =now.strftime("%Y-%m-%d") + '.log'
+        self.path = now.strftime("%Y-%m-%d") + '.log'
         self.threadID = threadID
         self.name = name
         self.counter = counter
@@ -38,6 +38,10 @@ class Logger(threading.Thread):
             "yellow": "\033[33m",
             "blue": "\033[34m",
         }
+
+        # 确保日志目录存在
+        if not os.path.exists(self.logpath):
+            os.makedirs(self.logpath, exist_ok=True)
 
     def run(self):
         """ 线程主执行方法 """
@@ -55,7 +59,12 @@ class Logger(threading.Thread):
     def write_main_function(self, time: str, mode: str, msg: str, module_name: str):
         """ 线程安全的日志写入 """
         with self.write_lock:
-            with open(self.logpath + '/' + self.path, 'a', encoding='utf-8') as f:
+            # 确保日志目录存在
+            if not os.path.exists(self.logpath):
+                os.makedirs(self.logpath, exist_ok=True)
+
+            log_file_path = os.path.join(self.logpath, self.path)
+            with open(log_file_path, 'a', encoding='utf-8') as f:
                 log_content = f"[{time}][{mode}][{module_name}] {msg}\n" if module_name \
                     else f"[{time}][{mode}] {msg}\n"
 
@@ -64,10 +73,11 @@ class Logger(threading.Thread):
                 print(f"{color_code}{log_content}\033[0m")
 
                 f.write(log_content)
-    def package(self, size:int):
+
+    def package(self, size: int):
         """
         统计LOGS文件夹大小，并打包成tar.gz
-        :param size:byte
+        :param size: byte
         :return:
         """
         total_size = 0
@@ -78,6 +88,5 @@ class Logger(threading.Thread):
                 if not os.path.islink(fp):
                     total_size += os.path.getsize(fp)
             if total_size > size:
-               with tarfile.open(f"{self.logpath}/logs.tar.gz", "w:gz") as tar:
+                with tarfile.open(f"{self.logpath}/logs.tar.gz", "w:gz") as tar:
                     tar.add(self.logpath, arcname=os.path.basename(self.logpath))
-

@@ -256,6 +256,10 @@ def front_end_log_interface(message):
 
 if __name__ == '__main__':
     # 初始化日志
+    log_path = "./logs"  # 确保这个路径是正确的
+    if not os.path.exists(log_path):
+        os.makedirs(log_path, exist_ok=True)
+
     log_thread = Logger(
         threadID=1,
         name="LogThread",
@@ -263,7 +267,7 @@ if __name__ == '__main__':
         msg="Initialize Log",
         mode="info",
         module_name="Server",
-        log_path='./logs'
+        log_path=log_path
     )
     log_thread.start()
     log_thread.package(config.get('log-size', 1000000000))
