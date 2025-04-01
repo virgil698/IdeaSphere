@@ -108,10 +108,9 @@ async function handleFileClick(fileNode) {
         })
             .then(response => response.json())
             .then(data => {
-                if (!data.success) {
-                    alert("获取文件内容失败" + data.error)
-                } else {
-                    buildEditor(data.content)
+                if (data.success) {
+                    const ext = fileNode.name.split('.').pop();
+                    buildEditor(data.content, ext, fileNode.name); // 传递文件扩展名
                 }
             })
     } catch (e) {
@@ -180,11 +179,20 @@ function showError(message) {
 }
 
 
-
-async function buildEditor(code) {
+async function buildEditor(code, fileExt, fileName) {
+    if (!fileName) {
+        fileName = prompt('请输入文件名') || `newfile.${lang}`;
+    }
     const pos_to_editor_main = document.getElementById('editor-main');
     pos_to_editor_main.innerHTML = '';
-
+    // 根据扩展名设置语言
+    const languages = {
+        js: 'javascript',
+        py: 'python',
+        html: 'html',
+        css: 'css'
+    };
+    const lang = languages[fileExt] || 'plaintext';
     // 创建容器和工具栏
     const container = document.createElement('div');
     container.className = 'editor-container';
@@ -203,44 +211,84 @@ async function buildEditor(code) {
 
     // 初始化数据
     let allLines = code ? code.split(/\r?\n/) : [];
-    let modifiedLines = [...allLines]; // 存储修改后的内容
+    let modifiedLines = [...allLines];
     const pageSize = 100;
     let isLoading = false;
+    let loadedLines = new Set(); // 新增：记录已加载行号
+    let lastScrollPos = 0; // 新增：记录上次滚动位置
 
-    // 创建编辑元素
+    // 创建编辑元素（添加行标识）
     const createEditorLine = (index, content) => {
         const lineDiv = document.createElement('div');
         lineDiv.className = 'editor-line';
 
-        // 行号
+        // 行号保持不变
         const lineNumber = document.createElement('span');
         lineNumber.className = 'line-number';
         lineNumber.textContent = index + 1;
 
-        // 输入框
-        const input = document.createElement('textarea');
-        input.className = 'code-input';
-        input.value = content;
-        input.addEventListener('input', (e) => {
-            modifiedLines[index] = e.target.value;
+        // 替换为支持高亮的代码块
+        const codeContainer = document.createElement('div');
+        codeContainer.className = 'code-container';
+
+        const pre = document.createElement('pre');
+        const codeElem = document.createElement('code');
+        codeElem.className = `language-${lang}`;
+        codeElem.textContent = content;
+        codeElem.contentEditable = true; // 保持可编辑
+
+        // 添加高亮
+        hljs.highlightElement(codeElem);
+
+        // 输入事件处理
+        codeElem.addEventListener('input', (e) => {
+            modifiedLines[index] = e.target.textContent;
+            // 输入后重新高亮
+            hljs.highlightElement(codeElem);
         });
 
-        lineDiv.append(lineNumber, input);
+        pre.appendChild(codeElem);
+        codeContainer.appendChild(pre);
+        lineDiv.append(lineNumber, codeContainer);
+
         return lineDiv;
     };
 
-    // 加载函数
+    // 添加CSS样式（追加到已有样式中）
+    const highlightStyle = `        .hljs{background:#f8f8f8;padding:0.3em}
+        .code-container {flex-grow:1}
+        .editor-line {
+            display: flex;
+            margin: 2px 0;
+            align-items: start;
+        }
+        pre {
+            margin:0;
+            padding:0;
+            background:none !important;
+        }
+        code {
+            white-space: pre-wrap;
+            display: block;
+            padding-left: 5px;
+        }
+    `;
+    document.head.querySelector('style').textContent += highlightStyle;
+
+    // 改进的加载函数（增量加载）
     const loadLines = (start, end) => {
-        editorWrapper.innerHTML = '';
         const fragment = document.createDocumentFragment();
-        for(let i = start; i < end; i++) {
-            if(i >= modifiedLines.length) break;
-            fragment.appendChild(createEditorLine(i, modifiedLines[i]));
+        for (let i = start; i < end; i++) {
+            if (i >= modifiedLines.length) break;
+            if (!loadedLines.has(i)) {
+                fragment.appendChild(createEditorLine(i, modifiedLines[i]));
+                loadedLines.add(i);
+            }
         }
         editorWrapper.appendChild(fragment);
     };
 
-    // 保存功能
+    // 保存功能（保持不变）
     saveBtn.addEventListener('click', async () => {
         try {
             const csrfToken = await getCSRFToken();
@@ -251,31 +299,45 @@ async function buildEditor(code) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    content: modifiedLines.join('\n')
+                    content: modifiedLines.join('\n'),
+                    filename: fileName || 'untitled'
                 })
             });
-
+            // console.log(modifiedLines.join('\n'))
+            // console.log(fileName)
             const result = await response.json();
-            if(result.success) {
+            if (result.success) {
                 alert('保存成功');
-                allLines = [...modifiedLines]; // 更新原始数据
+                allLines = [...modifiedLines];
             }
-        } catch(e) {
+        } catch (e) {
             showError(`保存失败: ${e.message}`);
         }
     });
 
-    // 滚动加载逻辑
+    // 改进的滚动处理逻辑
     let currentStart = 0;
     const handleScroll = () => {
-        if(isLoading) return;
+        if (isLoading) return;
 
-        const { scrollTop, scrollHeight, clientHeight } = editorWrapper;
-        if(scrollTop + clientHeight > scrollHeight - 50) {
+        const {scrollTop, scrollHeight, clientHeight} = editorWrapper;
+        const scrollDirection = scrollTop > lastScrollPos ? 'down' : 'up';
+        lastScrollPos = scrollTop;
+
+        // 向下滚动加载
+        if (scrollDirection === 'down' && (scrollTop + clientHeight >= scrollHeight - 100)) {
             isLoading = true;
-            const newEnd = Math.min(currentStart + pageSize * 2, allLines.length);
+            const newEnd = Math.min(currentStart + pageSize, allLines.length);
             loadLines(currentStart, newEnd);
             currentStart = newEnd;
+            isLoading = false;
+        }
+        // 向上滚动加载
+        else if (scrollDirection === 'up' && scrollTop <= 100) {
+            isLoading = true;
+            const newStart = Math.max(0, currentStart - pageSize * 2);
+            loadLines(newStart, currentStart);
+            currentStart = newStart;
             isLoading = false;
         }
     };

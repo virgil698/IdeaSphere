@@ -82,3 +82,10 @@ class editor_tool:
                     })
 
         return jsonify({"success": False, "error": "File not found"})
+
+    def save_file(self):
+        contents = request.json.get('content')
+        filename = request.json.get('filename')
+        with open(filename, 'w') as f:
+            f.write(contents)
+            return jsonify({"success": True})

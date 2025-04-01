@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, request, session, redirect, url_for, g, jsonify
 from flask_wtf.csrf import CSRFProtect
 from src.db_ext import db
@@ -253,6 +254,10 @@ def front_end_log_interface(message,mode):
     )
     log_thread.start()
     return jsonify({'success': True})
+
+@app.route('/save_file', methods=['POST', 'GET'])
+def save_file():
+    return editor_tool().save_file()
 
 if __name__ == '__main__':
     # 初始化日志
