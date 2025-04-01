@@ -1,14 +1,37 @@
-{% extends "base.html" %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaSphere - 用户登录</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="background">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1>IdeaSphere</h1>
+            <p>欢迎回到创意社区</p>
+        </div>
+        
         <div class="card">
             <div class="card-header">
-                <h5 class="text-center">论坛登录</h5>
+                <h2 class="card-title">用户登录</h2>
+                <p class="card-description">输入您的账号信息以登录平台</p>
             </div>
+            
             <div class="card-body">
-                <!-- 添加闪存消息显示部分 -->
+                <!-- 闪存消息显示 -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -18,29 +41,37 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                <!-- 结束闪存消息显示部分 -->
+                
                 <form method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">
-                            <i class="fas fa-user"></i> 用户名
-                        </label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                    
+                    <div class="form-group">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入您的用户名" autocomplete="off" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">
-                            <i class="fas fa-lock"></i> 密码
-                        </label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入您的密码" autocomplete="off" required>
                     </div>
-                    <div class="text-center">
+                    
+                    <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-sign-in-alt"></i> 登录
+                            <i class="fas fa-sign-in-alt"></i>
+                            登录
                         </button>
                     </div>
                 </form>
             </div>
+            
+            <div class="card-footer">
+                <p>还没有账号？</p>
+                <div class="footer-links">
+                    <a href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i> 立即注册</a>
+                    <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> 返回首页</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-{% endblock %}
+</body>
+</html>

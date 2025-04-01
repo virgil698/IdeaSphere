@@ -1,68 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="text-center">编辑主题</h5>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('edit_post', post_id=post.id) }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="create-post-container">
+    <div class="card">
+        <div class="card-header">
+            <h3>创建新主题</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                    <!-- 标题 -->
-                    <div class="mb-3">
-                        <label for="title" class="form-label">
-                            <i class="fas fa-heading"></i> 主题标题
-                        </label>
-                        <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required>
-                    </div>
-
-                    <!-- 内容 -->
-                    <div class="mb-3">
-                        <label for="content" class="form-label">
-                            <i class="fas fa-pencil-alt"></i> 主题内容（支持 Markdown 格式）
-                        </label>
-                        <div class="input-group">
-                            <textarea class="form-control" id="content" name="content" rows="6" placeholder="输入帖子内容" required>{{ post.content }}</textarea>
-                            <span class="input-group-text" id="emojiButton" title="添加表情">
-                                <i class="fas fa-smile"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- 提交按钮 -->
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> 保存修改后的主题
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Emoji 弹出框 -->
-                <div id="emojiPopup"
-                    style="display: none;
-                        position: absolute;
-                        left: 100%;
-                        top: 0;
-                        margin-left: 8px; /* 添加右侧间距 */
-                        /* 保持原有样式 */
-                        background: white;
-                        border: 1px solid #ccc;
-                        padding: 10px;
-                        border-radius: 8px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                        z-index: 1000;">
-                        <span class="emoji">😀</span>
-                        <span class="emoji">😎</span>
-                        <span class="emoji">👍</span>
-                        <span class="emoji">❤️</span>
-                        <span class="emoji">🚀</span>
-                        <!-- 更多Unicode Emoji -->
+                <!-- 标题 -->
+                <div class="form-group mb-3">
+                    <label for="title" class="form-label">
+                        <i class="fas fa-heading"></i> 标题
+                    </label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="输入帖子标题" required>
                 </div>
+
+                <!-- 版块选择 -->
+                <div class="form-group mb-3">
+                    <label for="section_id" class="form-label">
+                        <i class="fas fa-folder"></i> 选择版块
+                    </label>
+                    <select class="form-control" id="section_id" name="section_id">
+                        <option value="">-- 请选择版块 --</option>
+                        {% for section in sections %}
+                        <option value="{{ section.id }}">{{ section.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="text-muted">选择一个适合您话题的版块</small>
+                </div>
+
+                <!-- 内容 -->
+                <div class="form-group mb-3">
+                    <label for="content" class="form-label">
+                        <i class="fas fa-pencil-alt"></i> 内容（支持 Markdown 格式）
+                    </label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="content" name="content" rows="10" placeholder="输入帖子内容"
+                            required></textarea>
+                        <span class="input-group-text emoji-button" id="emojiButton" title="添加表情">
+                            <i class="fas fa-smile"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> 发布主题
+                    </button>
+                </div>
+            </form>
+
+            <!-- Emoji 弹出框 -->
+            <div id="emojiPopup" class="emoji-popup">
+                <span class="emoji">😀</span>
+                <span class="emoji">😎</span>
+                <span class="emoji">👍</span>
+                <span class="emoji">❤️</span>
+                <span class="emoji">🚀</span>
+                <span class="emoji">🎉</span>
+                <span class="emoji">🔥</span>
+                <span class="emoji">💯</span>
+                <span class="emoji">🤔</span>
+                <span class="emoji">😊</span>
+                <span class="emoji">👏</span>
+                <span class="emoji">🙏</span>
             </div>
         </div>
     </div>

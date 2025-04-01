@@ -1,32 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    {% for post in posts %}
-    <div class="col-md-12 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ post.title }}</h5>
-                <p class="card-text">{{ remove_markdown(post.content[:150]) }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">
-                        <i class="fas fa-eye"></i> 查看详情
-                    </a>
-                    <span class="text-success">点赞: {{ post.like_count }}</span>
+<!-- 帖子列表区域 -->
+<section class="hot-posts-section">
+<section class="hot-posts-section">
+    <div class="section-header">
+        <h2>全部帖子</h2>
+        {% if 'user_id' in session %}
+        <a href="{{ url_for('create_post') }}" class="create-post-btn">
+            <i class="fas fa-plus"></i> 发布
+        </a>
+        {% endif %}
+    </div>
+    <div class="posts-grid">
+        {% for post in posts %}
+        <!-- 帖子卡片 -->
+        <div class="post-card">
+            <div class="post-header">
+                <div class="post-author">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ post.author.username }}</span>
+                </div>
+                <div class="post-meta">
+                    <span><i class="fas fa-heart"></i> {{ post.like_count }}</span>
                 </div>
             </div>
+            <h3 class="post-title"><a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a></h3>
+            <p class="post-excerpt">{{ remove_markdown(post.content[:150]) }}...</p>
+            <div class="post-footer">
+                <a href="{{ url_for('view_post', post_id=post.id) }}" class="view-post-btn">
+                    <i class="fas fa-eye"></i> 查看详情
+                </a>
+            </div>
         </div>
+        {% else %}
+        <div class="no-posts-message">
+            <i class="fas fa-info-circle"></i> 暂无帖子
+        </div>
+        {% endfor %}
     </div>
-    {% else %}
-    <div class="alert alert-info">暂无帖子</div>
-    {% endfor %}
-</div>
-
-{% if 'user_id' in session %}
-<div class="text-center mt-5">
-    <a href="{{ url_for('create_post') }}" class="btn btn-success btn-lg">
-        <i class="fas fa-plus"></i> 发布主题
-    </a>
-</div>
-{% endif %}
+</section>
 {% endblock %}

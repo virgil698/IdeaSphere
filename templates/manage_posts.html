@@ -3,7 +3,7 @@
 {% block admin_content %}
 <div class="card">
     <div class="card-header">
-        <h5 class="text-center">管理主题</h5>
+        <h5 class="text-center">管理帖子</h5>
     </div>
     <div class="card-body">
         <table class="table table-hover">
@@ -25,10 +25,10 @@
                     <td>{{ post.comments | length }}</td>
                     <td>
                         <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit"></i> 编辑主题
+                            <i class="fas fa-edit"></i> 编辑帖子
                         </a>
                         <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash-alt"></i> 删除主题
+                            <i class="fas fa-trash-alt"></i> 删除帖子
                         </a>
                     </td>
                 </tr>

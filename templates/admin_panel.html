@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/admin_panel.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">

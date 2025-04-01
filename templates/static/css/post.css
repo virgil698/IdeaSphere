@@ -1,0 +1,75 @@
+    .create-post-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .card {
+        box-shadow: var(--shadow-sm);
+        border-radius: var(--border-radius-lg);
+        border: none;
+    }
+
+    .card-header {
+        background-color: var(--background-secondary);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+
+    .form-control {
+        border: 1px solid var(--border-color);
+        background-color: var(--background-secondary);
+        border-radius: var(--border-radius);
+        padding: 0.75rem;
+        transition: var(--transition-base);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(94, 114, 228, 0.25);
+    }
+
+    .emoji-button {
+        cursor: pointer;
+        background-color: var(--background-tertiary);
+        border: none;
+    }
+
+    .emoji-popup {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        z-index: 1000;
+        width: 250px;
+    }
+
+    .emoji {
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin: 0.25rem;
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+
+    .emoji:hover {
+        transform: scale(1.2);
+    }

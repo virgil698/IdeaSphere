@@ -1,35 +1,78 @@
-{% extends "base.html" %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IdeaSphere - 用户注册</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+</head>
+<body>
+    <div class="background">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1>IdeaSphere</h1>
+            <p>加入创意社区</p>
+        </div>
+        
         <div class="card">
             <div class="card-header">
-                <h5 class="text-center">注册用户</h5>
+                <h2 class="card-title">创建新账户</h2>
+                <p class="card-description">注册一个账户以开始您的创意之旅</p>
             </div>
+            
             <div class="card-body">
+                <!-- 闪存消息显示 -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
                 <form method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">
-                            <i class="fas fa-user"></i> 用户名
-                        </label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                    
+                    <div class="form-group">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入您的用户名" autocomplete="off" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">
-                            <i class="fas fa-lock"></i> 密码
-                        </label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入安全密码" autocomplete="off" required>
+                        <div class="form-text">请使用强密码以保护您的账户安全</div>
                     </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-success btn-block">
-                            <i class="fas fa-user-plus"></i> 注册
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-plus"></i>
+                            注册账户
                         </button>
                     </div>
                 </form>
             </div>
+            
+            <div class="card-footer">
+                <p>已有账号？</p>
+                <div class="footer-links">
+                    <a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> 立即登录</a>
+                    <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> 返回首页</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-{% endblock %}
+</body>
+</html>
