@@ -2,20 +2,25 @@
 API
 @Dev virgil698
 """
+import math
+
 from flask import Blueprint, jsonify, request
 from flask_wtf.csrf import generate_csrf, validate_csrf
 from src.db_ext import db
-from src.functions.database.models import User, Post, Comment, Report, Like
+from src.functions.database.models import Post, Comment, Report, Like
+import psutil
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 # 创建一个API蓝图
 api_bp = Blueprint('api', __name__)
+
 
 # 获取CSRF Token的API
 @api_bp.route('/csrf-token', methods=['GET'])
 def get_csrf_token():
     csrf_token = generate_csrf()
     return jsonify({'csrf_token': csrf_token})
+
 
 # 示例：获取所有帖子的API
 @api_bp.route('/posts', methods=['GET'])
@@ -35,6 +40,7 @@ def get_posts():
         post_list.append(post_data)
     return jsonify(post_list)
 
+
 # 示例：获取单个帖子的API
 @api_bp.route('/post/<int:post_id>', methods=['GET'])
 def get_post(post_id):
@@ -51,6 +57,7 @@ def get_post(post_id):
         'created_at': post.created_at.isoformat()
     }
     return jsonify(post_data)
+
 
 # 示例：创建新帖子的API
 @api_bp.route('/post', methods=['POST'])
@@ -71,6 +78,7 @@ def create_post():
     db.session.commit()
     return jsonify({'message': 'Post created successfully', 'post_id': new_post.id}), 201
 
+
 # 示例：点赞帖子的API
 @api_bp.route('/post/<int:post_id>/like', methods=['POST'])
 def like_post(post_id):
@@ -85,6 +93,7 @@ def like_post(post_id):
     db.session.query(Post).filter_by(id=post_id).update({'like_count': Post.like_count + 1})
     db.session.commit()
     return jsonify({'message': 'Post liked successfully'}), 200
+
 
 # 示例：举报帖子的API
 @api_bp.route('/post/<int:post_id>/report', methods=['POST'])
@@ -102,6 +111,7 @@ def report_post(post_id):
     db.session.add(new_report)
     db.session.commit()
     return jsonify({'message': 'Post reported successfully'}), 200
+
 
 # 示例：评论帖子的API
 @api_bp.route('/post/<int:post_id>/comment', methods=['POST'])
@@ -122,6 +132,7 @@ def create_comment(post_id):
     db.session.commit()
     return jsonify({'message': 'Comment created successfully', 'comment_id': new_comment.id}), 201
 
+
 # 在API请求中验证CSRF Token
 @api_bp.before_request
 def csrf_protect():
@@ -133,6 +144,7 @@ def csrf_protect():
         if not validate_csrf_token(csrf_token):
             return jsonify({'message': 'Invalid CSRF Token'}), 403
 
+
 # 验证CSRF Token的函数
 def validate_csrf_token(token):
     try:
@@ -140,3 +152,4 @@ def validate_csrf_token(token):
         return True
     except:
         return False
+

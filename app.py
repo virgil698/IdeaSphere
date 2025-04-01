@@ -240,19 +240,19 @@ def directory_tree_api():
 def get_file_content():
     return editor_tool().get_file_content()
 
-@app.route('/front_end_log_interface/<string:message>', methods=['POST', 'GET'])
-def front_end_log_interface(message):
+@app.route('/front_end_log_interface/<string:message>/<string:mode>', methods=['POST', 'GET'])
+def front_end_log_interface(message,mode):
     log_thread = Logger(
         threadID=1,
         name="FrontEnd",
         counter=1,
         msg=message,
-        mode="info",
+        mode=mode,
         module_name="FrontEndInterface",
         log_path='./logs'
     )
     log_thread.start()
-    return jsonify({"message": "Success"})
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     # 初始化日志
