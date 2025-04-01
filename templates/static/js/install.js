@@ -1,3 +1,6 @@
+import {send_log_data} from './logs.js'
+send_log_data("msg", "info")
+
 document.addEventListener('DOMContentLoaded', function () {
     // 更新步骤指示器状态
     function updateStepsIndicator(currentStep) {

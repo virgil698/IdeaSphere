@@ -3,6 +3,8 @@
  * @Dev virgil698
  * @StructRefactor Jason
  */
+import {send_log_data} from './logs.js'
+send_log_data("msg", "info")
 
 async function getCSRFToken() {
     const response = await fetch('/api/csrf-token');

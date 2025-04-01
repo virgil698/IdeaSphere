@@ -2,6 +2,9 @@
  * 获取CSRF Token
  * @returns {Promise<string>} CSRF Token
  */
+import {send_log_data} from './logs.js'
+send_log_data("msg", "info")
+
 async function getCSRFToken() {
     const response = await fetch('/api/csrf-token');
     const data = await response.json();
