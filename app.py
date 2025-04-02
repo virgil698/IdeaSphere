@@ -1,13 +1,13 @@
 import os
-
-from flask import Flask, request, session, redirect, url_for, g, jsonify
+from flask import Flask, request, session, redirect, url_for, g, jsonify, render_template
 from flask_wtf.csrf import CSRFProtect
 from src.db_ext import db
-from src.functions.database.models import User, Post, Comment
+from src.functions.database.models import User, Post, Comment, Section  # 确保导入 Section 模型
 from src.functions.icenter.db_operation import execute_sql_logic
 from src.functions.index import index_logic
 from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
+from src.functions.service import monitor
 from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, delete_post_logic
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
@@ -17,12 +17,11 @@ from src.functions.service.user_logic import register_logic, login_logic, logout
 from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
-from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, \
-    return_icenter_execute_sql_templates, return_icenter_editor
-from src.functions.api.api import api_bp
+from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, return_icenter_execute_sql_templates, return_icenter_editor
+from src.functions.api.api import api_bp  # 导入 API 蓝图
 from src.functions.config.config import get_config, initialize_database
-from src.functions.service import monitor
 from src.functions.utils.logger import Logger
+from src.functions.section.section import section_bp  # 导入板块蓝图
 
 """
 初始化部分   
@@ -46,6 +45,9 @@ csrf = CSRFProtect(app)
 
 # 注册API蓝图
 app.register_blueprint(api_bp, url_prefix='/api')
+
+# 注册板块蓝图
+app.register_blueprint(section_bp)  # 注册板块蓝图
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
@@ -242,7 +244,7 @@ def get_file_content():
     return editor_tool().get_file_content()
 
 @app.route('/front_end_log_interface/<string:message>/<string:mode>', methods=['POST', 'GET'])
-def front_end_log_interface(message,mode):
+def front_end_log_interface(message, mode):
     log_thread = Logger(
         threadID=1,
         name="FrontEnd",
@@ -258,6 +260,10 @@ def front_end_log_interface(message,mode):
 @app.route('/save_file', methods=['POST', 'GET'])
 def save_file():
     return editor_tool().save_file()
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     # 初始化日志
