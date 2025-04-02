@@ -173,8 +173,6 @@ If you have any questions or suggestions, feel free to reach out to us through t
 > [!NOTE]
 > This project is licensed under the `MIT License`. For more details, please refer to the `LICENSE` file.
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere?ref=badge_large&issueType=license)
-
 ```
 MIT License
 
