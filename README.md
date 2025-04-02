@@ -172,7 +172,7 @@ python app.py
 > [!NOTE]
 > 本项目采用 `MIT License` 许可证。有关详细信息，请参阅 `LICENSE` 文件。
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere?ref=badge_shield&issueType=license)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2FIdeaSphere-team%2FIdeaSphere?ref=badge_large&issueType=license)
 
 ```
 MIT License
