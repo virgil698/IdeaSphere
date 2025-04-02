@@ -2,15 +2,18 @@
 ICenter module
 @Dev Jason
 """
-from flask import request, jsonify
+from flask import request, jsonify, session
 from sqlalchemy import text
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.functions.database.models import db
 import logging
+from src.functions.utils.logger import Logger
 
 def delete_data(model, **filters):
     """
+    :Depracted
     根据条件删除指定模型的数据
     :param model: 数据库模型类
     :param filters: 过滤条件，键值对形式
@@ -60,8 +63,17 @@ def execute_sql_statement(sql):
 
     except SQLAlchemyError as e:
         connection.rollback()
-        error_msg = f"SQL执行错误: {str(e)}"
-        logging.error(error_msg)
+        log_thread = Logger(
+            threadID=1,
+            name="FrontEnd",
+            counter=1,
+            msg=f'SQL Statement Error! Reason: {e}',
+            mode='error',
+            module_name="Database",
+            log_path='./logs'
+        )
+        log_thread.start()
+        error_msg = f"Error: {e}"
         return {
             "success": False,
             "message": error_msg,
@@ -92,6 +104,21 @@ def add_column_to_table(table_name, column_name, column_type):
         logging.error(f"Error adding column {column_name} to table {table_name}: {e}")
         return False
 
+def get_all_rows():
+    """
+    获取所有的行数据
+    :return any
+    """
+    model = request.json.get('model') 
+    Session = sessionmaker(bind=db.engine)
+    session = Session()
+    all_rows = session.query(model)
+    for row in all_rows:
+        return jsonify({
+            "success": True,
+            "serach_result": row.to_dict()
+        })
+    
 def execute_sql_logic():
     """
     二次封装
@@ -100,12 +127,30 @@ def execute_sql_logic():
     """
     sql_statement = request.json.get('sql')
 
+    # 对请求进行验证
+
+    if session['role'] not in 'admin':
+        log_thread = Logger(
+            threadID=1,
+            name="FrontEnd",
+            counter=1,
+            msg='A dangerous DB operation happend!',
+            mode='error',
+            module_name="Database",
+            log_path='./logs'
+        )
+        log_thread.start()
+        return jsonify({
+            "success": False,
+            "message": "权限不足"
+        }), 403
+
     if not sql_statement:
         return jsonify({
             "success": False,
             "message": "未提供SQL语句"
         }), 400
-
+    
     # 执行并获取结果
     result = execute_sql_statement(sql_statement)
 
