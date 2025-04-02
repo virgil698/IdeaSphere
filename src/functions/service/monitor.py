@@ -52,7 +52,7 @@ class SystemMonitor:
     获取主机基本信息
     """
     @classmethod
-    def get_basic_info_for_machine(cls):
+    def get_basic_info_for_machine(self):
         return jsonify({
             "success": True,
             "cpu_logic_count": InitMonitor()._logic_count,
@@ -68,7 +68,6 @@ class SystemMonitor:
             'disk_usage_info_available': InitMonitor()._disk_usage_info_available
         })
 
-
 class InitMonitor:
     _process = psutil.Process()
     _process.cpu_percent(interval=None)
@@ -77,7 +76,11 @@ class InitMonitor:
     _logic_count = psutil.cpu_count()
     _physics_count = psutil.cpu_count(logical=False)
     _disk_part_info = psutil.disk_partitions()
+    _disk_usage_info = int(psutil.disk_usage('/').used / 1024000000)
+    _disk_usage_info_available = int(psutil.disk_usage('/').free / 1024000000)
 
+    _disk_io_read_info = psutil.disk_io_counters().read_count
+    _disk_io_write_info = psutil.disk_io_counters().write_count
     # 使用 platform.uname() 替代 os.uname()
     _system_info = platform.uname()
     _system_name = f"{_system_info.system}-{_system_info.release}-{_system_info.version}"
@@ -96,32 +99,4 @@ class InitMonitor:
     _cpu_info = platform.processor()
     _cpu_model = cpuinfo.get_cpu_info().get('brand_raw', 'Unknown CPU')
 
-    # 获取磁盘使用情况
-    _disk_usage_info = {}
-    for partition in _disk_part_info:
-        try:
-            usage = psutil.disk_usage(partition.mountpoint)
-            _disk_usage_info[partition.device] = {
-                'total': int(usage.total / 1024000000),
-                'used': int(usage.used / 1024000000),
-                'free': int(usage.free / 1024000000),
-                'percent': usage.percent
-            }
-        except PermissionError:
-            continue
-
-    # 获取磁盘 I/O 信息
-    _disk_io_info = psutil.disk_io_counters(perdisk=True)
-    _disk_io_read_info = {disk: info.read_count for disk, info in _disk_io_info.items()}
-    _disk_io_write_info = {disk: info.write_count for disk, info in _disk_io_info.items()}
-
-    # 获取磁盘可用空间
-    _disk_usage_info_available = {}
-    for partition in _disk_part_info:
-        try:
-            usage = psutil.disk_usage(partition.mountpoint)
-            _disk_usage_info_available[partition.device] = {
-                'available': int(usage.free / 1024000000)
-            }
-        except PermissionError:
-            continue
+   
