@@ -122,6 +122,24 @@ python app.py
 
 Default access address: `http://localhost:5000`
 
+# 🎯 Usage Instructions
+
+## 1. Installation Wizard
+
+On your first visit to the forum, you'll automatically enter the installation wizard page (`/install`). Follow the prompts to complete the installation.
+
+## 2. User Registration and Login
+
+Users can register for a new account via the `/register` page. After registration, use the `/login` page to log in.
+
+## 3. Posting and Commenting
+
+After logging in, users can access the `/post` page to create new posts. On the post details page (`/view_post`), users can post comments.
+
+## 4. Admin Backend
+
+Administrators can manage users, posts, and comments via the `/admin` page.
+
 # ⬆️ Contributing
 
 We welcome your participation in IdeaSphere's development. Follow these steps to submit your contributions:
