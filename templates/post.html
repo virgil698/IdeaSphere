@@ -25,7 +25,7 @@
                     <label for="section_id" class="form-label">
                         <i class="fas fa-folder"></i> 选择版块
                     </label>
-                    <select class="form-control" id="section_id" name="section_id">
+                    <select class="form-control" id="section_id" name="section_id" required>
                         <option value="">-- 请选择版块 --</option>
                         {% for section in sections %}
                         <option value="{{ section.id }}">{{ section.name }}</option>

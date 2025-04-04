@@ -35,17 +35,6 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
 
-            {% if g.role == 'admin' %}
-            <div class="section-admin-actions">
-                <a href="{{ url_for('section.edit_section', section_id=section.id) }}" class="btn-action edit-action" title="编辑版块">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <button class="btn-action delete-action" title="删除版块"
-                        onclick="confirmDeleteSection({{ section.id }}, '{{ section.name }}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-            {% endif %}
         </div>
         {% else %}
         <div class="no-sections">

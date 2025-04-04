@@ -28,6 +28,11 @@
             <i class="fas fa-comment"></i>
             <span>评论数: {{ section.comment_count }}</span>
         </div>
+        {% if g.role == 'admin' %}
+        <a href="{{ url_for('section.edit_section', section_id=section.id) }}" class="edit-section-btn">
+            <i class="fas fa-edit"></i> 编辑板块
+        </a>
+    {% endif %}
     </div>
 
     <div class="posts-list">

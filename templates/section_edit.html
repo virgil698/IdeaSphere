@@ -11,25 +11,16 @@
         </div>
         
         <form method="POST" class="edit-section-form" id="editSectionForm">
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
             <input type="hidden" name="section_id" value="{{ section.id }}">
 
             <div class="form-group">
                 <label for="name">板块名称</label>
                 <input type="text" id="name" name="name" value="{{ section.name }}" required>
-                {% if form_errors.name %}
-                <div class="error-message">{{ form_errors.name }}</div>
-                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="description">板块描述</label>
                 <textarea id="description" name="description" rows="4">{{ section.description }}</textarea>
-                {% if form_errors.description %}
-                <div class="error-message">{{ form_errors.description }}</div>
-                {% endif %}
             </div>
 
             <div class="form-group">
@@ -38,9 +29,6 @@
                 <div class="icon-preview">
                     <i class="{{ section.icon }}"></i>
                 </div>
-                {% if form_errors.icon %}
-                <div class="error-message">{{ form_errors.icon }}</div>
-                {% endif %}
             </div>
 
             <div class="form-actions">
@@ -59,8 +47,14 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 <script>
+    // 获取 CSRF Token
+    async function getCSRFToken() {
+        const response = await fetch('/api/csrf-token');
+        const data = await response.json();
+        return data.csrf_token;
+    }
+
     // 实时预览图标
     document.getElementById('icon').addEventListener('input', function() {
         const iconPreview = document.querySelector('.icon-preview i');

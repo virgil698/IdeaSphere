@@ -141,12 +141,12 @@
         <button class="home-btn" onclick="goToHomepage()">
             <i class="material-icons google-icon home-logo">home</i>返回主页
         </button>
-        <p class="redirect-message">或者，将在 <span id="countdown">5</span> 秒后自动跳转到主页。</p>
+        <p class="redirect-message">或者，将在 <span id="countdown">10</span> 秒后自动跳转到主页。</p>
     </div>
 
     <script>
         // 自动跳转倒计时
-        let timeLeft = 5;
+        let timeLeft = 10;
         const countdownElement = document.getElementById('countdown');
 
         const timer = setInterval(() => {

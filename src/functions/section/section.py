@@ -12,6 +12,15 @@ section_bp = Blueprint('section', __name__, url_prefix='/section')
 @section_bp.route('/')
 def sections():
     sections = Section.query.all()
+    for section in sections:
+        # 动态更新帖子数量
+        section.post_count = Post.query.filter_by(section_id=section.id, deleted=False).count()
+        # 动态更新回复数量
+        section.comment_count = Comment.query.join(Post).filter(
+            Post.section_id == section.id,
+            Post.deleted == False
+        ).count()
+    db.session.commit()
     return render_template('sections.html', sections=sections)
 
 # 创建板块
@@ -37,8 +46,8 @@ def create_section():
             name=name,
             description=description,
             icon=icon,
-            post_count=0,
-            comment_count=0
+            post_count=0,  # 初始化为 0
+            comment_count=0  # 初始化为 0
         )
 
         db.session.add(new_section)
@@ -55,7 +64,24 @@ def section_detail(section_id):
     section = Section.query.get_or_404(section_id)
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(section_id=section_id, deleted=False).paginate(page=page, per_page=10)
-    return render_template('section_detail.html', section=section, posts=posts, pagination=posts)
+
+    # 更新板块的帖子数量
+    section.post_count = Post.query.filter_by(section_id=section_id, deleted=False).count()
+    db.session.commit()
+
+    # 更新板块的回复数量
+    section.comment_count = Comment.query.join(Post).filter(
+        Post.section_id == section_id,
+        Post.deleted == False
+    ).count()
+    db.session.commit()
+
+    return render_template(
+        'section_detail.html',
+        section=section,
+        posts=posts,
+        pagination=posts
+    )
 
 # 板块分析
 @section_bp.route('/analytics')
@@ -99,38 +125,9 @@ def section_analytics():
     )
 
 # 编辑板块
-@section_bp.route('/edit/<int:section_id>', methods=['GET', 'POST'])
+@section_bp.route('/edit/<int:section_id>', methods=['GET'])
 def edit_section(section_id):
     section = Section.query.get_or_404(section_id)
-
-    if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
-        icon = request.form.get('icon')
-
-        if not name:
-            flash('板块名称不能为空', 'error')
-            return redirect(url_for('section.edit_section', section_id=section_id))
-
-        # 检查板块名称是否已存在（排除当前板块）
-        existing_section = Section.query.filter(
-            Section.name == name,
-            Section.id != section_id
-        ).first()
-        if existing_section:
-            flash('该板块名称已存在', 'error')
-            return redirect(url_for('section.edit_section', section_id=section_id))
-
-        # 更新板块信息
-        section.name = name
-        section.description = description
-        section.icon = icon
-
-        db.session.commit()
-
-        flash('板块更新成功', 'success')
-        return redirect(url_for('section.sections'))
-
     return render_template('section_edit.html', section=section)
 
 # 删除板块
@@ -145,6 +142,11 @@ def delete_section(section_id):
         for comment in comments:
             db.session.delete(comment)
         db.session.delete(post)
+
+    # 重置板块的帖子和回复数量
+    section.post_count = 0
+    section.comment_count = 0
+    db.session.commit()
 
     db.session.delete(section)
     db.session.commit()
