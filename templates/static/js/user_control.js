@@ -1,8 +1,6 @@
 /**
  * 用户操作
  */
-import {send_log_data} from './logs.js'
-send_log_data("msg", "info")
 
 // 获取CSRF Token
 async function getCSRFToken() {

@@ -36,47 +36,48 @@
     </div>
     <div class="page-wrapper">
         <!-- 导航栏 -->
-        <nav class="main-nav">
-            <div class="nav-container">
-                <div class="nav-left">
-                    <a href="{{ url_for('index') }}" class="nav-logo">IdeaSphere</a>
-                    <div class="nav-links">
-                        <a href="{{ url_for('index') }}" class="nav-link active">首页</a>
-                        {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
-                        <a href="{{ url_for('admin_panel') }}" class="nav-link">管理面板</a>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="nav-right">
-                    <div class="search-box">
-                        <input type="text" placeholder="搜索..." id="searchInput">
-                        <i class="fas fa-search"></i>
-                        <div class="search-results-popup" id="searchResultsPopup">
-                            <div class="search-results-content" id="searchResultsContent"></div>
-                        </div>
-                    </div>
-                    {% if 'user_id' in session %}
-                    <div class="user-menu">
-                        <a href="#" class="user-avatar">
-                            <i class="fas fa-user"></i>
-                            <span>{{ '管理员' if session['role'] == 'admin' else '用户' }} ({{ session['user_id'] }})</span>
-                        </a>
-                        <div class="user-dropdown">
-                            {% if session['role'] in ['admin', 'moderator'] %}
-                            <a href="{{ url_for('admin_panel') }}"><i class="fas fa-tachometer-alt"></i> 管理面板</a>
-                            {% endif %}
-                            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="auth-links">
-                        <a href="{{ url_for('login') }}" class="auth-link"><i class="fas fa-sign-in-alt"></i> 登录</a>
-                        <a href="{{ url_for('register') }}" class="auth-link"><i class="fas fa-user-plus"></i> 注册</a>
-                    </div>
-                    {% endif %}
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="nav-left">
+            <a href="{{ url_for('index') }}" class="nav-logo">IdeaSphere</a>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link active">首页</a>
+                <a href="{{ url_for('section.sections') }}" class="nav-link">板块分类</a>
+                {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
+                <a href="{{ url_for('admin_panel') }}" class="nav-link">管理面板</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="search-box">
+                <input type="text" placeholder="搜索..." id="searchInput">
+                <i class="fas fa-search"></i>
+                <div class="search-results-popup" id="searchResultsPopup">
+                    <div class="search-results-content" id="searchResultsContent"></div>
                 </div>
             </div>
-        </nav>
+            {% if 'user_id' in session %}
+            <div class="user-menu">
+                <a href="#" class="user-avatar">
+                    <i class="fas fa-user"></i>
+                    <span>{{ '管理员' if session['role'] == 'admin' else '用户' }} ({{ session['user_id'] }})</span>
+                </a>
+                <div class="user-dropdown">
+                    {% if session['role'] in ['admin', 'moderator'] %}
+                    <a href="{{ url_for('admin_panel') }}"><i class="fas fa-tachometer-alt"></i> 管理面板</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="auth-links">
+                <a href="{{ url_for('login') }}" class="auth-link"><i class="fas fa-sign-in-alt"></i> 登录</a>
+                <a href="{{ url_for('register') }}" class="auth-link"><i class="fas fa-user-plus"></i> 注册</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
         <!-- 主要内容区域 -->
         <main class="main-content">
@@ -142,9 +143,13 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     <script src="{{ url_for('static', filename='js/user_control.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 页面加载时显示加载动画
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 检查是否是第一次访问
+        const hasVisited = sessionStorage.getItem('hasVisited');
+
+        if (!hasVisited) {
+            // 如果是第一次访问，显示加载动画
             const loaderWrapper = document.getElementById('loaderWrapper');
             loaderWrapper.classList.add('visible');
 
@@ -152,10 +157,17 @@
             window.addEventListener('load', function() {
                 setTimeout(function() {
                     loaderWrapper.classList.remove('visible');
+                    // 标记为已访问
+                    sessionStorage.setItem('hasVisited', 'true');
                 }, 2000);
             });
-        });
-    </script>
+        } else {
+            // 如果不是第一次访问，直接隐藏加载动画
+            const loaderWrapper = document.getElementById('loaderWrapper');
+            loaderWrapper.classList.remove('visible');
+        }
+    });
+</script>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <script>
