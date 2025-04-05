@@ -42,7 +42,7 @@
             <a href="{{ url_for('index') }}" class="nav-logo">IdeaSphere</a>
             <div class="nav-links">
                 <a href="{{ url_for('index') }}" class="nav-link active">首页</a>
-                <a href="{{ url_for('section.sections') }}" class="nav-link">分类</a>
+                <a href="{{ url_for('section.sections') }}" class="nav-link">板块分类</a>
                 {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
                 <a href="{{ url_for('admin_panel') }}" class="nav-link">管理面板</a>
                 {% endif %}
@@ -143,9 +143,13 @@
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/search.js') }}"></script>
     <script src="{{ url_for('static', filename='js/logs.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 页面加载时显示加载动画
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 检查是否是第一次访问
+        const hasVisited = sessionStorage.getItem('hasVisited');
+
+        if (!hasVisited) {
+            // 如果是第一次访问，显示加载动画
             const loaderWrapper = document.getElementById('loaderWrapper');
             loaderWrapper.classList.add('visible');
 
@@ -153,10 +157,17 @@
             window.addEventListener('load', function() {
                 setTimeout(function() {
                     loaderWrapper.classList.remove('visible');
+                    // 标记为已访问
+                    sessionStorage.setItem('hasVisited', 'true');
                 }, 2000);
             });
-        });
-    </script>
+        } else {
+            // 如果不是第一次访问，直接隐藏加载动画
+            const loaderWrapper = document.getElementById('loaderWrapper');
+            loaderWrapper.classList.remove('visible');
+        }
+    });
+</script>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <script>
