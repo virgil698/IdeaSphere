@@ -27,11 +27,11 @@ img {
 }
 
 .like-count {
-    color: #2AFD6D;
+    color: #4ffa86;
 }
 
 .comment-like-count {
-    color: #FFF120; /* 金黄色 */
+    color: #fdf256; /* 金黄色 */
     font-weight: bold;
 }
 

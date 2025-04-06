@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="create-section-page">
+    <div class="create-section-container">
+        <div class="create-section-header">
+            <h2>创建新板块</h2>
+            <a href="{{ url_for('section.sections') }}" class="btn-outline">
+                <i class="fas fa-arrow-left"></i> 返回版块列表
+            </a>
+        </div>
+        
+        <form method="POST" class="create-section-form" id="createSectionForm">
+            <!-- 添加 CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-group">
+                <label for="name">板块名称</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">板块描述</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="icon">板块图标（Font Awesome 类名）</label>
+                <input type="text" id="icon" name="icon" placeholder="例如：fas fa-star">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-plus"></i> 创建板块
+                </button>
+                <a href="{{ url_for('section.sections') }}" class="btn-cancel">
+                    <i class="fas fa-times"></i> 取消
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/section_create.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script>
+    document.getElementById('createSectionForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        try {
+            const csrfToken = await getCSRFToken();
+            const formData = new FormData(this);
+            const data = {};
+
+            for (const [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            const response = await fetch('/api/section/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('板块创建成功');
+                window.location.href = "{{ url_for('section.sections') }}";
+            } else {
+                const error = await response.json();
+                alert('创建板块失败: ' + error.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('创建板块时发生错误');
+        }
+    });
+</script>
+{% endblock %}

@@ -114,3 +114,28 @@
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
 }
+
+.edit-section-btn {
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.edit-section-btn i {
+    margin-right: 5px;
+}
+
+.edit-section-btn:hover {
+    background-color: #0056b3;
+}
+
+.post-card {
+    margin-bottom: 20px; /* 增加帖子块之间的间距 */
+    padding-bottom: 20px; /* 可选：增加底部内边距 */
+    border-bottom: 1px solid #eee; /* 可选：增加分隔线 */
+}

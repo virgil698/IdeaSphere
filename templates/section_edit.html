@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="edit-section-page">
+    <div class="edit-section-container">
+        <div class="edit-section-header">
+            <h2>编辑板块</h2>
+            <a href="{{ url_for('section.sections') }}" class="btn-outline">
+                <i class="fas fa-arrow-left"></i> 返回版块列表
+            </a>
+        </div>
+        
+        <form method="POST" class="edit-section-form" id="editSectionForm">
+            <input type="hidden" name="section_id" value="{{ section.id }}">
+
+            <div class="form-group">
+                <label for="name">板块名称</label>
+                <input type="text" id="name" name="name" value="{{ section.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">板块描述</label>
+                <textarea id="description" name="description" rows="4">{{ section.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="icon">板块图标（Font Awesome 类名）</label>
+                <input type="text" id="icon" name="icon" value="{{ section.icon }}" placeholder="例如：fas fa-star">
+                <div class="icon-preview">
+                    <i class="{{ section.icon }}"></i>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> 保存更改
+                </button>
+                <a href="{{ url_for('section.sections') }}" class="btn-cancel">
+                    <i class="fas fa-times"></i> 取消
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/section_edit.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 获取 CSRF Token
+    async function getCSRFToken() {
+        const response = await fetch('/api/csrf-token');
+        const data = await response.json();
+        return data.csrf_token;
+    }
+
+    // 实时预览图标
+    document.getElementById('icon').addEventListener('input', function() {
+        const iconPreview = document.querySelector('.icon-preview i');
+        iconPreview.className = this.value;
+    });
+
+    // 表单提交处理
+    document.getElementById('editSectionForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        try {
+            const csrfToken = await getCSRFToken();
+            const formData = new FormData(this);
+            const data = {};
+
+            for (const [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            const response = await fetch('/api/section/edit/{{ section.id }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('板块更新成功');
+                window.location.href = "{{ url_for('section.sections') }}";
+            } else {
+                const error = await response.json();
+                alert('更新板块失败: ' + error.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('更新板块时发生错误');
+        }
+    });
+</script>
+{% endblock %}

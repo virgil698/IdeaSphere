@@ -6,20 +6,20 @@
         <h2>论坛版块</h2>
         <div class="section-actions">
             {% if g.role == 'admin' %}
-            <a href="{{ url_for('section_analytics') }}" class="btn-analytics">
+            <a href="{{ url_for('section.section_analytics') }}" class="btn-analytics">
                 <i class="fas fa-chart-bar"></i> 版块分析
             </a>
-            <a href="{{ url_for('create_section') }}" class="btn-create-section">
+            <a href="{{ url_for('section.create_section') }}" class="btn-create-section">
                 <i class="fas fa-plus"></i> 新增版块
             </a>
             {% endif %}
         </div>
     </div>
-    
+
     <div class="sections-list">
         {% for section in sections %}
         <div class="section-card">
-            <a href="{{ url_for('section_detail', section_id=section.id) }}" class="section-card-link"></a>
+            <a href="{{ url_for('section.section_detail', section_id=section.id) }}" class="section-card-link"></a>
             <div class="section-icon">
                 <i class="{{ section.icon }}"></i>
             </div>
@@ -31,21 +31,10 @@
                 </div>
                 <p class="section-desc">{{ section.description }}</p>
             </div>
-            <a href="{{ url_for('section_detail', section_id=section.id) }}" class="section-link">
+            <a href="{{ url_for('section.section_detail', section_id=section.id) }}" class="section-link">
                 <i class="fas fa-chevron-right"></i>
             </a>
-            
-            {% if g.role == 'admin' %}
-            <div class="section-admin-actions">
-                <a href="{{ url_for('edit_section', section_id=section.id) }}" class="btn-action edit-action" title="编辑版块">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <button class="btn-action delete-action" title="删除版块" 
-                        onclick="confirmDeleteSection({{ section.id }}, '{{ section.name }}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-            {% endif %}
+
         </div>
         {% else %}
         <div class="no-sections">

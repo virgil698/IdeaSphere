@@ -39,41 +39,44 @@
 - **Lightweight**: Developed with the Flask framework, ensuring high performance.
 - **Modular Design**: Clear code structure for easy expansion and maintenance.
 
-## 🌟 Realization function
+### 🌟 Implemented Features
 
-| Task Overview | Current Status | Implementation Version |
-|---|---|---|
-| **⌨️ Login** | ✅ | v0.1.0 |
-| **⌨️ Registration** | ✅ | v0.1.0 |
-| **⌨️ Post Creation** | ✅ | v0.1.0 |
-| **🖼 Super Administrator** | ✅ | v0.1.0 |
-| **🖼 Moderator Administrator** | ✅ | v0.1.0 |
-| **👤 Like Functionality** | ✅ | v0.1.0 |
-| **🧱 Reporting System** | ✅ | v0.1.0 |
-| **📦 Online Users** | ✅ | v0.1.0 |
-| **⭐ Post Replies** | ✅ | v0.1.0 |
-| **🔬 Search** | ✅ | v0.1.5 |
-| **👤 Site Statistics** | ✅ | v0.1.5 |
-| **🚀 Admin Panel** | ✅ | v0.2.0 |
-| **📦 Emoji Support** | ✅ | v0.2.0 |
-| **🔬 Post Deletion** | ✅ | v0.2.5 |
-| **👤 Permission Groups** | ✅ | v0.2.5 |
-| **👤 Full Permission Group Implementation** | 🚧 | |
-| **⭐ ICenter (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
-| **⭐ Content Replies** | 🚧 | |
-| **⭐ Content Reactions** | 🚧 | |
-| **🎈 Rich Text Editor** | 🚧 | |
-| **🎈 Post Sections** | 🚧 | |
-| **👤 Post Creation Time and Like Count Sorting** | 🚧 | |
-| **👤 Reply Time and Like Count Sorting** | 🚧 | |
-| **📦 Private Messaging System** | ⏳ | |
-| **📦 User Customization Settings** | ⏳ | |
-| **📦 User Profile Page** | ⏳ | |
-| **🔐 Email Registration and Password Reset** | ⏳ | |
-| **🔌 Templates** | ⏳ | |
-| **🔌 Plugins** | ⏳ | |
-| **🔐 Data Security** | ⏳ | |
-| **🔐 SEO Optimization** | ⏳ | |
+| Task Description | Current Status | Implemented Version |
+|------------------|----------------|---------------------|
+| **⌨️ Login**       | ✅             | v0.1.0              |
+| **⌨️ Registration**| ✅             | v0.1.0              |
+| **⌨️ Posting**     | ✅             | v0.1.0              |
+| **🖼 Super Admin**  | ✅             | v0.1.0              |
+| **🖼 Moderator Admin** | ✅          | v0.1.0              |
+| **👤 Like System**  | ✅             | v0.1.0              |
+| **🧱 Reporting System** | ✅         | v0.1.0              |
+| **📦 Online Users** | ✅             | v0.1.0              |
+| **⭐ Post Replies** | ✅             | v0.1.0              |
+| **🔬 Search**      | ✅             | v0.1.5              |
+| **👤 Site Statistics** | ✅          | v0.1.5              |
+| **🚀 Admin Panel** | ✅             | v0.2.0              |
+| **📦 Emoji Support** | ✅           | v0.2.0              |
+| **🔬 Delete Posts** | ✅            | v0.2.5              |
+| **👤 Permission Groups** | ✅        | v0.2.5              |
+| **🎈 Post Categories** | ✅         | v0.3.0              |
+| **🎈 404 Page**    | ✅             | v0.3.0              |
+| **🎈 API Integration** | ✅         | v0.3.0              |
+| **🖥️ Logs Recording** | 🚧           |                     |
+| **⭐ ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 |                     |
+| **👤 Full Permission Groups** | 🚧       |                     |
+| **⭐ Content Replies** | 🚧           |                     |
+| **⭐ Content Reactions** | 🚧         |                     |
+| **🎈 Rich Text Editor** | 🚧         |                     |
+| **👤 Post Sorting by Time and Likes** | 🚧 |                     |
+| **👤 Reply Sorting by Time and Likes** | 🚧 |                     |
+| **📦 Private Messaging System** | ⏳         |                     |
+| **📦 User Custom Settings** | ⏳         |                     |
+| **📦 User Profile Page** | ⏳           |                     |
+| **🔐 Email Registration and Password Reset** | ⏳ |                     |
+| **🔌 Templates**    | ⏳             |                     |
+| **🔌 Plugins**      | ⏳             |                     |
+| **🔐 Data Security** | ⏳            |                     |
+| **🔐 SEO Optimization** | ⏳          |                     |
 
 Here is the translation of the legend for your reference:
 

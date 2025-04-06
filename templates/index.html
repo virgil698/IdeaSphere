@@ -3,17 +3,21 @@
 {% block content %}
 <!-- 帖子列表区域 -->
 <section class="hot-posts-section">
-<section class="hot-posts-section">
     <div class="section-header">
         <h2>全部帖子</h2>
+        <div class="sort-buttons">
+            <button id="timeline-sort" class="sort-btn active">时间线</button>
+            <button id="global-sort" class="sort-btn">全局</button>
+        </div>
         {% if 'user_id' in session %}
         <a href="{{ url_for('create_post') }}" class="create-post-btn">
             <i class="fas fa-plus"></i> 发布
         </a>
         {% endif %}
     </div>
+
     <div class="posts-grid">
-        {% for post in posts %}
+        {% for post in posts.items %}
         <!-- 帖子卡片 -->
         <div class="post-card">
             <div class="post-header">
@@ -22,6 +26,7 @@
                     <span>{{ post.author.username }}</span>
                 </div>
                 <div class="post-meta">
+                    <span class="post-time"><i class="fas fa-clock"></i> {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
                     <span><i class="fas fa-heart"></i> {{ post.like_count }}</span>
                 </div>
             </div>
@@ -39,5 +44,48 @@
         </div>
         {% endfor %}
     </div>
+
+    <!-- 分页 -->
+    {% if posts.pages > 1 %}
+    <div class="pagination">
+        {% if posts.has_prev %}
+        <a href="{{ url_for('index') }}?page={{ posts.prev_num }}" class="page-link">
+            <i class="fas fa-chevron-left"></i> 上一页
+        </a>
+        {% endif %}
+
+        <span class="page-info">{{ posts.page }} / {{ posts.pages }}</span>
+
+        {% if posts.has_next %}
+        <a href="{{ url_for('index') }}?page={{ posts.next_num }}" class="page-link">
+            下一页 <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
 </section>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/section_detail.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index_index.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 确保在DOM加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        const timelineBtn = document.getElementById('timeline-sort');
+        const globalBtn = document.getElementById('global-sort');
+
+        // 为按钮添加点击事件
+        timelineBtn.addEventListener('click', function() {
+            // 按时间线排序（最先发布的在前）
+            window.location.href = "{{ url_for('index') }}?sort=timeline";
+        });
+
+        globalBtn.addEventListener('click', function() {
+            // 按全局排序（默认排序）
+            window.location.href = "{{ url_for('index') }}?sort=global";
+        });
+    });
+</script>
 {% endblock %}

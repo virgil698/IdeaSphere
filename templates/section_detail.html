@@ -4,7 +4,7 @@
 <section class="section-detail-page">
     <div class="section-header">
         <div class="header-left">
-            <a href="{{ url_for('sections') }}" class="back-link">
+            <a href="{{ url_for('section.sections') }}" class="back-link">
                 <i class="fas fa-arrow-left"></i> 返回版块列表
             </a>
             <h2><i class="{{ section.icon }}"></i> {{ section.name }}</h2>
@@ -18,7 +18,7 @@
             {% endif %}
         </div>
     </div>
-    
+
     <div class="section-stats-bar">
         <div class="stat-item">
             <i class="fas fa-file-alt"></i>
@@ -28,11 +28,16 @@
             <i class="fas fa-comment"></i>
             <span>评论数: {{ section.comment_count }}</span>
         </div>
+        {% if g.role == 'admin' %}
+        <a href="{{ url_for('section.edit_section', section_id=section.id) }}" class="edit-section-btn">
+            <i class="fas fa-edit"></i> 编辑板块
+        </a>
+    {% endif %}
     </div>
-    
+
     <div class="posts-list">
         <h3 class="list-title">帖子列表</h3>
-        
+
         {% if posts %}
             {% for post in posts %}
             <div class="post-card">
@@ -55,26 +60,26 @@
                 </div>
             </div>
             {% endfor %}
-            
+
             <!-- 分页 -->
             {% if pagination.pages > 1 %}
             <div class="pagination">
                 {% if pagination.has_prev %}
-                <a href="{{ url_for('section_detail', section_id=section.id, page=pagination.prev_num) }}" class="page-link">
+                <a href="{{ url_for('section.section_detail', section_id=section.id, page=pagination.prev_num) }}" class="page-link">
                     <i class="fas fa-chevron-left"></i> 上一页
                 </a>
                 {% endif %}
-                
+
                 <span class="page-info">{{ pagination.page }} / {{ pagination.pages }}</span>
-                
+
                 {% if pagination.has_next %}
-                <a href="{{ url_for('section_detail', section_id=section.id, page=pagination.next_num) }}" class="page-link">
+                <a href="{{ url_for('section.section_detail', section_id=section.id, page=pagination.next_num) }}" class="page-link">
                     下一页 <i class="fas fa-chevron-right"></i>
                 </a>
                 {% endif %}
             </div>
             {% endif %}
-            
+
         {% else %}
         <div class="no-posts">
             <i class="fas fa-file-alt"></i>
@@ -89,5 +94,5 @@
     </div>
 </section>
 
-<link href="{{ url_for('static', filename='css/section_detail.css') }}">
-{% endblock %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/section_detail.css') }}">
+{% endblock %}

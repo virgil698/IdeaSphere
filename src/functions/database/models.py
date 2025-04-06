@@ -4,6 +4,7 @@
 from email.policy import default
 
 from src.db_ext import db
+from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +32,13 @@ class Post(db.Model):
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
     like_count = db.Column(db.Integer, default=0)
+
+    # 新增 section_id 字段
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
+    section = db.relationship('Section', backref=db.backref('posts', lazy=True))
+
+    # 新增 created_at 字段
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 class Comment(db.Model):
@@ -85,3 +93,11 @@ class SearchModel(db.Model):
 class InstallationStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     is_installed = db.Column(db.Boolean, default=False)
+
+class Section(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    icon = db.Column(db.String(50), nullable=True)
+    post_count = db.Column(db.Integer, default=0)
+    comment_count = db.Column(db.Integer, default=0)
