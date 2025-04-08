@@ -116,15 +116,15 @@ def section_analytics():
 
     # 获取版块活跃用户
     section_active_users = {}
-    for section in section_post_counts:
+    for section, post_count in section_post_counts:
         users = db.session.query(
             User,
             func.count(Post.id).label('post_count')
-        ).outerjoin(Post, User.id == Post.user_id).filter(
-            Post.section_id == section.id,
+        ).outerjoin(Post, User.id == Post.author_id).filter(
+            Post.section_id == section.id,  # 使用 section.id
             Post.deleted == False
         ).group_by(User.id).order_by(func.count(Post.id).desc()).limit(5).all()
-        section_active_users[section.id] = users
+        section_active_users[section.id] = users  # 使用 section.id
 
     return render_template(
         'section_analytics.html',
