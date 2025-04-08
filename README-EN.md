@@ -8,10 +8,10 @@
 <h3 align="center">IdeaSphere</h3>
 
 <p align="center">
-  A forum software focusing on simplicity, practicality and easy configuration, built with Python3.
+  IdeaSphere is a Python3 forum software, easy to configure, with better communication features and more customization options, etc.
 </p>
 <p align="center">
-  主打简单实用易于配置的论坛程序，基于 Python3 完成
+  IdeaSphere 是 Python3 实现的论坛程序，易于配置、更好交流功能和更多定制等。
 </p>
 
 [![GitHub forks](https://img.shields.io/github/forks/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.comIdeaSphere-team/IdeaSphere/network)
@@ -30,8 +30,7 @@
 
 ## 📖 Project introduction
 
-`IdeaSphere` is a simple and useful forum program based on Python 3.11 and Flask framework. It is easy to configure and suitable for quickly setting up a lightweight forum system.
-
+IdeaSphere is an open-source social platform built with Python3 and Flask, that aims to provide easy deployment, optimize performance, deeply integrate centralized/decentralized features, and support extensive customization. Future versions will use Go, Python, and TypeScript to enhance stability and scalability.
 # 🌟 Core Features
 
 - **Simple and Easy to Use**: Clean interface, practical functions, and easy to get started.
