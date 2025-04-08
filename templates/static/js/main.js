@@ -1,6 +1,3 @@
-import {send_log_data} from './logs.js'
-send_log_data("msg", "info")
-
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化轮播图
     if (document.querySelector('.swiper-container')) {
