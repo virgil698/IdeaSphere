@@ -41,7 +41,7 @@
         <div class="nav-left">
             <a href="{{ url_for('index') }}" class="nav-logo">IdeaSphere</a>
             <div class="nav-links">
-                <a href="{{ url_for('index') }}" class="nav-link active">首页</a>
+                <a href="{{ url_for('index') }}" class="nav-link">首页</a>
                 <a href="{{ url_for('section.sections') }}" class="nav-link">板块分类</a>
                 {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
                 <a href="{{ url_for('admin_panel') }}" class="nav-link">管理面板</a>

@@ -6,8 +6,12 @@
     <div class="section-header">
         <h2>全部帖子</h2>
         <div class="sort-buttons">
-            <button id="timeline-sort" class="sort-btn active">时间线</button>
-            <button id="global-sort" class="sort-btn">全局</button>
+            <a href="{{ url_for('newest') }}" class="sort-btn" id="timeline-sort" data-text="时间线">
+                时间线
+            </a>
+            <a href="{{ url_for('global_sort') }}" class="sort-btn" id="global-sort" data-text="全局">
+                全局
+            </a>
         </div>
         {% if 'user_id' in session %}
         <a href="{{ url_for('create_post') }}" class="create-post-btn">
@@ -49,7 +53,7 @@
     {% if posts.pages > 1 %}
     <div class="pagination">
         {% if posts.has_prev %}
-        <a href="{{ url_for('index') }}?page={{ posts.prev_num }}" class="page-link">
+        <a href="{{ url_for(request.endpoint) }}?page={{ posts.prev_num }}" class="page-link">
             <i class="fas fa-chevron-left"></i> 上一页
         </a>
         {% endif %}
@@ -57,7 +61,7 @@
         <span class="page-info">{{ posts.page }} / {{ posts.pages }}</span>
 
         {% if posts.has_next %}
-        <a href="{{ url_for('index') }}?page={{ posts.next_num }}" class="page-link">
+        <a href="{{ url_for(request.endpoint) }}?page={{ posts.next_num }}" class="page-link">
             下一页 <i class="fas fa-chevron-right"></i>
         </a>
         {% endif %}
@@ -66,7 +70,7 @@
 </section>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/section_detail.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index_index.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sorting.css') }}">
 {% endblock %}
 
 {% block scripts %}
@@ -76,15 +80,25 @@
         const timelineBtn = document.getElementById('timeline-sort');
         const globalBtn = document.getElementById('global-sort');
 
+        // 根据当前路由更新按钮状态
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('newest')) {
+            timelineBtn.classList.add('active');
+            globalBtn.classList.remove('active');
+        } else if (currentPath.includes('global')) {
+            globalBtn.classList.add('active');
+            timelineBtn.classList.remove('active');
+        }
+
         // 为按钮添加点击事件
         timelineBtn.addEventListener('click', function() {
-            // 按时间线排序（最先发布的在前）
-            window.location.href = "{{ url_for('index') }}?sort=timeline";
+            timelineBtn.classList.add('active');
+            globalBtn.classList.remove('active');
         });
 
         globalBtn.addEventListener('click', function() {
-            // 按全局排序（默认排序）
-            window.location.href = "{{ url_for('index') }}?sort=global";
+            globalBtn.classList.add('active');
+            timelineBtn.classList.remove('active');
         });
     });
 </script>

@@ -4,7 +4,7 @@ from flask_wtf.csrf import CSRFProtect
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment, Section  # 确保导入 Section 模型
 from src.functions.icenter.db_operation import execute_sql_logic
-from src.functions.index import index_logic
+from src.functions.index import index_logic, newest_logic, global_logic  # 导入新的逻辑函数
 from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.service import monitor
@@ -114,7 +114,15 @@ def install():
 
 @app.route('/')
 def index():
-    return index_logic()
+    return index_logic()  # 默认重定向到时间线排序页面
+
+@app.route('/newest')
+def newest():
+    return newest_logic()
+
+@app.route('/global')
+def global_sort():
+    return global_logic()
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
