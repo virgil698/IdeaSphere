@@ -5,7 +5,6 @@ from markdown import markdown
 
 
 def convert_markdown_to_html(markdown_text):
-
     # 添加对banner的支持
     banner_patterns = {
         'tip': r'::: tip\s*(.*?)\s*:::',
@@ -41,8 +40,8 @@ def convert_markdown_to_html(markdown_text):
                     'span', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'blockquote',
                     'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i']
     allowed_attributes = {
-        'a': ['href', 'title', 'target'],
-        'img': ['src', 'alt', 'width', 'height'],
+        'a': ['href', 'title', 'target', 'class', 'data-fancybox'],
+        'img': ['src', 'alt', 'width', 'height', 'class', 'data-fancybox'],
         'div': ['class', 'style'],
         'span': ['class', 'style'],
         'table': ['class', 'style'],
@@ -80,12 +79,20 @@ def convert_markdown_to_html(markdown_text):
     # 为小段代码添加样式
     for code in soup.find_all('code'):
         # 检测代码块的长度，如果长度小于等于3行，则认为是小段代码
-        if len(code.text.split('\n')) <= 3:
+        if len(code.text.split('\n')) <= 1:
             code['class'] = 'code-inline'
             code['style'] = 'background-color: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace;'
         else:
             code['class'] = 'code-block'
             code['style'] = 'background-color: #282c34; color: #abb2bf; font-family: monospace; border-radius: 5px; overflow-x: auto; margin: 15px 0;'
+
+    # 为图片添加 FancyBox 支持
+    for img in soup.find_all('img'):
+        if 'src' in img.attrs:
+            # 添加 FancyBox 所需的类和属性
+            img['class'] = img.get('class', []) + ['fancybox']
+            img['data-fancybox'] = 'gallery'
+            img['data-caption'] = img.get('alt', '')
 
     # 添加CSS样式
     style_tag = soup.new_tag('style')
@@ -181,6 +188,26 @@ def convert_markdown_to_html(markdown_text):
         head_tag = soup.new_tag('head')
         soup.insert(0, head_tag)
     soup.head.append(style_tag)
+
+    # 添加 FancyBox 的 CSS 和 JS
+    fancybox_css = soup.new_tag('link', rel='stylesheet', href='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css')
+    fancybox_js = soup.new_tag('script', src='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js')
+    fancybox_js_initialization = soup.new_tag('script')
+    fancybox_js_initialization.string = '''
+    document.addEventListener("DOMContentLoaded", function() {
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            // 配置选项
+            loop: true,
+            buttons: ["zoom", "slideShow", "fullScreen", "thumbs", "close"],
+            image: {
+                zoom: true
+            }
+        });
+    });
+    '''
+    soup.head.append(fancybox_css)
+    soup.head.append(fancybox_js)
+    soup.head.append(fancybox_js_initialization)
 
     cleaned_html = str(soup)
     return cleaned_html

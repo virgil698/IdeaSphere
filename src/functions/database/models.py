@@ -32,12 +32,9 @@ class Post(db.Model):
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
     like_count = db.Column(db.Integer, default=0)
-
-    # 新增 section_id 字段
+    look_count = db.Column(db.Integer, default=0)
     section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
     section = db.relationship('Section', backref=db.backref('posts', lazy=True))
-
-    # 新增 created_at 字段
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 

@@ -45,6 +45,13 @@ def view_post_logic(post_id):
         flash('该帖子已被删除', 'danger')
         return redirect(url_for('index'))
 
+    # 获取帖子所属的板块
+    section = post.section
+
+    # 更新查看次数
+    post.look_count += 1
+    db.session.commit()  # 提交更改
+
     if request.method == 'POST':
         if not g.user:
             flash('请先登录再进行评论', 'danger')
@@ -78,4 +85,4 @@ def view_post_logic(post_id):
             return redirect(url_for('view_post', post_id=post.id))
 
     comments = Comment.query.filter_by(post_id=post.id, deleted=False).all()
-    return render_template('view_post.html', post=post, comments=comments)
+    return render_template('view_post.html', post=post, comments=comments, section=section)

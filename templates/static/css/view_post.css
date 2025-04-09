@@ -11,28 +11,74 @@ code, pre {
 }
 
 pre {
-    padding: 1rem;
+    padding: 0.1rem;
 }
 
 blockquote {
-    border-left: 4px solid #ddd;
+    border-left: 2px solid #ddd;
     padding-left: 1rem;
     color: #666;
     margin-left: 0;
 }
 
 img {
-    max-width: 100%;
+    max-width: 60%;
     height: auto;
 }
 
-.like-count {
-    color: #4ffa86;
+.pre-wrap {
+white-space: pre;
 }
 
-.comment-like-count {
-    color: #fdf256; /* 金黄色 */
-    font-weight: bold;
+.front {
+    font-size: 1.0rem;
+    font-weight: 100;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.front i {
+    color: var(--primary-color);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--background-secondary);
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition-base);
+}
+
+.btn-primary:hover {
+    color: var(--primary-color);
+    background-color: var(--background-secondary);
+}
+
+.btn-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--background-secondary);
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition-base);
+}
+
+.btn-warning:hover {
+    color: var(--primary-color);
+    background-color: var(--background-secondary);
 }
 
 .comment-emoji-container {
@@ -49,4 +95,34 @@ img {
         margin-left: 0;
         margin-right: 8px;
     }
+}
+
+.emoji-button {
+    cursor: pointer;
+    background-color: var(--background-tertiary);
+    border: none;
+}
+
+.emoji-popup {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    width: 250px;
+}
+
+.emoji {
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 0.25rem;
+    display: inline-block;
+    transition: transform 0.2s;
+}
+
+.emoji:hover {
+    transform: scale(1.5);
 }

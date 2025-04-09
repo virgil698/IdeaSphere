@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
-
 <div class="create-post-container">
     <div class="card">
         <div class="card-header">
@@ -74,9 +72,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
 <script src="{{ url_for('static', filename='js/emoji_interact.js') }}"></script>
-
 {% endblock %}
