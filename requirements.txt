@@ -23,4 +23,4 @@ rapidfuzz~=3.13.0
 livereload~=2.7.1
 py-cpuinfo~=9.0.0
 setuptools~=78.1.0
-psutil~=6.1.0
+psutil~=7.0.0
