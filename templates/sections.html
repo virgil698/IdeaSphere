@@ -3,13 +3,13 @@
 {% block content %}
 <section class="sections-page">
     <div class="section-header">
-        <h2>论坛版块</h2>
+        <h2>版块分类</h2>
         <div class="section-actions">
             {% if g.role == 'admin' %}
-            <a href="{{ url_for('section.section_analytics') }}" class="btn-analytics">
+            <a href="{{ url_for('section.section_analytics') }}" class="btn-outline">
                 <i class="fas fa-chart-bar"></i> 版块分析
             </a>
-            <a href="{{ url_for('section.create_section') }}" class="btn-create-section">
+            <a href="{{ url_for('section.create_section') }}" class="btn-outline">
                 <i class="fas fa-plus"></i> 新增版块
             </a>
             {% endif %}
@@ -38,14 +38,14 @@
         </div>
         {% else %}
         <div class="no-sections">
-            <i class="fas fa-folder-open"></i>
-            <p>暂无版块，请管理员添加版块。</p>
+            <i class="fas fa-folder-open"></i> 暂无版块，请管理员添加版块
         </div>
         {% endfor %}
     </div>
 </section>
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_detail.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sections.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_analytics.css') }}">
 
 {% if g.role == 'admin' %}
 <script src="{{ url_for('static', filename='js/sections.js') }}"></script>

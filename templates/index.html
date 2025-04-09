@@ -4,18 +4,18 @@
 <!-- 帖子列表区域 -->
 <section class="hot-posts-section">
     <div class="section-header">
-        <h2>全部帖子</h2>
         <div class="sort-buttons">
-            <a href="{{ url_for('newest') }}" class="sort-btn" id="timeline-sort" data-text="时间线">
+            <h2>全部帖子</h2>
+            <a href="{{ url_for('newest') }}" class="sort-btn" id="timeline-sort">
                 时间线
             </a>
-            <a href="{{ url_for('global_sort') }}" class="sort-btn" id="global-sort" data-text="全局">
+            <a href="{{ url_for('global_sort') }}" class="sort-btn" id="global-sort">
                 全局
             </a>
         </div>
         {% if 'user_id' in session %}
         <a href="{{ url_for('create_post') }}" class="create-post-btn">
-            <i class="fas fa-plus"></i> 发布
+            <i class="fas fa-plus"></i> 发布帖子
         </a>
         {% endif %}
     </div>

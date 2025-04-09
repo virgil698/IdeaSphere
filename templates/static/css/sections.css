@@ -15,78 +15,15 @@
     gap: 1rem;
 }
 
-.btn-analytics {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    background-color: var(--info-color);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    transition: var(--transition-base);
-}
-
-.btn-analytics:hover {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-.btn-create-section {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    background-color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    transition: var(--transition-base);
-}
-
-.btn-create-section:hover {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
 .sections-list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.section-card {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-    padding: 1.5rem;
-    transition: var(--transition-base);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
 .section-card:hover {
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
-}
-
-.section-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1.5rem;
-    flex-shrink: 0;
-    color: white;
-    font-size: 1.5rem;
 }
 
 .section-info {
@@ -179,20 +116,15 @@
 }
 
 .no-sections {
+    padding: 2rem;
     text-align: center;
-    padding: 3rem;
     background: white;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-radius: 12px;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
 }
 
 .no-sections i {
-    font-size: 3rem;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-}
-
-.no-sections p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
 }

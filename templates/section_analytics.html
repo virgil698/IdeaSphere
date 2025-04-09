@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-    <link href="{{ url_for('static', filename='css/section_analytics.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
 <div class="analytics-container">
     <div class="analytics-header">
@@ -115,4 +111,6 @@
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_analytics.css') }}">
 {% endblock %}

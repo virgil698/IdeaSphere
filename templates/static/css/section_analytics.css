@@ -20,7 +20,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-secondary);
+    color: var(--primary-color);
     background-color: transparent;
     border: 1px solid var(--border-color);
     text-decoration: none;
@@ -32,7 +32,7 @@
 
 .btn-outline:hover {
     border-color: var(--primary-color);
-    color: var(--primary-color);
+    color: var(--border-color);
 }
 
 .analytics-grid {
