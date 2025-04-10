@@ -4,56 +4,7 @@ from bs4 import BeautifulSoup
 from markdown import markdown
 
 
-def fix_markdown_list(markdown_text):
-    """
-    修复Markdown列表，确保编号连续，忽略多余的空行
-    """
-    # 匹配列表项的正则表达式
-    list_item_pattern = r'^\s*(\d+)\.\s+(.*)$'
-
-    # 分割文本为行
-    lines = markdown_text.split('\n')
-
-    # 用于存储修复后的行
-    fixed_lines = []
-
-    # 当前列表的起始编号
-    current_number = 1
-
-    # 是否处于列表中
-    in_list = False
-
-    for line in lines:
-        # 检查是否是列表项
-        match = re.match(list_item_pattern, line, re.MULTILINE)
-
-        if match:
-            # 如果是列表项，替换编号为连续的编号
-            fixed_line = f"{current_number}. {match.group(2)}"
-            fixed_lines.append(fixed_line)
-            current_number += 1
-            in_list = True
-        else:
-            # 如果不是列表项，检查是否处于列表中
-            if in_list:
-                # 如果当前行为空，保留一个空行作为分隔
-                if line.strip() == '':
-                    fixed_lines.append('')
-                    in_list = False
-                else:
-                    # 如果不是空行，结束列表
-                    in_list = False
-            fixed_lines.append(line)
-
-    # 重新组合修复后的行
-    fixed_markdown = '\n'.join(fixed_lines)
-    return fixed_markdown
-
-
 def convert_markdown_to_html(markdown_text):
-    # 修复Markdown列表
-    markdown_text = fix_markdown_list(markdown_text)
-
     # 添加对banner的支持
     banner_patterns = {
         'tip': r'::: tip\s*(.*?)\s*:::',
