@@ -9,13 +9,13 @@
         border: none;
     }
 
-    .card-header {
+    .card-header-post {
         background-color: var(--background-secondary);
         border-bottom: 1px solid var(--border-color);
         padding: 1.5rem;
     }
 
-    .card-header h3 {
+    .card-header-post h3 {
         margin: 0;
         font-weight: 600;
         color: var(--text-primary);
