@@ -30,6 +30,10 @@ def convert_markdown_to_html(markdown_text):
             flags=re.DOTALL
         )
 
+    # 预处理嵌套无序列表的缩进
+    # 检测星号或者+号-号前有两个空格即判断为嵌套无序列表项
+    markdown_text = re.sub(r'(\n\s{2})(\*|\+|-)\s', r'\1    \2 ', markdown_text)
+
     # 启用tables、breaks和fenced_code扩展
     html = markdown(
         markdown_text,
@@ -78,7 +82,7 @@ def convert_markdown_to_html(markdown_text):
 
     # 为小段代码添加样式
     for code in soup.find_all('code'):
-        # 检测代码块的长度，如果长度小于等于3行，则认为是小段代码
+        # 检测代码块的长度，如果长度小于等于1行，则认为是小段代码
         if len(code.text.split('\n')) <= 1:
             code['class'] = 'code-inline'
             code['style'] = 'background-color: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace;'
