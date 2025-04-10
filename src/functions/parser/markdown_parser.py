@@ -1,7 +1,7 @@
 import re
-import markdown
-from bs4 import BeautifulSoup
 import bleach
+from bs4 import BeautifulSoup
+from markdown import markdown
 
 
 def fix_markdown_list(markdown_text):
@@ -80,7 +80,7 @@ def convert_markdown_to_html(markdown_text):
         )
 
     # 启用tables、breaks和fenced_code扩展
-    html = markdown.markdown(
+    html = markdown(
         markdown_text,
         extensions=['tables', 'nl2br', 'fenced_code']
     )
