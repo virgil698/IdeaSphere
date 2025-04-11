@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import g, jsonify, request, abort, flash, url_for, redirect, render_template
 
-from src.functions.database.models import Report, db, Like, Post, Comment, User
+from src.functions.database.models import Report, db, Like, Post, Comment, User, UserActivity
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 
@@ -21,8 +21,22 @@ def report_post_logic(post_id):
     new_report = Report(post_id=post_id, user_id=g.user.id, reason=reason)
     db.session.add(new_report)
     db.session.commit()
-    return jsonify({'success': True, 'message': '举报成功！'})
 
+    # 更新用户活动统计
+    today = datetime.utcnow().date()
+    activity = UserActivity.query.filter_by(user_uid=g.user.user_uid, date=today).first()
+    if activity:
+        activity.reports_count += 1
+    else:
+        activity = UserActivity(
+            user_uid=g.user.user_uid,
+            date=today,
+            reports_count=1
+        )
+        db.session.add(activity)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': '举报成功！'})
 
 def report_comment_logic(comment_id):
     if not g.user:
@@ -39,6 +53,21 @@ def report_comment_logic(comment_id):
     new_report = Report(comment_id=comment_id, user_id=g.user.id, reason=reason)
     db.session.add(new_report)
     db.session.commit()
+
+    # 更新用户活动统计
+    today = datetime.utcnow().date()
+    activity = UserActivity.query.filter_by(user_uid=g.user.user_uid, date=today).first()
+    if activity:
+        activity.reports_count += 1
+    else:
+        activity = UserActivity(
+            user_uid=g.user.user_uid,
+            date=today,
+            reports_count=1
+        )
+        db.session.add(activity)
+    db.session.commit()
+
     return jsonify({'success': True, 'message': '举报成功！'})
 
 
