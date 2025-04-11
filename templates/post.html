@@ -67,6 +67,18 @@
                             <button type="button" class="toolbar-btn" id="emojiButton" title="添加表情">
                                 <i class="fas fa-smile"></i>
                             </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: tip\n', '\n:::', '代码块')" title="信息块-提示">
+                                <i class="fa-solid fa-bell"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: info\n', '\n:::', '代码块')" title="信息块-信息">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: warning\n', '\n:::', '代码块')" title="信息块-警告">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: danger\n', '\n:::', '代码块')" title="信息块-警告">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                            </button>
                         </div>
                         <textarea class="form-control" id="content" name="content" rows="12" placeholder="输入帖子内容" required></textarea>
                         <div class="form-text">添加丰富的内容，支持 Markdown 格式，可以插入代码、图片和链接</div>
