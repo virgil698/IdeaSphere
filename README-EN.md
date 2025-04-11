@@ -68,9 +68,9 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 | **🎈 Rich Text Editor** | 🚧         |                     |
 | **👤 Post Sorting by Time and Likes** | 🚧 |                     |
 | **👤 Reply Sorting by Time and Likes** | 🚧 |                     |
+| **📦 User Custom Settings** | 🚧         |                     |
+| **📦 User Profile Page** | 🚧           |                     |
 | **📦 Private Messaging System** | ⏳         |                     |
-| **📦 User Custom Settings** | ⏳         |                     |
-| **📦 User Profile Page** | ⏳           |                     |
 | **🔐 Email Registration and Password Reset** | ⏳ |                     |
 | **🔌 Templates**    | ⏳             |                     |
 | **🔌 Plugins**      | ⏳             |                     |
