@@ -127,3 +127,11 @@ def user_posts(user_uid):
         return jsonify({'error': '用户不存在'}), 404
 
     return render_template('user/user_posts.html', user=user_data['user'], posts=user_data['posts'])
+
+
+@user_bp.route('/user/<int:user_uid>/treeholes')
+def user_treeholes(user_uid):
+    user_data = get_user_data(user_uid)
+    if not user_data:
+        return jsonify({'error': '用户不存在'}), 404
+    return render_template('user/user_treeholes.html', user=user_data['user'])
