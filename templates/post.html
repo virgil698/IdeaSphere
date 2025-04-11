@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="create-post-container">
+<div class="post-page">
+    <div class="post-page-header">
+        <h2><i class="fas fa-pen"></i> 创建新主题</h2>
+        <p class="text-muted">分享您的想法和创意，让更多人参与讨论</p>
+    </div>
+    
     <div class="card">
-        <div class="card-header-post">
-            <h3>创建新主题</h3>
-        </div>
         <div class="card-body">
-            <form method="POST">
+            <form method="POST" id="post-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- 标题 -->
-                <div class="form-group mb-3">
+                <div class="form-group mb-4">
                     <label for="title" class="form-label">
                         <i class="fas fa-heading"></i> 标题
                     </label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="输入帖子标题" required>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="输入帖子标题（5-50个字符）" required>
+                    <div class="form-text">一个好的标题能够吸引更多读者</div>
                 </div>
 
                 <!-- 版块选择 -->
-                <div class="form-group mb-3">
+                <div class="form-group mb-4">
                     <label for="section_id" class="form-label">
                         <i class="fas fa-folder"></i> 选择版块
                     </label>
@@ -29,49 +32,181 @@
                         <option value="{{ section.id }}">{{ section.name }}</option>
                         {% endfor %}
                     </select>
-                    <small class="text-muted">选择一个适合您话题的版块</small>
+                    <div class="form-text">选择一个适合您话题的版块</div>
                 </div>
 
                 <!-- 内容 -->
-                <div class="form-group mb-3">
+                <div class="form-group mb-4">
                     <label for="content" class="form-label">
-                        <i class="fas fa-pencil-alt"></i> 内容（支持 Markdown 格式）
+                        <i class="fas fa-pencil-alt"></i> 内容
+                        <span class="markdown-support">支持 Markdown 格式</span>
                     </label>
-                    <div class="input-group">
-                        <textarea class="form-control" id="content" name="content" rows="10" placeholder="输入帖子内容"
-                            required></textarea>
-                        <span class="input-group-text emoji-button" id="emojiButton" title="添加表情">
-                            <i class="fas fa-smile"></i>
-                        </span>
+                    <div class="content-editor">
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('**', '**', '粗体文本')" title="粗体">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('*', '*', '斜体文本')" title="斜体">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('### ', '', '标题')" title="标题">
+                                <i class="fas fa-heading"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('[', '](URL)', '链接文本')" title="链接">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('![alt text](', ')', 'https://图片链接')" title="图片">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('```\n', '\n```', '代码块')" title="代码块">
+                                <i class="fas fa-code"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('> ', '', '引用文本')" title="引用">
+                                <i class="fas fa-quote-right"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" id="emojiButton" title="添加表情">
+                                <i class="fas fa-smile"></i>
+                            </button>
+                        </div>
+                        <textarea class="form-control" id="content" name="content" rows="12" placeholder="输入帖子内容" required></textarea>
+                        <div class="form-text">添加丰富的内容，支持 Markdown 格式，可以插入代码、图片和链接</div>
+                        
+                        <!-- Emoji 弹出框 -->
+                        <div id="emojiPopup" class="emoji-popup">
+                            <div class="emoji-popup-header">
+                                <span>常用表情</span>
+                                <button type="button" class="emoji-close-btn" onclick="hideEmojiPopup()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="emoji-popup-content">
+                                <span class="emoji">😀</span>
+                                <span class="emoji">😊</span>
+                                <span class="emoji">😎</span>
+                                <span class="emoji">🤔</span>
+                                <span class="emoji">😍</span>
+                                <span class="emoji">🙂</span>
+                                <span class="emoji">😁</span>
+                                <span class="emoji">😉</span>
+                                <span class="emoji">👍</span>
+                                <span class="emoji">👏</span>
+                                <span class="emoji">❤️</span>
+                                <span class="emoji">🎉</span>
+                                <span class="emoji">🔥</span>
+                                <span class="emoji">💯</span>
+                                <span class="emoji">🚀</span>
+                                <span class="emoji">💡</span>
+                            </div>
+                            <div class="emoji-popup-footer">
+                                按 <kbd>Ctrl</kbd>+<kbd>:</kbd> 打开表情菜单
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 提交按钮 -->
-                <div class="text-right">
+                <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-paper-plane"></i> 发布主题
                     </button>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline">
+                        <i class="fas fa-times"></i> 取消
+                    </a>
                 </div>
             </form>
-
-            <!-- Emoji 弹出框 -->
-            <div id="emojiPopup" class="emoji-popup">
-                <span class="emoji">😀</span>
-                <span class="emoji">😎</span>
-                <span class="emoji">👍</span>
-                <span class="emoji">❤️</span>
-                <span class="emoji">🚀</span>
-                <span class="emoji">🎉</span>
-                <span class="emoji">🔥</span>
-                <span class="emoji">💯</span>
-                <span class="emoji">🤔</span>
-                <span class="emoji">😊</span>
-                <span class="emoji">👏</span>
-                <span class="emoji">🙏</span>
-            </div>
         </div>
     </div>
 </div>
+
+<div class="markdown-preview-panel">
+    <div class="preview-header">
+        <h3>预览</h3>
+        <button type="button" class="close-preview-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="preview-content markdown-content"></div>
+</div>
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
 <script src="{{ url_for('static', filename='js/emoji_interact.js') }}"></script>
+<script>
+    // Markdown 编辑器功能
+    function insertMarkdown(before, after, placeholder) {
+        const textarea = document.getElementById('content');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        const replacement = before + (selectedText || placeholder) + after;
+        
+        textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+        
+        // 设置光标位置
+        const newPosition = selectedText ? start + replacement.length : start + before.length + placeholder.length;
+        textarea.focus();
+        textarea.selectionStart = newPosition;
+        textarea.selectionEnd = newPosition;
+        
+        // 触发内容变化事件
+        textarea.dispatchEvent(new Event('input'));
+    }
+    
+    // 预览功能
+    document.addEventListener('DOMContentLoaded', function() {
+        const previewPanel = document.querySelector('.markdown-preview-panel');
+        const previewContent = document.querySelector('.preview-content');
+        const closeBtn = document.querySelector('.close-preview-btn');
+        const textarea = document.getElementById('content');
+        
+        // 添加实时预览按钮
+        const toolbar = document.querySelector('.editor-toolbar');
+        const previewBtn = document.createElement('button');
+        previewBtn.type = 'button';
+        previewBtn.className = 'toolbar-btn preview-btn';
+        previewBtn.title = '预览';
+        previewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        toolbar.appendChild(previewBtn);
+        
+        // 预览按钮点击事件
+        previewBtn.addEventListener('click', function() {
+            if (previewPanel.classList.contains('active')) {
+                previewPanel.classList.remove('active');
+            } else {
+                updatePreview();
+                previewPanel.classList.add('active');
+            }
+        });
+        
+        // 关闭预览
+        closeBtn.addEventListener('click', function() {
+            previewPanel.classList.remove('active');
+        });
+        
+        // 更新预览内容
+        function updatePreview() {
+            // 简单的Markdown转HTML实现
+            let html = textarea.value
+                .replace(/#{3}\s*(.*?)\s*$/gm, '<h3>$1</h3>')
+                .replace(/#{2}\s*(.*?)\s*$/gm, '<h2>$1</h2>')
+                .replace(/#{1}\s*(.*?)\s*$/gm, '<h1>$1</h1>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">')
+                .replace(/`{3}([\s\S]*?)`{3}/g, '<pre><code>$1</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^>\s*(.*?)$/gm, '<blockquote>$1</blockquote>')
+                .replace(/\n/g, '<br>');
+            
+            previewContent.innerHTML = html;
+        }
+        
+        // 监听文本变化
+        textarea.addEventListener('input', function() {
+            if (previewPanel.classList.contains('active')) {
+                updatePreview();
+            }
+        });
+    });
+</script>
 {% endblock %}

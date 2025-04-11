@@ -1,48 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="create-section-page">
-    <div class="create-section-container">
-        <div class="create-section-header">
-            <h2>创建新板块</h2>
-            <a href="{{ url_for('section.sections') }}" class="btn-outline">
-                <i class="fas fa-arrow-left"></i> 返回版块列表
-            </a>
-        </div>
-        
-        <form method="POST" class="create-section-form" id="createSectionForm">
-            <!-- 添加 CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <div class="form-group">
-                <label for="name">板块名称</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="description">板块描述</label>
-                <textarea id="description" name="description" rows="4"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="icon">板块图标（Font Awesome 类名）</label>
-                <input type="text" id="icon" name="icon" placeholder="例如：fas fa-star">
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-plus"></i> 创建板块
-                </button>
-                <a href="{{ url_for('section.sections') }}" class="btn-cancel">
-                    <i class="fas fa-times"></i> 取消
-                </a>
-            </div>
-        </form>
+<div class="post-page">
+    <div class="post-page-header">
+        <h2><i class="fas fa-plus-circle"></i> 创建新板块</h2>
+        <p class="text-muted">添加一个新的讨论板块，丰富社区内容</p>
     </div>
-</section>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" id="createSectionForm">
+                <!-- 添加 CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+                <!-- 板块名称 -->
+                <div class="form-group mb-4">
+                    <label for="name" class="form-label">
+                        <i class="fas fa-tag"></i> 板块名称
+                    </label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="输入板块名称（3-30个字符）">
+                    <div class="form-text">给您的板块起一个简洁明了的名称</div>
+                </div>
+    
+                <!-- 板块描述 -->
+                <div class="form-group mb-4">
+                    <label for="description" class="form-label">
+                        <i class="fas fa-align-left"></i> 板块描述
+                    </label>
+                    <textarea class="form-control" id="description" name="description" rows="6" placeholder="输入板块的详细描述"></textarea>
+                    <div class="form-text">详细描述板块的主题和用途，吸引用户参与讨论</div>
+                </div>
+    
+                <!-- 板块图标 -->
+                <div class="form-group mb-4">
+                    <label for="icon" class="form-label">
+                        <i class="fas fa-icons"></i> 板块图标
+                    </label>
+                    <input type="text" class="form-control" id="icon" name="icon" placeholder="输入Font Awesome图标类名，例如：fas fa-star">
+                    <div class="form-text">选择一个合适的图标来代表板块主题 (<a href="https://fontawesome.com/icons" target="_blank">浏览图标库</a>)</div>
+                </div>
+    
+                <!-- 提交按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> 创建板块
+                    </button>
+                    <a href="{{ url_for('section.sections') }}" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> 返回版块列表
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_create.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_analytics.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}">
 {% endblock %}
 
 {% block scripts %}

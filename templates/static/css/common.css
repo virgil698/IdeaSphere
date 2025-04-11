@@ -1,7 +1,7 @@
 :root {
     /* 主色调 */
     --primary-color: #5e72e4;
-    --secondary-color: #11cdef;
+    --secondary-color: #5365cb;
     --accent-color: #fb6340;
     
     /* 文本颜色 */
@@ -20,7 +20,7 @@
     
     /* 交互状态颜色 */
     --success-color: #2dce89;
-    --info-color: #11cdef;
+    --info-color: #5365cb;
     --warning-color: #fb6340;
     --danger-color: #f5365c;
     
