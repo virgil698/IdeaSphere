@@ -22,6 +22,7 @@ from src.functions.api.api import api_bp  # 导入 API 蓝图
 from src.functions.config.config import get_config, initialize_database
 from src.functions.utils.logger import Logger
 from src.functions.section.section import section_bp  # 导入板块蓝图
+from src.functions.service.user_routes import user_bp  # 导入用户页面蓝图
 
 """
 初始化部分   
@@ -48,6 +49,9 @@ app.register_blueprint(api_bp, url_prefix='/api')
 
 # 注册板块蓝图
 app.register_blueprint(section_bp)  # 注册板块蓝图
+
+# 注册用户页面蓝图
+app.register_blueprint(user_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 

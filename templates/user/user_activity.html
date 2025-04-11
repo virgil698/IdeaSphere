@@ -1,0 +1,22 @@
+<div class="activity-heatmap">
+    <div class="heatmap-container">
+        <canvas id="activityHeatmap"></canvas>
+    </div>
+    <div class="heatmap-legend">
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: rgba(0, 255, 0, 0.2);"></span>
+            <span class="legend-label">低</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: rgba(0, 255, 0, 0.5);"></span>
+            <span class="legend-label">中</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: rgba(0, 255, 0, 0.8);"></span>
+            <span class="legend-label">高</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+<script src="{{ url_for('static', filename='js/user_activity.js') }}"></script>

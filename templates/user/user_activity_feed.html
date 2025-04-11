@@ -1,0 +1,25 @@
+<div class="activity-feed-container">
+    {% for activity in activities %}
+    <div class="activity-item">
+        <div class="activity-header">
+            <img src="{{ url_for('static', filename='img/user-avatar.jpg') }}" alt="用户头像" class="activity-avatar">
+            <div class="activity-info">
+                <h3 class="activity-user">{{ user.username }}</h3>
+                <span class="activity-time">{{ activity.time }}</span>
+            </div>
+        </div>
+        <div class="activity-content">
+            {% if activity.type == 'post' %}
+            发布了帖子：{{ activity.title }}
+            {% elif activity.type == 'comment' %}
+            评论了帖子：{{ activity.content }}
+            {% endif %}
+        </div>
+        <div class="activity-actions">
+            <a href="#" class="action-link"><i class="fas fa-heart"></i> 喜欢</a>
+            <a href="#" class="action-link"><i class="fas fa-comment"></i> 评论</a>
+            <a href="#" class="action-link"><i class="fas fa-share"></i> 分享</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>

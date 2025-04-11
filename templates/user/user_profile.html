@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="user-profile">
+    <!-- 用户头像、用户空间封面 -->
+    <div class="user-cover">
+        <img src="{{ url_for('static', filename='img/user-cover.jpg') }}" alt="用户空间封面" class="cover-image">
+        <div class="user-avatar-container">
+            <img src="{{ url_for('static', filename='img/user-avatar.jpg') }}" alt="用户头像" class="user-avatar">
+        </div>
+    </div>
+
+    <!-- 用户简介 -->
+    <div class="user-info">
+        <h1 class="user-name">{{ user.username }}</h1>
+        <p class="user-brief">{{ user.brief }}</p>
+        <div class="user-stats">
+            <div class="stat-item">
+                <span class="stat-value">{{ user.user_uid }}</span>
+                <span class="stat-label">用户UID</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ user.posts_count }}</span>
+                <span class="stat-label">帖子</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ user.following_count }}</span>
+                <span class="stat-label">关注中</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ user.followers_count }}</span>
+                <span class="stat-label">关注者</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户详细信息 -->
+    <div class="user-details">
+        <div class="detail-section">
+            <h2 class="section-title">个人信息</h2>
+            <div class="detail-item">
+                <span class="detail-label">用户UID</span>
+                <span class="detail-value">{{ user.user_uid }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">来自</span>
+                <span class="detail-value">{{ user.location }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">生日</span>
+                <span class="detail-value">{{ user.birthday }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">性别</span>
+                <span class="detail-value">{{ user.gender }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">今日在线时长</span>
+                <span class="detail-value">{{ user.today_online }}</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2 class="section-title">联系方式</h2>
+            <div class="detail-item">
+                <span class="detail-label">BiliBili主页</span>
+                <a href="{{ user.bilibili }}" class="detail-value">{{ user.bilibili }}</a>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Github主页</span>
+                <a href="{{ user.github }}" class="detail-value">{{ user.github }}</a>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">微博主页</span>
+                <a href="{{ user.weibo }}" class="detail-value">{{ user.weibo }}</a>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">博客地址</span>
+                <a href="{{ user.blog }}" class="detail-value">{{ user.blog }}</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户活动信息 -->
+    <div class="user-activity">
+        <h2 class="section-title">活动信息</h2>
+        {% include "user/user_activity.html" %}
+    </div>
+
+    <!-- 用户最新动态 -->
+    <div class="user-activity-feed">
+        <h2 class="section-title">最新动态</h2>
+        {% include "user/user_activity_feed.html" %}
+    </div>
+
+    <!-- 用户投稿的帖子 -->
+    <div class="user-posts">
+        <h2 class="section-title">投稿的帖子</h2>
+        {% include "user/user_posts.html" %}
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user_profile.css') }}">
+{% endblock %}

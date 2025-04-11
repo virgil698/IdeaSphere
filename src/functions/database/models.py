@@ -53,6 +53,7 @@ class Comment(db.Model):
     delete_reason = db.Column(db.Text)
     delete_time = db.Column(db.DateTime)
     like_count = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
 
 
 class Report(db.Model):
