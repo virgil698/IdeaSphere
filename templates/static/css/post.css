@@ -1,75 +1,551 @@
-    .create-post-container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
+/* 发帖页面样式 */
+.post-page {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
 
-    .card {
-        box-shadow: var(--shadow-sm);
-        border-radius: var(--border-radius-lg);
-        border: none;
-    }
+.post-page-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    padding: 1.5rem 0;
+}
 
-    .card-header-post {
-        background-color: var(--background-secondary);
-        border-bottom: 1px solid var(--border-color);
+.post-page-header h2 {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-page-header h2 i {
+    color: var(--primary-color);
+    margin-right: 0.75rem;
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(83, 88, 93, 0.12);
+    border-radius: 10px;
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+}
+
+.form-label i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+    width: 20px;
+    text-align: center;
+}
+
+.markdown-support {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.1rem 0.5rem;
+    margin-left: 0.75rem;
+}
+
+.form-control {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.25s ease;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.15rem rgba(94, 114, 228, 0.15);
+}
+
+.form-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235365cb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
+}
+
+textarea.form-control {
+    min-height: 200px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+/* Markdown编辑器样式 */
+.content-editor {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.content-editor:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.15rem rgba(94, 114, 228, 0.15);
+}
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem;
+}
+
+.toolbar-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+    background-color: rgba(94, 114, 228, 0.1);
+    color: var(--primary-color);
+}
+
+.content-editor .form-control {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.content-editor .form-text {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+/* 表单操作按钮 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn i {
+    margin-right: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 6px rgba(83, 101, 203, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #4a5acf;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(83, 101, 203, 0.3);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+}
+
+/* 表情选择器 */
+#emojiButton.toolbar-btn {
+    background-color: #fff8e1;
+    color: #ff9800;
+}
+
+#emojiButton.toolbar-btn:hover {
+    background-color: #ffe0b2;
+    color: #f57c00;
+}
+
+.emoji-popup {
+    display: none;
+    position: absolute;
+    z-index: 1050;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    overflow: hidden;
+}
+
+.emoji-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.emoji-popup-header span {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.emoji-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.emoji-close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+}
+
+.emoji-popup-content {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.emoji {
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 0.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.emoji:hover {
+    background-color: var(--background-secondary);
+    transform: scale(1.2);
+}
+
+.emoji-selected {
+    background-color: var(--background-secondary);
+    transform: scale(1.2);
+    animation: emojiPulse 0.3s ease-in-out;
+}
+
+@keyframes emojiPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1.2); }
+}
+
+.emoji-popup-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background-color: var(--background-secondary);
+}
+
+.emoji-popup-footer kbd {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    margin: 0 0.2rem;
+}
+
+.emoji-shortcut-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    font-size: 0.9rem;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Markdown预览面板 */
+.markdown-preview-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.markdown-preview-panel.active {
+    right: 0;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.preview-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.close-preview-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-preview-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.preview-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* Markdown内容样式 */
+.markdown-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-wrap: break-word;
+}
+
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.markdown-content h1 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.markdown-content h2 {
+    font-size: 1.5rem;
+}
+
+.markdown-content h3 {
+    font-size: 1.2rem;
+}
+
+.markdown-content p {
+    margin-bottom: 1rem;
+}
+
+.markdown-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--primary-color);
+}
+
+.markdown-content a:hover {
+    border-bottom-style: solid;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.markdown-content pre {
+    background-color: var(--background-secondary);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.markdown-content code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    background-color: var(--background-secondary);
+    border-radius: 3px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.9em;
+}
+
+.markdown-content pre code {
+    padding: 0;
+    background-color: transparent;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1rem;
+    color: var(--text-secondary);
+    margin: 1rem 0 1rem 0.5rem;
+    font-style: italic;
+}
+
+/* 响应式样式 */
+@media (max-width: 992px) {
+    .markdown-preview-panel {
+        width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-body {
         padding: 1.5rem;
     }
-
-    .card-header-post h3 {
-        margin: 0;
-        font-weight: 600;
-        color: var(--text-primary);
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
     }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .markdown-preview-panel {
+        width: 85%;
+        right: -85%;
+    }
+}
 
+@media (max-width: 576px) {
+    .post-page-header {
+        padding: 1rem 0;
+    }
+    
     .card-body {
-        padding: 2rem;
+        padding: 1.25rem;
     }
-
-    .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: var(--text-primary);
-    }
-
-    .form-control {
-        border: 1px solid var(--border-color);
-        background-color: var(--background-secondary);
-        border-radius: var(--border-radius);
-        padding: 0.75rem;
-        transition: var(--transition-base);
-    }
-
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(94, 114, 228, 0.25);
-    }
-
-    .emoji-button {
-        cursor: pointer;
-        background-color: var(--background-tertiary);
-        border: none;
-    }
-
+    
     .emoji-popup {
-        display: none;
-        position: absolute;
-        background: white;
-        border: 1px solid var(--border-color);
-        padding: 1rem;
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow-md);
-        z-index: 1000;
-        width: 250px;
+        width: 90%;
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
     }
-
+    
+    .editor-toolbar {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    
+    .toolbar-btn {
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .emoji-popup-content {
+        max-height: 150px;
+    }
+    
     .emoji {
-        font-size: 1.5rem;
-        cursor: pointer;
-        margin: 0.25rem;
-        display: inline-block;
-        transition: transform 0.2s;
+        font-size: 1.3rem;
+        width: 2.2rem;
+        height: 2.2rem;
     }
-
-    .emoji:hover {
-        transform: scale(1.2);
-    }
+}
