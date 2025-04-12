@@ -125,7 +125,7 @@ def convert_markdown_to_html(markdown_text):
         margin-right: 10px;
     }
     .banner-tip {
-        border-color: #d4edda;
+        border-color: #e6f6e6;
         background-color: #d4edda;
         color: #155724;
     }
