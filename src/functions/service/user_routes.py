@@ -41,8 +41,7 @@ def get_user_data(user_uid):
             'time': post.created_at.strftime('%Y-%m-%d %H:%M:%S')
         })
 
-    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(
-            10).all():
+    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(10).all():
         activity_data.append({
             'id': comment.id,
             'type': 'comment',
@@ -81,7 +80,8 @@ def get_user_data(user_uid):
             'content': post.content,
             'time': post.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'like_count': post.like_count,
-            'comment_count': Comment.query.filter_by(post_id=post.id, deleted=False).count()
+            'comment_count': Comment.query.filter_by(post_id=post.id, deleted=False).count(),
+            'section': post.section  # 添加 section 信息
         })
 
     return {

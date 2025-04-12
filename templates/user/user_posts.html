@@ -9,7 +9,11 @@
                     <span class="post-time">{{ post.time }}</span>
                 </div>
                 <div class="post-section">
+                    {% if post.section %}
                     <span class="section-badge">{{ post.section.name }}</span>
+                    {% else %}
+                    <span class="section-badge">未分类</span>
+                    {% endif %}
                 </div>
             </div>
             <div class="post-content">
