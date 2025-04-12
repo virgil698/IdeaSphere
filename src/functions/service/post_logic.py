@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from flask import flash, g, redirect, url_for, request, render_template, abort, jsonify
-from src.functions.database.models import Post, db, Comment, Section, UserActivity
+from src.functions.database.models import Post, db, Comment, Section
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 
@@ -10,16 +8,18 @@ def create_post_logic():
         flash('请先登录再创建帖子', 'danger')
         return redirect(url_for('login'))
 
+    # 获取所有可用的板块
     sections = Section.query.all()
 
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        section_id = request.form.get('section_id')
+        section_id = request.form.get('section_id')  # 从前端表单中获取 section_id
 
+        # 检查是否选择了板块
         if not section_id:
-            flash('请选择板块后才能发布帖子', 'danger')
-            return render_template('post.html', sections=sections)
+            flash('请选择板块后才能发布帖子', 'danger')  # 提示用户选择板块
+            return render_template('post.html', sections=sections)  # 返回到发帖页面并传递板块信息
 
         html_content = convert_markdown_to_html(content)
         new_post = Post(
@@ -27,28 +27,13 @@ def create_post_logic():
             content=content,
             html_content=html_content,
             author_id=g.user.id,
-            section_id=section_id
+            section_id=section_id  # 显式设置 section_id
         )
         db.session.add(new_post)
         db.session.commit()
-
-        # 更新用户活动统计
-        today = datetime.utcnow().date()  # 使用datetime.datetime.utcnow()
-        activity = UserActivity.query.filter_by(user_uid=g.user.user_uid, date=today).first()
-        if activity:
-            activity.posts_count += 1
-        else:
-            activity = UserActivity(
-                user_uid=g.user.user_uid,
-                date=today,
-                posts_count=1
-            )
-            db.session.add(activity)
-        db.session.commit()
-
         flash('帖子创建成功！', 'success')
         return redirect(url_for('index'))
-    return render_template('post.html', sections=sections)
+    return render_template('post.html', sections=sections)  # 传递板块信息到前端
 
 
 def view_post_logic(post_id):
@@ -60,15 +45,19 @@ def view_post_logic(post_id):
         flash('该帖子已被删除', 'danger')
         return redirect(url_for('index'))
 
+    # 获取帖子所属的板块
     section = post.section
+
+    # 更新查看次数
     post.look_count += 1
-    db.session.commit()
+    db.session.commit()  # 提交更改
 
     if request.method == 'POST':
         if not g.user:
             flash('请先登录再进行评论', 'danger')
             return redirect(url_for('login'))
 
+        # 检查是否是API请求
         if request.headers.get('Accept') == 'application/json':
             data = request.get_json()
             content = data.get('content')
@@ -87,20 +76,6 @@ def view_post_logic(post_id):
             post_id=post.id
         )
         db.session.add(new_comment)
-        db.session.commit()
-
-        # 更新用户活动统计
-        today = datetime.utcnow().date()  # 使用datetime.datetime.utcnow()
-        activity = UserActivity.query.filter_by(user_uid=g.user.user_uid, date=today).first()
-        if activity:
-            activity.comments_count += 1
-        else:
-            activity = UserActivity(
-                user_uid=g.user.user_uid,
-                date=today,
-                comments_count=1
-            )
-            db.session.add(activity)
         db.session.commit()
 
         if request.headers.get('Accept') == 'application/json':

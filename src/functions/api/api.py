@@ -2,13 +2,12 @@
 API
 @Dev virgil698
 """
-import datetime
 import math
 
 from flask import Blueprint, jsonify, request
 from flask_wtf.csrf import generate_csrf, validate_csrf
 from src.db_ext import db
-from src.functions.database.models import Post, Comment, Report, Like, Section, UserActivity  # 确保导入 Section 模型
+from src.functions.database.models import Post, Comment, Report, Like, Section  # 确保导入 Section 模型
 import psutil
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
@@ -223,46 +222,3 @@ def validate_csrf_token(token):
         return True
     except:
         return False
-
-# 获取用户每日活动统计的API
-@api_bp.route('/user/activity', methods=['GET'])
-def get_user_activity():
-    user_uid = request.args.get('user_uid')
-    date = request.args.get('date')  # 可选参数，默认为当天
-
-    if not user_uid:
-        return jsonify({'success': False, 'message': '缺少 user_uid 参数'}), 400
-
-    try:
-        user_uid = int(user_uid)
-    except ValueError:
-        return jsonify({'success': False, 'message': 'user_uid 必须是整数'}), 400
-
-    if date:
-        try:
-            date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-        except ValueError:
-            return jsonify({'success': False, 'message': '日期格式不正确，应为 YYYY-MM-DD'}), 400
-        activity = UserActivity.query.filter_by(user_uid=user_uid, date=date_obj).first()
-    else:
-        today = datetime.datetime.utcnow().date()
-        activity = UserActivity.query.filter_by(user_uid=user_uid, date=today).first()
-
-    if not activity:
-        return jsonify({
-            'success': True,
-            'data': {
-                'posts_count': 0,
-                'comments_count': 0,
-                'reports_count': 0
-            }
-        })
-
-    return jsonify({
-        'success': True,
-        'data': {
-            'posts_count': activity.posts_count,
-            'comments_count': activity.comments_count,
-            'reports_count': activity.reports_count
-        }
-    })

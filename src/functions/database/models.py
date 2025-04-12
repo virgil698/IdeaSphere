@@ -99,16 +99,3 @@ class Section(db.Model):
     icon = db.Column(db.String(50), nullable=True)
     post_count = db.Column(db.Integer, default=0)
     comment_count = db.Column(db.Integer, default=0)
-
-class UserActivity(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    posts_count = db.Column(db.Integer, default=0)
-    comments_count = db.Column(db.Integer, default=0)
-    reports_count = db.Column(db.Integer, default=0)
-    user = db.relationship('User', backref=db.backref('activities', lazy=True))
-
-    __table_args__ = (
-        db.UniqueConstraint('user_uid', 'date', name='unique_user_date'),
-    )
