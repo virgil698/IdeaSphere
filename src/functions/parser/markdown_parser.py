@@ -15,9 +15,9 @@ def convert_markdown_to_html(markdown_text):
 
     # 定义每种banner对应的Font图标
     banner_icons = {
-        'tip': 'fa-bell',
+        'tip': 'fa-lightbulb',
         'info': 'fa-circle-info',
-        'danger': 'fa-exclamation-triangle',
+        'danger': 'fa-skull',
         'warning': 'fa-circle-exclamation'
     }
 
