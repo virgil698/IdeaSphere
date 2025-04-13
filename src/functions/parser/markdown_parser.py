@@ -109,19 +109,43 @@ def convert_markdown_to_html(markdown_text):
             img['data-fancybox'] = 'gallery'
             img['data-caption'] = img.get('alt', '')
 
-    # 为 B 站视频嵌入代码添加样式
+    # 处理嵌入代码
     for iframe in soup.find_all('iframe'):
-        # 确保 src 属性存在且是 B 站视频链接
         if 'src' in iframe.attrs:
             src = iframe['src']
-            # 检查是否是 B 站视频链接
+            # 处理 B 站视频嵌入代码
             if re.match(r'//player\.bilibili\.com/player\.html\?isOutside=true&.*', src):
-                # 添加默认宽度和高度
                 iframe['width'] = iframe.get('width', '640')
                 iframe['height'] = iframe.get('height', '360')
                 iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
+                iframe['frameborder'] = iframe.get('frameborder', '0')
+                iframe['scrolling'] = iframe.get('scrolling', 'no')
+            # 处理优酷视频嵌入代码
+            elif re.match(r'https?://player\.youku\.com/embed/.*', src):
+                iframe['width'] = iframe.get('width', '510')
+                iframe['height'] = iframe.get('height', '498')
+                iframe['frameborder'] = iframe.get('frameborder', '0')
+                iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
+            # 处理网易云音乐播放器嵌入代码
+            elif re.match(r'//music\.163\.com/outchain/player\?type=2.*', src):
+                iframe['width'] = iframe.get('width', '330')
+                iframe['height'] = iframe.get('height', '86')
+                iframe['frameborder'] = iframe.get('frameborder', 'no')
+                iframe['scrolling'] = iframe.get('scrolling', 'no')
+            # 处理网易云音乐歌单嵌入代码
+            elif re.match(r'//music\.163\.com/outchain/player\?type=0.*', src):
+                iframe['width'] = iframe.get('width', '330')
+                iframe['height'] = iframe.get('height', '450')
+                iframe['frameborder'] = iframe.get('frameborder', 'no')
+                iframe['scrolling'] = iframe.get('scrolling', 'no')
+            # 处理腾讯视频嵌入代码
+            elif re.match(r'https?://v\.qq\.com/txp/iframe/player\.html\?vid=.*', src):
+                iframe['width'] = iframe.get('width', '640')
+                iframe['height'] = iframe.get('height', '360')
+                iframe['frameborder'] = iframe.get('frameborder', '0')
+                iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
             else:
-                # 如果不是 B 站视频链接，移除 iframe
+                # 如果不是支持的嵌入代码，移除 iframe
                 iframe.decompose()
 
     # 添加CSS样式
