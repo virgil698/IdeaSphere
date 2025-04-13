@@ -152,3 +152,43 @@ def edit_post_logic(post_id):
         return redirect(url_for('manage_posts'))
 
     return render_template('edit_post.html', post=post)
+
+def follow_user_logic(follower_id, following_id):
+    if not g.user:
+        return jsonify({'success': False, 'message': '未登录'})
+
+    # 检查是否已经关注
+    existing_follow = g.user.following.filter_by(following_id=following_id).first()
+    if existing_follow:
+        return jsonify({'success': False, 'message': '您已经关注过此用户'})
+
+    # 添加关注关系
+    g.user.following.append(User(id=following_id))
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': '关注成功'})
+
+def unfollow_user_logic(follower_id, following_id):
+    if not g.user:
+        return jsonify({'success': False, 'message': '未登录'})
+
+    # 检查是否已经关注
+    existing_follow = g.user.following.filter_by(following_id=following_id).first()
+    if not existing_follow:
+        return jsonify({'success': False, 'message': '您没有关注此用户'})
+
+    # 移除关注关系
+    g.user.following.remove(existing_follow)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': '取消关注成功'})
+
+def get_following_logic(user_id):
+    following = g.user.following.all()
+    following_list = [{'id': user.id, 'username': user.username} for user in following]
+    return jsonify({'success': True, 'following': following_list})
+
+def get_followers_logic(user_id):
+    followers = g.user.followers.all()
+    followers_list = [{'id': user.id, 'username': user.username} for user in followers]
+    return jsonify({'success': True, 'followers': followers_list})

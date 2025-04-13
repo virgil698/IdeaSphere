@@ -4,6 +4,7 @@ import pkg_resources
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash
 from src.functions.database.models import User, db, InstallationStatus
+import redis
 
 def check_python_version():
     current_version = sys.version_info
@@ -41,6 +42,25 @@ def check_dependencies():
             })
     return dependencies
 
+def check_redis():
+    from src.functions.config.config import get_config
+    config = get_config()
+    redis_config = config.get('redis', {})
+    try:
+        redis_client = redis.StrictRedis(
+            host=redis_config.get('host', 'localhost'),
+            port=redis_config.get('port', 6379),
+            db=redis_config.get('db', 0),
+            password=redis_config.get('password', ''),
+            decode_responses=True
+        )
+        redis_client.ping()  # 测试连接
+        return True, "Redis 连接成功"
+    except redis.exceptions.ConnectionError as e:
+        return False, f"Redis 连接失败: {str(e)}"
+    except Exception as e:
+        return False, f"Redis 检查失败: {str(e)}"
+
 def install_dependencies():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
 
@@ -48,6 +68,7 @@ def install_logic():
     python_version_ok, current_python_version, required_python_version = check_python_version()
     dependencies = check_dependencies()
     dependencies_installed = all(dependency['status'] == 'success' for dependency in dependencies)
+    redis_ok, redis_message = check_redis()
 
     if request.method == 'POST':
         if request.form['step'] == '1':
@@ -71,6 +92,12 @@ def install_logic():
 
             if not username or not password:
                 flash('请填写所有必填项！', 'danger')
+                return redirect(url_for('install'))
+
+            # 检查用户是否已经存在
+            existing_user = User.query.filter_by(username=username).first()
+            if existing_user:
+                flash('该用户名已被占用，请选择其他用户名！', 'danger')
                 return redirect(url_for('install'))
 
             new_admin = User(
@@ -102,4 +129,6 @@ def install_logic():
                            current_python_version=current_python_version,
                            required_python_version=required_python_version,
                            dependencies=dependencies,
-                           dependencies_installed=dependencies_installed)
+                           dependencies_installed=dependencies_installed,
+                           redis_ok=redis_ok,
+                           redis_message=redis_message)

@@ -2,6 +2,7 @@ import re
 import bleach
 from bs4 import BeautifulSoup
 from markdown import markdown
+from bleach.css_sanitizer import CSSSanitizer
 
 
 def convert_markdown_to_html(markdown_text):
@@ -40,9 +41,20 @@ def convert_markdown_to_html(markdown_text):
         extensions=['tables', 'nl2br', 'fenced_code']
     )
 
+    # 创建一个 CSSSanitizer 实例，允许常用的 CSS 属性
+    css_sanitizer = CSSSanitizer(
+        allowed_css_properties=[
+            'color', 'font-size', 'font-weight', 'font-style', 'text-align',
+            'background-color', 'border', 'border-radius', 'padding', 'margin',
+            'width', 'height', 'display', 'flex', 'justify-content', 'align-items',
+            'text-decoration', 'line-height', 'list-style-type', 'overflow',
+            'overflow-x', 'overflow-y', 'white-space', 'word-wrap', 'word-break'
+        ]
+    )
+
     allowed_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'hr', 'br', 'div',
                     'span', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'blockquote',
-                    'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i']
+                    'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i', 'iframe']
     allowed_attributes = {
         'a': ['href', 'title', 'target', 'class', 'data-fancybox'],
         'img': ['src', 'alt', 'width', 'height', 'class', 'data-fancybox'],
@@ -55,17 +67,16 @@ def convert_markdown_to_html(markdown_text):
         'pre': ['class', 'style'],
         'code': ['class', 'style'],
         'blockquote': ['class', 'style'],
-        'i': ['class']
+        'i': ['class'],
+        'iframe': ['src', 'scrolling', 'border', 'frameborder', 'framespacing', 'allowfullscreen', 'width', 'height']
     }
 
-    # 禁止清洗代码块的样式
-    allowed_attributes['pre'] = ['class', 'style']
-    allowed_attributes['code'] = ['class', 'style']
-
+    # 清理 HTML 内容
     sanitized_html = bleach.clean(
         html,
         tags=allowed_tags,
         attributes=allowed_attributes,
+        css_sanitizer=css_sanitizer,
         strip=True
     )
 
@@ -97,6 +108,21 @@ def convert_markdown_to_html(markdown_text):
             img['class'] = img.get('class', []) + ['fancybox']
             img['data-fancybox'] = 'gallery'
             img['data-caption'] = img.get('alt', '')
+
+    # 为 B 站视频嵌入代码添加样式
+    for iframe in soup.find_all('iframe'):
+        # 确保 src 属性存在且是 B 站视频链接
+        if 'src' in iframe.attrs:
+            src = iframe['src']
+            # 检查是否是 B 站视频链接
+            if re.match(r'//player\.bilibili\.com/player\.html\?isOutside=true&.*', src):
+                # 添加默认宽度和高度
+                iframe['width'] = iframe.get('width', '640')
+                iframe['height'] = iframe.get('height', '360')
+                iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
+            else:
+                # 如果不是 B 站视频链接，移除 iframe
+                iframe.decompose()
 
     # 添加CSS样式
     style_tag = soup.new_tag('style')

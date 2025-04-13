@@ -24,3 +24,7 @@ livereload~=2.7.1
 py-cpuinfo~=9.0.0
 setuptools~=78.1.0
 psutil~=7.0.0
+SQLAlchemy~=2.0.38
+Booktype~=1.5
+redis~=5.2.1
+tinycss2~=1.4.0

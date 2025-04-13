@@ -12,7 +12,7 @@ def register_logic():
         username = request.form['username']
         password = request.form['password']
         if User.query.filter_by(username=username).first():
-            flash('用户名已存在', 'danger')
+            flash('用户名被占用，请重新选择！', 'danger')
             return redirect(url_for('register'))
 
         last_user = User.query.order_by(User.user_uid.desc()).first()

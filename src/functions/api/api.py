@@ -2,12 +2,13 @@
 API
 @Dev virgil698
 """
+from datetime import datetime
 import math
 
 from flask import Blueprint, jsonify, request
 from flask_wtf.csrf import generate_csrf, validate_csrf
 from src.db_ext import db
-from src.functions.database.models import Post, Comment, Report, Like, Section  # 确保导入 Section 模型
+from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
 import psutil
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
@@ -203,6 +204,63 @@ def edit_section(section_id):
     db.session.commit()
 
     return jsonify({'message': '板块更新成功', 'section_id': section.id}), 200
+
+# 关注用户的API
+@api_bp.route('/user/<int:user_id>/follow', methods=['POST'])
+def follow_user(user_id):
+    # 验证 CSRF Token
+    csrf_token = request.headers.get('X-CSRFToken')
+    if not csrf_token:
+        return jsonify({'message': 'CSRF Token missing'}), 403
+
+    try:
+        validate_csrf(csrf_token)
+    except:
+        return jsonify({'message': 'Invalid CSRF Token'}), 403
+
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    # 检查是否已经关注
+    existing_follow = request.user.following.filter_by(following_id=user_id).first()
+    if existing_follow:
+        return jsonify({'message': 'You have already followed this user'}), 400
+
+    # 添加关注关系
+    current_time = datetime.now().timestamp()
+    request.user.following.append(User(id=user_id))
+    db.session.commit()
+
+    return jsonify({'message': 'User followed successfully'}), 200
+
+# 取消关注用户的API
+@api_bp.route('/user/<int:user_id>/unfollow', methods=['POST'])
+def unfollow_user(user_id):
+    # 验证 CSRF Token
+    csrf_token = request.headers.get('X-CSRFToken')
+    if not csrf_token:
+        return jsonify({'message': 'CSRF Token missing'}), 403
+
+    try:
+        validate_csrf(csrf_token)
+    except:
+        return jsonify({'message': 'Invalid CSRF Token'}), 403
+
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    # 检查是否已经关注
+    existing_follow = request.user.following.filter_by(following_id=user_id).first()
+    if not existing_follow:
+        return jsonify({'message': 'You have not followed this user'}), 400
+
+    # 移除关注关系
+    request.user.following.remove(existing_follow)
+    db.session.commit()
+
+    return jsonify({'message': 'User unfollowed successfully'}), 200
 
 # 在API请求中验证CSRF Token
 @api_bp.before_request
