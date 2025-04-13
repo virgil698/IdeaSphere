@@ -40,42 +40,46 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 
 ### 🌟 Implemented Features
 
-| Task Description | Current Status | Implemented Version |
-|------------------|----------------|---------------------|
-| **⌨️ Login**       | ✅             | v0.1.0              |
-| **⌨️ Registration**| ✅             | v0.1.0              |
-| **⌨️ Posting**     | ✅             | v0.1.0              |
-| **🖼 Super Admin**  | ✅             | v0.1.0              |
-| **🖼 Moderator Admin** | ✅          | v0.1.0              |
-| **👤 Like System**  | ✅             | v0.1.0              |
-| **🧱 Reporting System** | ✅         | v0.1.0              |
-| **📦 Online Users** | ✅             | v0.1.0              |
-| **⭐ Post Replies** | ✅             | v0.1.0              |
-| **🔬 Search**      | ✅             | v0.1.5              |
-| **👤 Site Statistics** | ✅          | v0.1.5              |
-| **🚀 Admin Panel** | ✅             | v0.2.0              |
-| **📦 Emoji Support** | ✅           | v0.2.0              |
-| **🔬 Delete Posts** | ✅            | v0.2.5              |
-| **👤 Permission Groups** | ✅        | v0.2.5              |
-| **🎈 Post Categories** | ✅         | v0.3.0              |
-| **🎈 404 Page**    | ✅             | v0.3.0              |
-| **🎈 API Integration** | ✅         | v0.3.0              |
-| **🖥️ Logs Recording** | 🚧           |                     |
-| **⭐ ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 |                     |
-| **👤 Full Permission Groups** | 🚧       |                     |
-| **⭐ Content Replies** | 🚧           |                     |
-| **⭐ Content Reactions** | 🚧         |                     |
-| **🎈 Rich Text Editor** | 🚧         |                     |
-| **👤 Post Sorting by Time and Likes** | 🚧 |                     |
-| **👤 Reply Sorting by Time and Likes** | 🚧 |                     |
-| **📦 User Custom Settings** | 🚧         |                     |
-| **📦 User Profile Page** | 🚧           |                     |
-| **📦 Private Messaging System** | ⏳         |                     |
-| **🔐 Email Registration and Password Reset** | ⏳ |                     |
-| **🔌 Templates**    | ⏳             |                     |
-| **🔌 Plugins**      | ⏳             |                     |
-| **🔐 Data Security** | ⏳            |                     |
-| **🔐 SEO Optimization** | ⏳          |                     |
+| Task Overview | Current Status | Implementation Version |
+|---------------|----------------|------------------------|
+| **⌨️ Login** | ✅ | v0.1.0 |
+| **⌨️ Registration** | ✅ | v0.1.0 |
+| **⌨️ Posting** | ✅ | v0.1.0 |
+| **🖼 Super Admin** | ✅ | v0.1.0 |
+| **🖼 Moderator Admin** | ✅ | v0.1.0 |
+| **👍 Like** | ✅ | v0.1.0 |
+| **🧱 Reporting System** | ✅ | v0.1.0 |
+| **📦 Online Users** | ✅ | v0.1.0 |
+| **⭐ Post Replies** | ✅ | v0.1.0 |
+| **🔬 Search** | ✅ | v0.1.5 |
+| **📊 Site Statistics** | ✅ | v0.1.5 |
+| **🚀 Admin Panel** | ✅ | v0.2.0 |
+| **📦 Emoji Support** | ✅ | v0.2.0 |
+| **🗑 Delete Posts** | ✅ | v0.2.5 |
+| **👤 Permission Group Implementation** | ✅ | v0.2.5 |
+| **🎈 Post Sections** | ✅ | v0.3.0 |
+| **🎈 404 Page** | ✅ | v0.3.0 |
+| **🎈 API Transmission** | ✅ | v0.3.0 |
+| **📊 Post Time and Like Sorting** | ✅ | v0.3.0 |
+| **📝 Logs Recording** | 🚧 |        |
+| **🔍 ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5  )** | 🚧 |        |
+| **✅ Full Permission Group Completion** | 🚧 |        |
+| **💬 Content Replies** | 🚧 |        |
+| **👍 Content Reactions** | 🚧 |        |
+| **📝 Rich Text Editor** | 🚧 |        |
+| **⚙️ User Custom Settings** | 🚧 |        |
+| **👤 User Page** | 🚧 |        |
+| **📊 Contribution Graph System** | 🚧 |        |
+| **👥 Follow and Fans** | 🚧 |        |
+| **🔄 Dynamic System** | 🚧 |        |
+| **✉️ Private Messaging System** | ⏳ |        |
+| **📧 Email Registration, Password Reset** | ⏳ |        |
+| **🔄 Go+Py+TS Rewrite** | ⏳ |        |
+| **📄 Templates** | ⏳ |        |
+| **🔌 Plugins** | ⏳ |        |
+| **🔒 Data Security** | ⏳ |        |
+| **🔍 SEO Optimization** | ⏳ |        |
+| **🗺️ Site Map** | ⏳ |        |
 
 Here is the translation of the legend for your reference:
 
