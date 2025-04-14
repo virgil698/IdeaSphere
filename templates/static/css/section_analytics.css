@@ -49,7 +49,7 @@
     box-shadow: var(--shadow-sm);
 }
 
-.card-header {
+.card-headers {
     background-color: var(--background-secondary);
     border-bottom: 1px solid var(--border-color);
     padding: 1.25rem 1.5rem;
@@ -58,7 +58,7 @@
     justify-content: space-between;
 }
 
-.card-header h3 {
+.card-headers h3 {
     margin: 0;
     font-weight: 600;
     color: var(--text-primary);
