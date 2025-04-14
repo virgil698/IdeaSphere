@@ -54,7 +54,7 @@ def convert_markdown_to_html(markdown_text):
 
     allowed_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'hr', 'br', 'div',
                     'span', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'blockquote',
-                    'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i', 'iframe']
+                    'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'i', 'iframe', 'blockquote', 'script']
     allowed_attributes = {
         'a': ['href', 'title', 'target', 'class', 'data-fancybox'],
         'img': ['src', 'alt', 'width', 'height', 'class', 'data-fancybox'],
@@ -66,9 +66,10 @@ def convert_markdown_to_html(markdown_text):
         'tr': ['class', 'style'],
         'pre': ['class', 'style'],
         'code': ['class', 'style'],
-        'blockquote': ['class', 'style'],
+        'script': ['src', 'async'],
         'i': ['class'],
-        'iframe': ['src', 'scrolling', 'border', 'frameborder', 'framespacing', 'allowfullscreen', 'width', 'height']
+        'iframe': ['src','scrolling', 'border', 'framespacing', 'width', 'height', 'frameborder', 'allowfullscreen', 'allow', 'referrerpolicy'],
+        'blockquote': ['class', 'cite', 'style']
     }
 
     # 清理 HTML 内容
@@ -109,44 +110,62 @@ def convert_markdown_to_html(markdown_text):
             img['data-fancybox'] = 'gallery'
             img['data-caption'] = img.get('alt', '')
 
-    # 处理嵌入代码
+    # 处理 iframe 嵌入代码
     for iframe in soup.find_all('iframe'):
         if 'src' in iframe.attrs:
             src = iframe['src']
-            # 处理 B 站视频嵌入代码
+            # 处理 B 站视频嵌入
             if re.match(r'//player\.bilibili\.com/player\.html\?isOutside=true&.*', src):
                 iframe['width'] = iframe.get('width', '640')
                 iframe['height'] = iframe.get('height', '360')
                 iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
-                iframe['frameborder'] = iframe.get('frameborder', '0')
-                iframe['scrolling'] = iframe.get('scrolling', 'no')
-            # 处理优酷视频嵌入代码
+            # 处理优酷视频嵌入
             elif re.match(r'https?://player\.youku\.com/embed/.*', src):
                 iframe['width'] = iframe.get('width', '510')
                 iframe['height'] = iframe.get('height', '498')
                 iframe['frameborder'] = iframe.get('frameborder', '0')
                 iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
-            # 处理网易云音乐播放器嵌入代码
-            elif re.match(r'//music\.163\.com/outchain/player\?type=2.*', src):
+            # 处理网易云音乐播放器嵌入
+            elif re.match(r'//music\.163\.com/outchain/player\?type=2&.*', src):
                 iframe['width'] = iframe.get('width', '330')
                 iframe['height'] = iframe.get('height', '86')
                 iframe['frameborder'] = iframe.get('frameborder', 'no')
-                iframe['scrolling'] = iframe.get('scrolling', 'no')
-            # 处理网易云音乐歌单嵌入代码
-            elif re.match(r'//music\.163\.com/outchain/player\?type=0.*', src):
-                iframe['width'] = iframe.get('width', '330')
-                iframe['height'] = iframe.get('height', '450')
+                iframe['border'] = iframe.get('border', '0')
+            # 处理网易云音乐歌单嵌入
+            elif re.match(r'//music\.163\.com/outchain/player\?type=0&.*', src):
+                if 'height=430' in src:
+                    iframe['width'] = iframe.get('width', '330')
+                    iframe['height'] = iframe.get('height', '450')
+                elif 'height=90' in src:
+                    iframe['width'] = iframe.get('width', '330')
+                    iframe['height'] = iframe.get('height', '110')
                 iframe['frameborder'] = iframe.get('frameborder', 'no')
-                iframe['scrolling'] = iframe.get('scrolling', 'no')
-            # 处理腾讯视频嵌入代码
+                iframe['border'] = iframe.get('border', '0')
+            # 处理腾讯视频嵌入
             elif re.match(r'https?://v\.qq\.com/txp/iframe/player\.html\?vid=.*', src):
                 iframe['width'] = iframe.get('width', '640')
                 iframe['height'] = iframe.get('height', '360')
                 iframe['frameborder'] = iframe.get('frameborder', '0')
                 iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
+            # 处理 YouTube 嵌入
+            elif re.match(r'https?://www\.youtube\.com/embed/.*', src) or re.match(r'https?://www\.youtube-nocookie\.com/embed/.*', src):
+                iframe['width'] = iframe.get('width', '560')
+                iframe['height'] = iframe.get('height', '315')
+                iframe['frameborder'] = iframe.get('frameborder', '0')
+                iframe['allow'] = iframe.get('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture')
+                iframe['referrerpolicy'] = iframe.get('referrerpolicy', 'strict-origin-when-cross-origin')
+                iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
             else:
                 # 如果不是支持的嵌入代码，移除 iframe
                 iframe.decompose()
+
+    # 处理 TikTok 嵌入代码
+    for blockquote in soup.find_all('blockquote', class_='tiktok-embed'):
+        # 添加样式
+        blockquote['style'] = blockquote.get('style','max-width: 605px; min-width: 325px; margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;')
+        # 确保 blockquote 内的 script 标签被保留
+        script_tag = soup.new_tag('script', src='https://www.tiktok.com/embed.js', async_=True)
+        blockquote.append(script_tag)
 
     # 添加CSS样式
     style_tag = soup.new_tag('style')
@@ -236,6 +255,13 @@ def convert_markdown_to_html(markdown_text):
     .line-numbers span:before {
         content: counter(linenumber);
         color: #8da0bf;
+    }
+    .tiktok-embed {
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #f9f9f9;
     }
     '''
     if not soup.head:

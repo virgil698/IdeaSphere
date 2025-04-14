@@ -60,36 +60,58 @@ def create_section():
     return render_template('section_create.html')
 
 
-# 板块详情
+# 板块详情（重定向到时间线排序）
 @section_bp.route('/detail/<int:section_id>')
 def section_detail(section_id):
-    section = Section.query.get_or_404(section_id)  # 修复拼写错误
+    return redirect(url_for('section.section_newest', section_id=section_id))
+
+# 时间线排序（板块内）
+@section_bp.route('/detail/<int:section_id>/newest')
+def section_newest(section_id):
     page = request.args.get('page', 1, type=int)
     per_page = 10
 
-    # 查询该板块下的帖子并分页
-    posts = Post.query.filter_by(section_id=section_id, deleted=False).paginate(
+    # 查询该板块下的帖子并按时间线排序
+    posts = Post.query.filter_by(section_id=section_id, deleted=False).order_by(
+        Post.created_at.desc()
+    ).paginate(
         page=page,
         per_page=per_page,
         error_out=False
     )
 
-    # 更新板块的帖子数量
-    section.post_count = Post.query.filter_by(section_id=section_id, deleted=False).count()
-    db.session.commit()
-
-    # 更新板块的回复数量
-    section.comment_count = Comment.query.join(Post).filter(
-        Post.section_id == section_id,
-        Post.deleted == False
-    ).count()
-    db.session.commit()
-
+    section = Section.query.get_or_404(section_id)
     return render_template(
         'section_detail.html',
         section=section,
         posts=posts,
-        pagination=posts
+        pagination=posts,
+        sort='timeline'
+    )
+
+# 全局排序（板块内）
+@section_bp.route('/detail/<int:section_id>/global_sort')
+def section_global_sort(section_id):
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
+    # 查询该板块下的帖子并按全局排序
+    posts = Post.query.filter_by(section_id=section_id, deleted=False).order_by(
+        Post.like_count.desc(),
+        Post.created_at.desc()
+    ).paginate(
+        page=page,
+        per_page=per_page,
+        error_out=False
+    )
+
+    section = Section.query.get_or_404(section_id)
+    return render_template(
+        'section_detail.html',
+        section=section,
+        posts=posts,
+        pagination=posts,
+        sort='global'
     )
 
 # 板块分析

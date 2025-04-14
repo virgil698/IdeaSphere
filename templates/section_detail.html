@@ -32,11 +32,20 @@
         <a href="{{ url_for('section.edit_section', section_id=section.id) }}" class="edit-section-btn">
             <i class="fas fa-edit"></i> 编辑板块
         </a>
-    {% endif %}
+        {% endif %}
     </div>
 
     <div class="posts-list">
-        <h3 class="list-title">帖子列表</h3>
+        <!-- 排序按钮 -->
+        <div class="sort-buttons">
+            <h3 class="list-title">帖子列表</h3>
+            <a href="{{ url_for('section.section_newest', section_id=section.id) }}" class="sort-btn" id="timeline-sort">
+                时间线
+            </a>
+            <a href="{{ url_for('section.section_global_sort', section_id=section.id) }}" class="sort-btn" id="global-sort">
+                全局
+            </a>
+        </div>
 
         {% if posts %}
             {% for post in posts %}
@@ -66,7 +75,7 @@
             {% if pagination.pages > 1 %}
             <div class="pagination">
                 {% if pagination.has_prev %}
-                <a href="{{ url_for('section.section_detail', section_id=section.id, page=pagination.prev_num) }}" class="page-link">
+                <a href="{{ url_for('section.section_newest', section_id=section.id, page=pagination.prev_num) }}" class="page-link">
                     <i class="fas fa-chevron-left"></i> 上一页
                 </a>
                 {% endif %}
@@ -74,7 +83,7 @@
                 <span class="page-info">{{ pagination.page }} / {{ pagination.pages }}</span>
 
                 {% if pagination.has_next %}
-                <a href="{{ url_for('section.section_detail', section_id=section.id, page=pagination.next_num) }}" class="page-link">
+                <a href="{{ url_for('section.section_newest', section_id=section.id, page=pagination.next_num) }}" class="page-link">
                     下一页 <i class="fas fa-chevron-right"></i>
                 </a>
                 {% endif %}
@@ -96,4 +105,5 @@
 </section>
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_detail.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sorting.css') }}">
 {% endblock %}
