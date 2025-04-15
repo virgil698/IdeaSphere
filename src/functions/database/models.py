@@ -37,7 +37,21 @@ class Post(db.Model):
     section = db.relationship('Section', backref=db.backref('posts', lazy=True))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-
+class ReplyComment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reply_message = db.Column(db.Text, nullable=False)
+    reply_user = db.Column(db.Text, nullable=False)
+    target_comment_id = db.Column(  # 移除非法的 primary_key
+        db.Integer, 
+        db.ForeignKey('comment.id', ondelete='CASCADE'),  # 添加外键
+        nullable=False
+    )
+    reply_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now(),
+        server_onupdate=db.func.now()
+    )
+    
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
@@ -54,8 +68,7 @@ class Comment(db.Model):
     delete_time = db.Column(db.DateTime)
     like_count = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
-
-
+    
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)

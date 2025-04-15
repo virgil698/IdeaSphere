@@ -25,7 +25,7 @@ from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
-from src.functions.service.user_operations import report_post_logic, like_post_logic, report_comment_logic, \
+from src.functions.service.user_operations import reply_logic, report_post_logic, like_post_logic, report_comment_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic, \
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
 from src.functions.service.user_routes import user_bp  # 导入用户页面蓝图
@@ -316,6 +316,10 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+@app.route('/reply/<string:front_end_reply_messsage>/<string:reply_to_users_id>', methods=['POST', 'GET'])
+def reply(front_end_reply_messsage, reply_to_users_id):
+    return reply_logic(front_end_reply_messsage, reply_to_users_id)
 
 if __name__ == '__main__':
     # 初始化日志

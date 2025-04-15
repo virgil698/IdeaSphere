@@ -112,6 +112,30 @@ async function reportComment(commentId) {
     .catch(error => console.error('Error:', error));
 }
 
+// 回复评论
+async function replyComment(commentId) {
+    const reply_message = prompt("请输入回复内容，不能为空！")
+    if (!reply_message){
+        alert("回复内容不能为空！")
+    }
+
+    const CSRF = await getCSRFToken()
+    fetch(`/reply/${reply_message}/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': CSRF,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    })
+}
 let cig_id = document.getElementById("comment-input-group");
 let comment_id = document.getElementById("comment");
 
