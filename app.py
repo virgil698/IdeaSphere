@@ -18,7 +18,7 @@ from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.section.section import section_bp  # 导入板块蓝图
 from src.functions.service import monitor
-from src.functions.service.admin import admin_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, \
+from src.functions.service.moderation import moderation_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, \
     delete_post_logic
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
@@ -168,9 +168,9 @@ def create_post():
 def view_post(post_id):
     return view_post_logic(post_id)
 
-@app.route('/admin')
-def admin_panel():
-    return admin_panel_logic()
+@app.route('/moderation')
+def moderation_panel():
+    return moderation_panel_logic()
 
 @app.route('/manage_users')
 def manage_users():

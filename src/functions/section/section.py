@@ -22,7 +22,7 @@ def sections():
             Post.deleted == False
         ).count()
     db.session.commit()
-    return render_template('sections.html', sections=sections)
+    return render_template('section/sections.html', sections=sections)
 
 # 创建板块
 @section_bp.route('/create', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def create_section():
         flash('板块创建成功', 'success')
         return redirect(url_for('section.sections'))
 
-    return render_template('section_create.html')
+    return render_template('section/section_create.html')
 
 
 # 板块详情（重定向到时间线排序）
@@ -82,7 +82,7 @@ def section_newest(section_id):
 
     section = Section.query.get_or_404(section_id)
     return render_template(
-        'section_detail.html',
+        'section/section_detail.html',
         section=section,
         posts=posts,
         pagination=posts,
@@ -107,7 +107,7 @@ def section_global_sort(section_id):
 
     section = Section.query.get_or_404(section_id)
     return render_template(
-        'section_detail.html',
+        'section/section_detail.html',
         section=section,
         posts=posts,
         pagination=posts,
@@ -149,7 +149,7 @@ def section_analytics():
         section_active_users[section.id] = users  # 使用 section.id
 
     return render_template(
-        'section_analytics.html',
+        'section/section_analytics.html',
         section_post_counts=section_post_counts,
         daily_post_counts=daily_post_counts,
         section_active_users=section_active_users
@@ -159,7 +159,7 @@ def section_analytics():
 @section_bp.route('/edit/<int:section_id>', methods=['GET'])
 def edit_section(section_id):
     section = Section.query.get_or_404(section_id)
-    return render_template('section_edit.html', section=section)
+    return render_template('section/section_edit.html', section=section)
 
 # 删除板块
 @section_bp.route('/delete/<int:section_id>', methods=['POST'])

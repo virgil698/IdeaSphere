@@ -42,9 +42,9 @@
             <a href="{{ url_for('index') }}" class="nav-logo">IdeaSphere</a>
             <div class="nav-links">
                 <a href="{{ url_for('index') }}" class="nav-link">首页</a>
-                <a href="{{ url_for('section.sections') }}" class="nav-link">板块分类</a>
+                <a href="{{ url_for('section.sections') }}" class="nav-link">版块分类</a>
                 {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
-                <a href="{{ url_for('admin_panel') }}" class="nav-link">管理面板</a>
+                <a href="{{ url_for('moderation_panel') }}" class="nav-link">版务中心</a>
                 {% endif %}
             </div>
         </div>
@@ -64,7 +64,7 @@
                 </a>
                 <div class="user-dropdown">
                     {% if session['role'] in ['admin', 'moderator'] %}
-                    <a href="{{ url_for('admin_panel') }}"><i class="fas fa-tachometer-alt"></i> 管理面板</a>
+                    <a href="{{ url_for('moderation_panel') }}"><i class="fas fa-tachometer-alt"></i> 版务中心</a>
                     {% endif %}
                     <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
                 </div>

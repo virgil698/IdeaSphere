@@ -3,13 +3,13 @@ from flask import abort, g, render_template, url_for, flash, redirect
 from src.functions.database.models import Report, User, Post, db
 
 
-def admin_panel_logic():
+def moderation_panel_logic():
     if g.role not in ['admin', 'moderator']:
         abort(403)
 
     reports = Report.query.all()
     users = User.query.all()
-    return render_template('admin_panel.html', reports=reports, users=users)
+    return render_template('moderation/moderation_panel.html', reports=reports, users=users)
 
 
 def manage_users_logic():
@@ -17,7 +17,7 @@ def manage_users_logic():
         abort(403)
 
     users = User.query.all()
-    return render_template('manage_users.html', users=users)
+    return render_template('moderation/manage_users.html', users=users)
 
 
 def manage_reports_logic():
@@ -25,14 +25,14 @@ def manage_reports_logic():
         abort(403)
 
     reports = Report.query.all()
-    return render_template('manage_reports.html', reports=reports)
+    return render_template('moderation/manage_reports.html', reports=reports)
 
 
 def manage_posts_logic():
     if g.role not in ['admin', 'moderator']:
         abort(403)
     posts = Post.query.all()
-    return render_template('manage_posts.html', posts=posts)
+    return render_template('moderation/manage_posts.html', posts=posts)
 
 
 def delete_post_logic(post_id):
