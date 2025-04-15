@@ -14,7 +14,7 @@ The currently supported versions of IdeaSphere are as follows:
 | ------- | ------------------ |
 | Beta 1.0.x   | :white_check_mark: |
 | 0.3.0   | :white_check_mark: |
-| < 0.3.0   | :x:                |
+| > 0.3.0   | :x:                |
 
 ## Where should I report security issues? | 我应该在哪里报告安全问题？
 
