@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-banner.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/active-users.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/load.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/backToTop.css') }}">
 </head>
 
 <body>
@@ -139,6 +140,11 @@
         </main>
     </div>
 
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>
@@ -165,6 +171,27 @@
             const loaderWrapper = document.getElementById('loaderWrapper');
             loaderWrapper.classList.remove('visible');
         }
+    });
+
+    // 获取按钮元素
+    const backToTopButton = document.getElementById('backToTop');
+
+    // 检测滚动事件
+    window.addEventListener('scroll', () => {
+        // 如果页面滚动超过100px，显示按钮
+        if (window.pageYOffset > 100) {
+            backToTopButton.classList.add('visible');
+        } else {
+            backToTopButton.classList.remove('visible');
+        }
+    });
+
+    // 点击按钮返回顶部
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 </script>
     {% with messages = get_flashed_messages(with_categories=true) %}
