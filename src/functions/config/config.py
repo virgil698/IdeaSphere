@@ -13,6 +13,9 @@ def get_config():
 port: 5000 # 释放端口，默认 http
 debug: True # debug 模式，默认开启
 
+# 时区配置
+timezone: 'UTC' # 默认时区为 UTC，可以设置为 'Asia/Shanghai' 等其他时区
+
 # SQLite3 数据库相关（建议保持默认状态）
 database:
   uri: 'sqlite:///forum.db' # 数据库地址

@@ -14,6 +14,7 @@ class User(db.Model):
     role = db.Column(db.String(10), default='user')  # user, moderator, admin
     icenter_user = db.Column(db.String)
     icenter_pwd = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 新增注册时间字段
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
