@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function followUser() {
         try {
             const csrfToken = await getCSRFToken();
-            const response = await fetch(`/api/user/${followingUserId}/follow`, { // 确保 URL 与后端路由一致
+            const response = await fetch(`/user/${followingUserId}/follow`, { // 确保 URL 与后端路由一致
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function unfollowUser() {
         try {
             const csrfToken = await getCSRFToken();
-            const response = await fetch(`/api/user/${followingUserId}/unfollow`, { // 确保 URL 与后端路由一致
+            const response = await fetch(`/user/${followingUserId}/unfollow`, { // 确保 URL 与后端路由一致
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
