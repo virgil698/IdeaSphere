@@ -14,8 +14,27 @@
             </div>
             
             <h1 class="user-name">{{ user.username }}</h1>
+
+            <!-- 关注按钮 -->
+            {% if g.user and not is_self %}
+                {% if not is_followed %}
+                    <button id="followBtn" class="follow-btn">
+                        <i class="fas fa-plus"></i> 关注
+                    </button>
+                {% else %}
+                    <div class="follow-container">
+                        <button id="followBtn" class="followed-btn">
+                            <i class="fas fa-check"></i> 已关注
+                        </button>
+                        <div id="followMenu" class="follow-menu">
+                            <button id="unfollowBtn" class="unfollow-btn">取消关注</button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
             <p class="user-brief">{{ user.brief if user.brief else '这个人很懒，什么都没有写~' }}</p>
-            
+
             <div class="user-stats">
                 <div class="stat-item">
                     <span class="stat-value">{{ user.user_uid }}</span>
@@ -36,11 +55,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 树洞链接 -->
-    <a href="{{ url_for('user_treeholes', user_id=user.user_uid) }}" class="treeholes-link">
-        <i class="fas fa-tree"></i> 查看{{ user.username }}的树洞
-    </a>
 
     <!-- 个人信息 -->
     <div class="user-details">
@@ -112,4 +126,7 @@
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user_profile.css') }}">
+<script src="{{ url_for('static', filename='js/follow.js') }}"></script>
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}

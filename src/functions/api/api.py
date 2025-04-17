@@ -230,7 +230,6 @@ def follow_user(user_id):
         return jsonify({'message': 'You have already followed this user'}), 400
 
     # 添加关注关系
-    current_time = datetime.now().timestamp()
     request.user.following.append(User(id=user_id))
     db.session.commit()
 
