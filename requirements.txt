@@ -28,4 +28,3 @@ SQLAlchemy~=2.0.40
 Booktype~=1.5
 redis~=5.2.1
 tinycss2~=1.4.0
-pytz~=2025.2

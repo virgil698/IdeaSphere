@@ -1,6 +1,4 @@
 import os
-import pytz
-from datetime import datetime
 
 import redis
 from flask import Flask, request, session, redirect, url_for, g, jsonify, render_template
@@ -32,7 +30,6 @@ from src.functions.service.user_operations import reply_logic, report_post_logic
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
 from src.functions.service.user_routes import user_bp  # 导入用户页面蓝图
 from src.functions.utils.logger import Logger
-from src.functions.config.config_example import generate_config_example  # 导入生成示例配置文件的函数
 
 """
 初始化部分   
@@ -40,20 +37,8 @@ from src.functions.config.config_example import generate_config_example  # 导�
 app = Flask(__name__, static_folder="templates/static", static_url_path='/static', template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
 
-# 生成示例配置文件
-generate_config_example()
-
 # 从配置文件中读取配置
 config = get_config()
-
-# 设置时区
-timezone_str = config.get('timezone', 'UTC')
-try:
-    app.config['TIMEZONE'] = pytz.timezone(timezone_str)
-except pytz.UnknownTimeZoneError:
-    # 如果时区设置错误，使用默认的 UTC 时区
-    app.config['TIMEZONE'] = pytz.utc
-    print(f"Unknown timezone: {timezone_str}. Using UTC as default.")
 
 # 数据库配置
 app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']
