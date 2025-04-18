@@ -21,6 +21,7 @@ def get_user_data(user_uid):
         'location': "四川，中国",
         'birthday': "2021/03/12",
         'gender': "男",
+        'today_online': "6 小时 17 分 33 秒",
         'bilibili': "https://space.bilibili.com/401319663",
         'github': "https://github.com/Virgi1698",
         'weibo': "https://weibo.com/u/123456789",

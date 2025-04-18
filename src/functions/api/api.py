@@ -5,8 +5,10 @@ API
 from datetime import datetime
 import math
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from flask_wtf.csrf import generate_csrf, validate_csrf
+
+from src.functions.service.user_operations import reply_logic
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
 import psutil
@@ -228,6 +230,7 @@ def follow_user(user_id):
         return jsonify({'message': 'You have already followed this user'}), 400
 
     # 添加关注关系
+    current_time = datetime.now().timestamp()
     request.user.following.append(User(id=user_id))
     db.session.commit()
 
@@ -260,6 +263,45 @@ def unfollow_user(user_id):
     db.session.commit()
 
     return jsonify({'message': 'User unfollowed successfully'}), 200
+
+# 评论回复的 API
+@api_bp.route('/comment/<int:comment_id>/reply', methods=['POST'])
+def reply_to_comment(comment_id):
+    # 验证 CSRF Token
+    csrf_token = request.headers.get('X-CSRFToken')
+    if not csrf_token:
+        return jsonify({'message': 'CSRF Token missing'}), 403
+
+    try:
+        validate_csrf(csrf_token)
+    except:
+        return jsonify({'message': 'Invalid CSRF Token'}), 403
+
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    data = request.get_json()
+    if not data or 'content' not in data:
+        return jsonify({'message': 'Invalid data'}), 400
+
+    reply_content = data['content']
+
+    # 调用 reply_logic 函数处理回复逻辑
+    result = reply_logic(comment_id, reply_content)
+    return result
+
+# 获取评论的回复数量
+@api_bp.route('/comment/<int:comment_id>/reply_count', methods=['GET'])
+def get_comment_reply_count(comment_id):
+    redis_client = g.redis_client
+    redis_key = f'comment:{comment_id}:reply_count'
+    reply_count = redis_client.get(redis_key)
+    if reply_count is None:
+        reply_count = 0
+    else:
+        reply_count = int(reply_count)
+    return jsonify({'reply_count': reply_count})
 
 # 在API请求中验证CSRF Token
 @api_bp.before_request

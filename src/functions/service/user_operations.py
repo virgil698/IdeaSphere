@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import g, jsonify, request, abort, flash, url_for, redirect, render_template
 
-from src.functions.database.models import Report, db, Like, Post, Comment, User
+from src.functions.database.models import Report, db, Like, Post, Comment, User, ReplyComment
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 
@@ -192,3 +192,33 @@ def get_followers_logic(user_id):
     followers = g.user.followers.all()
     followers_list = [{'id': user.id, 'username': user.username} for user in followers]
     return jsonify({'success': True, 'followers': followers_list})
+
+
+def reply_logic(comment_id, reply_content):
+    if not g.user:
+        return jsonify({'success': False, 'message': '未登录'})
+
+    # 检查评论是否存在
+    comment = Comment.query.get(comment_id)
+    if not comment:
+        return jsonify({'success': False, 'message': '评论不存在'})
+
+    # 检查回复内容是否为空
+    if not reply_content:
+        return jsonify({'success': False, 'message': '回复内容不能为空'})
+
+    # 创建回复
+    new_reply = ReplyComment(
+        reply_message=reply_content,
+        reply_user=g.user.username,
+        target_comment_id=comment_id
+    )
+    db.session.add(new_reply)
+    db.session.commit()
+
+    # 使用 Redis 更新评论的回复数量
+    redis_client = g.redis_client
+    redis_key = f'comment:{comment_id}:reply_count'
+    redis_client.incr(redis_key)
+
+    return jsonify({'success': True, 'message': '回复成功'})
