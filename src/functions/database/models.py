@@ -113,3 +113,14 @@ class Section(db.Model):
     icon = db.Column(db.String(50), nullable=True)
     post_count = db.Column(db.Integer, default=0)
     comment_count = db.Column(db.Integer, default=0)
+
+
+class UserContribution(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    contribution_value = db.Column(db.Float, nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint('user_uid', 'date', name='_user_uid_date_uc'),
+    )

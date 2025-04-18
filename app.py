@@ -1,15 +1,16 @@
 import os
-import pytz
-from datetime import datetime
 
-import redis
+import pytz
 from flask import Flask, request, session, redirect, url_for, g, jsonify, render_template
+from flask_apscheduler import APScheduler
 from flask_wtf.csrf import CSRFProtect
 
 from src.db_ext import db
 from src.functions.api.api import api_bp  # 导入 API 蓝图
 from src.functions.config.config import get_config, initialize_database
-from src.functions.database.models import User, Post, Comment, Section  # 确保导入 Section 模型
+from src.functions.config.config_example import generate_config_example  # 导入生成示例配置文件的函数
+from src.functions.database.models import User, Post, Comment  # 确保导入 Section 模型
+from src.functions.database.redis import RedisManager  # 导入 Redis 管理器
 from src.functions.icenter.db_operation import execute_sql_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
@@ -20,19 +21,19 @@ from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.section.section import section_bp  # 导入板块蓝图
 from src.functions.service import monitor
-from src.functions.service.moderation import moderation_panel_logic, manage_reports_logic, manage_users_logic, manage_posts_logic, \
-    delete_post_logic
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
+from src.functions.service.moderation import moderation_panel_logic, manage_reports_logic, manage_users_logic, \
+    manage_posts_logic, \
+    delete_post_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import reply_logic, report_post_logic, like_post_logic, report_comment_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic, \
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
-from src.functions.service.user_routes import user_bp  # 导入用户页面蓝图
+from src.functions.service.user_routes import user_bp, scheduled_calculate_contributions  # 导入用户页面蓝图
 from src.functions.utils.logger import Logger
-from src.functions.config.config_example import generate_config_example  # 导入生成示例配置文件的函数
 
 """
 初始化部分   
@@ -65,12 +66,10 @@ app.config['WTF_CSRF_SSL_STRICT'] = config['csrf']['ssl_strict']
 
 # Redis 配置
 redis_config = config.get('redis', {})
-redis_client = redis.StrictRedis(
+redis_manager = RedisManager(
     host=redis_config.get('host', 'localhost'),
     port=redis_config.get('port', 6379),
-    db=redis_config.get('db', 0),
-    password=redis_config.get('password', ''),
-    decode_responses=True
+    password=redis_config.get('password', '')
 )
 
 db.init_app(app)
@@ -86,6 +85,23 @@ app.register_blueprint(section_bp)  # 注册板块蓝图
 app.register_blueprint(user_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
+
+# 初始化调度器
+scheduler = APScheduler()
+
+# 在应用初始化后启动调度器
+with app.app_context():
+    scheduler.init_app(app)
+    scheduler.start()
+
+# 配置定时任务
+@scheduler.task('cron', id='calculate_contributions_task', minute='*/10')
+def scheduled_task_every_10_minutes():
+    scheduled_calculate_contributions()
+
+@scheduler.task('cron', id='calculate_contributions_task_at_1am', hour=1, minute=0)
+def scheduled_task_at_1am():
+    scheduled_calculate_contributions()
 
 @app.before_request
 def before_request():
@@ -111,7 +127,7 @@ def before_request():
     g.user_agent = user_agent
 
     # 将 Redis 客户端作为全局变量
-    g.redis_client = redis_client
+    g.redis_manager = redis_manager
 
 
 @app.context_processor

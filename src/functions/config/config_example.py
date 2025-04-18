@@ -1,7 +1,5 @@
-import os
 import yaml
 import pytz
-
 
 def generate_config_example():
     config_example_path = 'config_example.yml'
@@ -25,7 +23,6 @@ def generate_config_example():
         'redis': {
             'host': 'localhost',
             'port': 6379,
-            'db': 0,
             'password': ''
         },
         'timezones': {
@@ -59,7 +56,6 @@ def generate_config_example():
         'redis': {
             'host': '# Redis 服务器地址',
             'port': '# Redis 服务器端口',
-            'db': '# Redis 数据库编号',
             'password': '# Redis 密码（如果需要）'
         },
         'timezones': {
@@ -101,7 +97,6 @@ def generate_config_example():
         f.write("redis:\n")
         f.write(f"  host: '{config_example_content['redis']['host']}' {comments['redis']['host']}\n")
         f.write(f"  port: {config_example_content['redis']['port']} {comments['redis']['port']}\n")
-        f.write(f"  db: {config_example_content['redis']['db']} {comments['redis']['db']}\n")
         f.write(f"  password: '{config_example_content['redis']['password']}' {comments['redis']['password']}\n\n")
 
         # 添加时区列表注释
@@ -119,7 +114,6 @@ def generate_config_example():
         f.write("# 4. 请勿随意修改配置文件的结构，否则可能导致程序无法正常运行。\n")
 
     print(f"示例配置文件已生成: {config_example_path}")
-
 
 if __name__ == '__main__':
     generate_config_example()

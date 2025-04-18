@@ -8,6 +8,7 @@ import math
 from flask import Blueprint, jsonify, request, g
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
+from src.functions.service.user_routes import get_contributions_from_db, calculate_contributions
 from src.functions.service.user_operations import reply_logic
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
@@ -302,6 +303,21 @@ def get_comment_reply_count(comment_id):
     else:
         reply_count = int(reply_count)
     return jsonify({'reply_count': reply_count})
+
+# 获取用户贡献数据的API
+@api_bp.route('/user/<int:user_uid>/contributions', methods=['GET'])
+def get_contributions(user_uid):
+    contributions = get_contributions_from_db(user_uid)
+    return jsonify(contributions)
+
+# 计算用户贡献数据的API
+@api_bp.route('/user/<int:user_uid>/contributions', methods=['POST'])
+def api_calculate_contributions(user_uid):
+    result = calculate_contributions(user_uid)
+    if result:
+        return jsonify(result)
+    else:
+        return jsonify({'error': 'User not found'}), 404
 
 # 在API请求中验证CSRF Token
 @api_bp.before_request
