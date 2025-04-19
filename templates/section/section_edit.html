@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-actions">
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-save"></i> 保存更改
@@ -75,7 +75,7 @@
                 data[key] = value;
             }
 
-            const response = await fetch('/api/section/edit/{{ section.id }}', {
+            const response = await fetch(`/section/edit/{{ section.id }}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

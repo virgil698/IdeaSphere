@@ -3,17 +3,15 @@ API
 @Dev virgil698
 """
 from datetime import datetime
-import math
 
 from flask import Blueprint, jsonify, request, g
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
-from src.functions.service.user_routes import get_contributions_from_db, calculate_contributions
-from src.functions.service.user_operations import reply_logic
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
-import psutil
 from src.functions.parser.markdown_parser import convert_markdown_to_html
+from src.functions.service.user_operations import reply_logic
+from src.functions.service.user_routes import get_contributions_from_db, calculate_contributions
 
 # 创建一个API蓝图
 api_bp = Blueprint('api', __name__)
