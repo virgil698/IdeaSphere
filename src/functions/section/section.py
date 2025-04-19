@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from datetime import datetime, timedelta
+
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from sqlalchemy import func
+
 from src.db_ext import db
 from src.functions.database.models import Section, Post, Comment, User
-from src.functions.utils.logger import Logger
-from datetime import datetime, timedelta
-from sqlalchemy import func
-from flask import abort
 
 # 创建蓝图
 section_bp = Blueprint('section', __name__, url_prefix='/section')
@@ -159,6 +159,38 @@ def section_analytics():
 @section_bp.route('/edit/<int:section_id>', methods=['GET'])
 def edit_section(section_id):
     section = Section.query.get_or_404(section_id)
+
+    # 修改板块信息
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        icon = request.form.get('icon')
+
+        if not name:
+            flash('板块名称不能为空', 'error')
+            return redirect(url_for('section.edit_section', section_id=section_id))
+
+        # 检查板块是否存在
+        section = Section.query.get_or_404(section_id)
+
+        # 检查板块名称是否已存在（排除当前板块）
+        existing_section = Section.query.filter(
+            Section.name == name,
+            Section.id != section_id
+        ).first()
+        if existing_section:
+            flash('该板块名称已存在', 'error')
+            return redirect(url_for('section.edit_section', section_id=section_id))
+
+        # 更新板块信息
+        section.name = name
+        section.description = description
+        section.icon = icon
+
+        db.session.commit()
+
+        flash('板块更新成功', 'success')
+        return redirect(url_for('section.sections'))
     return render_template('section/section_edit.html', section=section)
 
 # 删除板块
