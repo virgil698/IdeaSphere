@@ -29,3 +29,4 @@ Booktype~=1.5
 redis~=5.2.1
 tinycss2~=1.4.0
 flask_apscheduler~=1.13.1
+pytz~=2025.2
