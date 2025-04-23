@@ -38,7 +38,7 @@ from src.functions.utils.logger import Logger
 """
 初始化部分   
 """
-app = Flask(__name__, static_folder="templates/static", static_url_path='/static', template_folder='templates')
+app = Flask(__name__, static_folder="static", static_url_path='/static', template_folder='templates')
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
 
 # 生成示例配置文件
