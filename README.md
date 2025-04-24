@@ -28,18 +28,18 @@
 </div>
 
 
-## 📖 项目介绍
+# 📖 项目介绍
 
 IdeaSphere 是一个基于 Python3 和 Flask 构建的开源社交平台，旨在提供便捷的部署与配置能力、优化性能表现、实现中心化与去中心化功能的深度融合，并支持广泛的定制化功能。未来版本计划采用 Go、Python 和 TypeScript 进行开发，以进一步提升平台的稳定性和扩展性。
 
-## 🌟 核心特点
+# 🌟 核心特点
 
 - **简单易用**：界面简洁，功能实用，易于上手。
 - **易于配置**：通过 `config.yml` 文件即可完成大部分配置。
 - **轻量级**：基于 Flask 框架开发，性能高效。
 - **模块化设计**：代码结构清晰，方便扩展和维护。
 
-## 🌟 实现功能
+# 🌟 实现功能
 
 | 任务大概 | 目前情况 | 实现版本  |
 |---|---|---|
@@ -88,7 +88,7 @@ IdeaSphere 是一个基于 Python3 和 Flask 构建的开源社交平台，旨�
 - 🚧：任务正在进行中。我们正在努力！💪
 - ⏳：任务即将开始。令人期待的事情即将到来！🌠
 
-## 🛠️ 安装指南
+# 🛠️ 安装指南
 
 1. 环境要求
 
@@ -126,7 +126,7 @@ python app.py
 
 默认访问地址为：`http://localhost:5000`
 
-## 🎯 使用说明
+# 🎯 使用说明
 
 1. 安装向导
 
@@ -144,7 +144,7 @@ python app.py
 
 管理员可以通过 `/admin` 页面管理用户、帖子和评论。
 
-## ⬆️ 提交贡献
+# ⬆️ 提交贡献
 
 欢迎参与 IdeaSphere 的开发，您需要通过以下方式提交你的贡献
 
@@ -154,11 +154,11 @@ python app.py
 3. 在本地仓库中进行修改并构建文档测试,无误后 push 至自己的仓库
 4. 回到此仓库,点击 Pull requests -> New pull request 发起 PR
 
-## 📫 捐赠我们
+# 📫 捐赠我们
 
 如果您喜欢我们的工作，请随时通过我们的 [Open Collective](https://opencollective.com/ideasphere) 或 IdeaSphere 的 [爱发电](https://afdian.com/a/ideasphere) 捐款
 
-## 📞 联系我们
+# 📞 联系我们
 
 如果您有任何问题或建议，可以通过以下方式联系我们：
 
@@ -166,20 +166,20 @@ python app.py
 - QQ交流群：[![QQ](https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-1036347298-20B2AA?style=for-the-badge)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
 - Discode：[![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
 
-## 🤝 贡献者
+# 🤝 贡献者
 
 [![Contrib](https://contrib.rocks/image?repo=IdeaSphere-team/IdeaSphere)](https://github.com/IdeaSphere-team/IdeaSphere/graphs/contributors)
 
-## ⭐ Star 历史图
+# ⭐ Star 历史图
 
 [![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
-## 😊 免责声明
+# 😊 免责声明
 
 > [!NOTE]
 > 本项目仅供学习和参考使用。在使用过程中，请确保遵守相关法律法规和网站服务条款。
 
-## 🎫 许可证
+# 🎫 许可证
 > [!NOTE]
 > 本项目采用 `MIT License` 许可证。有关详细信息，请参阅 `LICENSE` 文件。
 
