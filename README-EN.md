@@ -153,7 +153,7 @@ We welcome your participation in IdeaSphere's development. Follow these steps to
 3. Make changes, build, and test the documentation locally. Once verified, push to your repository
 4. Return to this repository, click Pull requests -> New pull request to initiate a PR
 
-#📬 Donate to Us
+# 📬 Donate to Us
 
 If you like our work, you can donate anytime via our [Open Collective](https://opencollective.com/ideasphere) or IdeaSphere’s [AFDIAN](https://afdian.com/a/ideasphere).
 
