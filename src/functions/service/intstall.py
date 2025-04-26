@@ -4,6 +4,11 @@ import pkg_resources
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash
 from src.functions.database.models import User, db, InstallationStatus
+import os
+from ruamel.yaml import YAML  # 使用 ruamel.yaml 替代 PyYAML
+from src.functions.config.config import get_config, initialize_database  # 导入获取和初始化配置的函数
+
+config_path = os.path.join('config', 'config.yml')
 
 def check_python_version():
     current_version = sys.version_info
@@ -44,26 +49,38 @@ def check_dependencies():
 def install_dependencies():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
 
+def update_timezone_config(timezone):
+    # 使用 ruamel.yaml 保留注释
+    yaml = YAML()
+    yaml.preserve_quotes = True
+    yaml.indent(mapping=2, sequence=4, offset=2)
+    yaml.width = 4096
+
+    # 读取现有的配置文件
+    with open(config_path, 'r', encoding='utf-8') as f:
+        config = yaml.load(f)
+
+    # 更新时区配置
+    config['timezone'] = timezone
+
+    # 写回配置文件
+    with open(config_path, 'w', encoding='utf-8') as f:
+        yaml.dump(config, f)
+
+    # 重新加载配置
+    get_config()
+
 def install_logic():
     python_version_ok, current_python_version, required_python_version = check_python_version()
     dependencies = check_dependencies()
     dependencies_installed = all(dependency['status'] == 'success' for dependency in dependencies)
 
     if request.method == 'POST':
-        if request.form['step'] == '1':
-            if not dependencies_installed:
-                install_dependencies()
-                flash('依赖安装成功！', 'success')
-                return redirect(url_for('install'))
-            return redirect(url_for('install'))
-
-        elif request.form['step'] == '2':
-            return redirect(url_for('install'))
-
-        elif request.form['step'] == '3':
+        if request.form['step'] == '5':  # 确保步骤参数为5
             username = request.form['username']
             password = request.form['password']
             password_confirm = request.form['password_confirm']
+            timezone = request.form['timezone']  # 获取时区配置
 
             if password != password_confirm:
                 flash('密码和确认密码不一致！', 'danger')
@@ -95,6 +112,10 @@ def install_logic():
                 install_status.is_installed = True
 
             db.session.commit()
+
+            # 更新时区配置
+            update_timezone_config(timezone)
+
             flash('论坛安装成功！请登录', 'success')
 
             return jsonify({

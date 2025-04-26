@@ -56,8 +56,8 @@ except pytz.UnknownTimeZoneError:
     print(f"Unknown timezone: {timezone_str}. Using UTC as default.")
 
 # 数据库配置
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 使用 SQLite 数据库
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']  # 动态设置数据库 URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['database']['track_modifications']
 
 # CSRF配置
 app.config['WTF_CSRF_ENABLED'] = config['csrf']['enabled']

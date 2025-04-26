@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // 更新步骤指示器状态
     function updateStepsIndicator(currentStep) {
-        const steps = ['step1-indicator', 'step2-indicator', 'step3-indicator', 'step4-indicator'];
+        const steps = ['step1-indicator', 'step2-indicator', 'step3-indicator', 'step4-indicator', 'step5-indicator'];
         steps.forEach(step => {
             document.getElementById(step).classList.remove('active');
         });
@@ -42,6 +42,18 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('step4').style.display = 'none';
         document.getElementById('step3').style.display = 'block';
         updateStepsIndicator(3);
+    });
+
+    document.getElementById('nextToStep5').addEventListener('click', function () {
+        document.getElementById('step4').style.display = 'none';
+        document.getElementById('step5').style.display = 'block';
+        updateStepsIndicator(5);
+    });
+
+    document.getElementById('prevToStep4').addEventListener('click', function () {
+        document.getElementById('step5').style.display = 'none';
+        document.getElementById('step4').style.display = 'block';
+        updateStepsIndicator(4);
     });
 
     // 密码强度检测
@@ -85,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('adminUsername').value;
         const password = document.getElementById('adminPassword').value;
         const passwordConfirm = document.getElementById('adminPasswordConfirm').value;
+        const timezone = document.getElementById('timezoneSelect').value; // 获取时区选择
 
         if (password !== passwordConfirm) {
             alert('密码和确认密码不一致！');
@@ -106,7 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'username': username,
                 'password': password,
                 'password_confirm': passwordConfirm,
-                'step': '3'
+                'timezone': timezone, // 传递时区参数
+                'step': '5' // 更新步骤参数为5
             })
         })
             .then(response => response.json())

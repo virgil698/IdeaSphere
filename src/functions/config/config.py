@@ -2,11 +2,18 @@ import os
 import yaml
 from src.db_ext import db
 
+def ensure_config_directory():
+    config_dir = 'config'
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
+    return os.path.join(config_dir, 'config.yml')
+
 def get_config():
-    config_path = 'config.yml'
+    config_path = ensure_config_directory()  # 生成 config.yml 文件路径
     if not os.path.exists(config_path):
         # 定义默认配置内容
-        default_config_content = """# IdeaSphere 配置文件
+        default_config_content = """
+# IdeaSphere 配置文件
 # 开源地址：https://github.com/IdeaSphere-team/IdeaSphere
 
 # 基础配置

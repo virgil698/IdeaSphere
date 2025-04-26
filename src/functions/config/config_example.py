@@ -1,8 +1,16 @@
 import yaml
 import pytz
+import os
+
+def ensure_config_directory():
+    config_dir = 'config'
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
+    return config_dir
 
 def generate_config_example():
-    config_example_path = 'config_example.yml'
+    config_dir = ensure_config_directory()  # 确保 config 文件夹存在
+    config_example_path = os.path.join(config_dir, 'config_example.yml')
 
     # 获取所有时区名称
     all_timezones = pytz.all_timezones
