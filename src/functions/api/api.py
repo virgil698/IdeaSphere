@@ -293,13 +293,7 @@ def reply_to_comment(comment_id):
 # 获取评论的回复数量
 @api_bp.route('/comment/<int:comment_id>/reply_count', methods=['GET'])
 def get_comment_reply_count(comment_id):
-    redis_client = g.redis_client
-    redis_key = f'comment:{comment_id}:reply_count'
-    reply_count = redis_client.get(redis_key)
-    if reply_count is None:
-        reply_count = 0
-    else:
-        reply_count = int(reply_count)
+    reply_count = Comment.query.filter_by(target_comment_id=comment_id).count()
     return jsonify({'reply_count': reply_count})
 
 # 获取用户贡献数据的API

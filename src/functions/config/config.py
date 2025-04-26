@@ -25,12 +25,6 @@ database:
 csrf:
   enabled: True # 默认开启
   ssl_strict: True # 默认开启
-
-# Redis 配置
-redis:
-  host: 'localhost'  # Redis 服务器地址
-  port: 6379         # Redis 服务器端口
-  password: ''      # Redis 密码（如果需要）
 """
         # 使用 UTF-8 编码写入文件
         with open(config_path, 'w', encoding='utf-8') as f:

@@ -166,11 +166,6 @@ def follow_user_logic(follower_id, following_id):
     g.user.following.append(User(id=following_id))
     db.session.commit()
 
-    # 更新 Redis 关注数据
-    redis_manager = g.redis_manager
-    following_db = redis_manager.get_following_db()
-    following_db.sadd(f'following:{g.user.id}', following_id)
-
     return jsonify({'success': True, 'message': '关注成功'})
 
 def unfollow_user_logic(follower_id, following_id):
@@ -186,26 +181,15 @@ def unfollow_user_logic(follower_id, following_id):
     g.user.following.remove(existing_follow)
     db.session.commit()
 
-    # 更新 Redis 关注数据
-    redis_manager = g.redis_manager
-    following_db = redis_manager.get_following_db()
-    following_db.srem(f'following:{g.user.id}', following_id)
-
     return jsonify({'success': True, 'message': '取消关注成功'})
 
 def get_following_logic(user_id):
-    redis_manager = g.redis_manager
-    following_db = redis_manager.get_following_db()
-    following_ids = following_db.smembers(f'following:{user_id}')
-    following_users = User.query.filter(User.id.in_(following_ids)).all()
+    following_users = User.query.filter(User.followers.any(follower_id=user_id)).all()
     following_list = [{'id': user.id, 'username': user.username} for user in following_users]
     return jsonify({'success': True, 'following': following_list})
 
 def get_followers_logic(user_id):
-    redis_manager = g.redis_manager
-    fans_db = redis_manager.get_fans_db()
-    fan_ids = fans_db.smembers(f'fans:{user_id}')
-    fan_users = User.query.filter(User.id.in_(fan_ids)).all()
+    fan_users = User.query.filter(User.following.any(following_id=user_id)).all()
     followers_list = [{'id': user.id, 'username': user.username} for user in fan_users]
     return jsonify({'success': True, 'followers': followers_list})
 
@@ -230,11 +214,5 @@ def reply_logic(comment_id, reply_content):
     )
     db.session.add(new_reply)
     db.session.commit()
-
-    # 使用 Redis 更新评论的回复数量
-    redis_manager = g.redis_manager
-    comment_db = redis_manager.get_connection(2)  # 假设使用 2 号数据库存储评论回复数据
-    redis_key = f'comment:{comment_id}:reply_count'
-    comment_db.incr(redis_key)
 
     return jsonify({'success': True, 'message': '回复成功'})

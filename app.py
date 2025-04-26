@@ -10,7 +10,6 @@ from src.functions.api.api import api_bp  # 导入 API 蓝图
 from src.functions.config.config import get_config, initialize_database
 from src.functions.config.config_example import generate_config_example  # 导入生成示例配置文件的函数
 from src.functions.database.models import User, Post, Comment  # 确保导入 Section 模型
-from src.functions.database.redis import RedisManager  # 导入 Redis 管理器
 from src.functions.icenter.db_operation import execute_sql_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
@@ -57,20 +56,12 @@ except pytz.UnknownTimeZoneError:
     print(f"Unknown timezone: {timezone_str}. Using UTC as default.")
 
 # 数据库配置
-app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['database']['track_modifications']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 使用 SQLite 数据库
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # CSRF配置
 app.config['WTF_CSRF_ENABLED'] = config['csrf']['enabled']
 app.config['WTF_CSRF_SSL_STRICT'] = config['csrf']['ssl_strict']
-
-# Redis 配置
-redis_config = config.get('redis', {})
-redis_manager = RedisManager(
-    host=redis_config.get('host', 'localhost'),
-    port=redis_config.get('port', 6379),
-    password=redis_config.get('password', '')
-)
 
 db.init_app(app)
 csrf = CSRFProtect(app)
@@ -89,7 +80,7 @@ app.jinja_env.globals.update(remove_markdown=remove_markdown)
 # 初始化调度器
 scheduler = APScheduler()
 
-# 在应用初始化后启动调度器
+# 使用 Flask 应用上下文初始化调度器
 with app.app_context():
     scheduler.init_app(app)
     scheduler.start()
@@ -97,11 +88,15 @@ with app.app_context():
 # 配置定时任务
 @scheduler.task('cron', id='calculate_contributions_task', minute='*/10')
 def scheduled_task_every_10_minutes():
-    scheduled_calculate_contributions()
+    # 确保在应用上下文中执行定时任务
+    with app.app_context():
+        scheduled_calculate_contributions()
 
 @scheduler.task('cron', id='calculate_contributions_task_at_1am', hour=1, minute=0)
 def scheduled_task_at_1am():
-    scheduled_calculate_contributions()
+    # 确保在应用上下文中执行定时任务
+    with app.app_context():
+        scheduled_calculate_contributions()
 
 @app.before_request
 def before_request():
@@ -126,10 +121,6 @@ def before_request():
     user_agent = request.headers.get('User-Agent', 'Unknown')
     g.user_agent = user_agent
 
-    # 将 Redis 客户端作为全局变量
-    g.redis_manager = redis_manager
-
-
 @app.context_processor
 def inject_forum_stats():
     forum_stats = {
@@ -139,7 +130,6 @@ def inject_forum_stats():
         'latest_user': User.query.order_by(User.id.desc()).first().username if User.query.count() > 0 else "暂无用户"
     }
     return {'forum_stats': forum_stats}
-
 
 @app.context_processor
 def inject_online_users():
@@ -157,7 +147,6 @@ def inject_online_users():
         online_users['total'] += 1
         online_users['guests'] += 1
     return {'online_users': online_users}
-
 
 """
 路由部分

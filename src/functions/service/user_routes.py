@@ -7,7 +7,6 @@ from sqlalchemy import func
 
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment, Report, Like, UserContribution, ReplyComment
-from src.functions.database.redis import RedisManager
 
 user_bp = Blueprint('user', __name__)
 
@@ -200,15 +199,6 @@ def calculate_contributions(user_uid):
 
 
 def get_contributions_from_db(user_uid):
-    # 尝试从Redis获取数据
-    redis_conn = RedisManager.get_connection(3)
-    cache_key = f"user_contributions:{user_uid}"
-    cached_data = redis_conn.hgetall(cache_key)
-
-    if cached_data:
-        # 缓存命中，返回缓存数据
-        return cached_data
-
     # 查询过去一年的数据
     end_date = datetime.now().date()
     start_date = end_date - timedelta(days=365)
@@ -222,11 +212,5 @@ def get_contributions_from_db(user_uid):
     result = {}
     for contribution in contributions:
         result[contribution.date.isoformat()] = contribution.contribution_value
-
-    # 存入Redis缓存
-    if result:
-        for date_str, value in result.items():
-            redis_conn.hset(cache_key, date_str, value)
-        redis_conn.expire(cache_key, 86400 * 7)  # 缓存7天
 
     return result

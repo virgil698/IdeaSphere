@@ -15,6 +15,14 @@ class User(db.Model):
     icenter_user = db.Column(db.String)
     icenter_pwd = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 新增注册时间字段
+    following = db.relationship(
+        'User',
+        secondary='user_followers',
+        primaryjoin='User.id == user_followers.c.follower_id',
+        secondaryjoin='User.id == user_followers.c.following_id',
+        backref=db.backref('followers', lazy='dynamic'),
+        lazy='dynamic'
+    )
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,8 +50,8 @@ class ReplyComment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reply_message = db.Column(db.Text, nullable=False)
     reply_user = db.Column(db.Text, nullable=False)
-    target_comment_id = db.Column(  # 移除非法的 primary_key
-        db.Integer, 
+    target_comment_id = db.Column(
+        db.Integer,
         db.ForeignKey('comment.id', ondelete='CASCADE'),  # 添加外键
         nullable=False
     )
@@ -52,7 +60,7 @@ class ReplyComment(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now()
     )
-    
+
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
@@ -69,7 +77,8 @@ class Comment(db.Model):
     delete_time = db.Column(db.DateTime)
     like_count = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
-    
+    target_comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)
+
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
@@ -96,16 +105,6 @@ class Like(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)
 
-
-class SearchModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    keyword = db.Column(db.String(100), unique=True, nullable=False)
-
-
-class InstallationStatus(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    is_installed = db.Column(db.Boolean, default=False)
-
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
@@ -113,7 +112,6 @@ class Section(db.Model):
     icon = db.Column(db.String(50), nullable=True)
     post_count = db.Column(db.Integer, default=0)
     comment_count = db.Column(db.Integer, default=0)
-
 
 class UserContribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -124,3 +122,17 @@ class UserContribution(db.Model):
     __table_args__ = (
         db.UniqueConstraint('user_uid', 'date', name='_user_uid_date_uc'),
     )
+
+user_followers = db.Table('user_followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('following_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)
+
+
+class InstallationStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    is_installed = db.Column(db.Boolean, default=False)
+
+class SearchModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String(100), unique=True, nullable=False)

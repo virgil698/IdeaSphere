@@ -10,7 +10,7 @@ body {
 }
 
 .install-container {
-    max-width: 100%;
+    max-width: 800px;
     width: 100%;
     margin: 0 auto;
 }
@@ -55,7 +55,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
     padding: 30px;
-    width: 100%;
 }
 
 .step-title {
@@ -71,7 +70,7 @@ body {
     margin-top: 20px;
 }
 
-.python-info, .redis-info, .dependencies-info {
+.python-info, .dependencies-info {
     flex: 1;
     background-color: #f8f9fa;
     border-radius: 8px;

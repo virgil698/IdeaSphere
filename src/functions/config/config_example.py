@@ -19,24 +19,6 @@ def generate_config_example():
         'csrf': {
             'enabled': True,
             'ssl_strict': True
-        },
-        'redis': {
-            'host': 'localhost',
-            'port': 6379,
-            'password': ''
-        },
-        'timezones': {
-            'common': [
-                'UTC',
-                'Asia/Shanghai',
-                'Asia/Tokyo',
-                'Asia/Seoul',
-                'Europe/London',
-                'Europe/Paris',
-                'America/New_York',
-                'America/Los_Angeles'
-            ],
-            'all': all_timezones
         }
     }
 
@@ -52,15 +34,6 @@ def generate_config_example():
         'csrf': {
             'enabled': '# 默认开启',
             'ssl_strict': '# 默认开启'
-        },
-        'redis': {
-            'host': '# Redis 服务器地址',
-            'port': '# Redis 服务器端口',
-            'password': '# Redis 密码（如果需要）'
-        },
-        'timezones': {
-            'common': '# 常用时区列表',
-            'all': '# 完整时区列表（供参考）'
         }
     }
 
@@ -91,27 +64,6 @@ def generate_config_example():
         f.write("csrf:\n")
         f.write(f"  enabled: {config_example_content['csrf']['enabled']} {comments['csrf']['enabled']}\n")
         f.write(f"  ssl_strict: {config_example_content['csrf']['ssl_strict']} {comments['csrf']['ssl_strict']}\n\n")
-
-        # 添加 Redis 配置注释
-        f.write("# Redis 配置\n")
-        f.write("redis:\n")
-        f.write(f"  host: '{config_example_content['redis']['host']}' {comments['redis']['host']}\n")
-        f.write(f"  port: {config_example_content['redis']['port']} {comments['redis']['port']}\n")
-        f.write(f"  password: '{config_example_content['redis']['password']}' {comments['redis']['password']}\n\n")
-
-        # 添加时区列表注释
-        f.write("# 允许使用的时区列表\n")
-        f.write("timezones:\n")
-        f.write(f"  common: {config_example_content['timezones']['common']} {comments['timezones']['common']}\n")
-        f.write(
-            f"  all: {config_example_content['timezones']['all'][:10]} ... (完整列表见 https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) {comments['timezones']['all']}\n")
-
-        # 添加注意事项
-        f.write("\n# 注意事项\n")
-        f.write("# 1. 请确保时区设置正确，否则程序将使用默认的 UTC 时区。\n")
-        f.write("# 2. 如果需要修改数据库地址，请确保数据库服务已启动。\n")
-        f.write("# 3. Redis 配置中的密码如果为空，请确保 Redis 服务未设置密码。\n")
-        f.write("# 4. 请勿随意修改配置文件的结构，否则可能导致程序无法正常运行。\n")
 
     print(f"示例配置文件已生成: {config_example_path}")
 

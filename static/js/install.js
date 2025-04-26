@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // 更新步骤指示器状态
     function updateStepsIndicator(currentStep) {
-        const steps = ['step1-indicator', 'step2-indicator', 'step3-indicator'];
+        const steps = ['step1-indicator', 'step2-indicator', 'step3-indicator', 'step4-indicator'];
         steps.forEach(step => {
             document.getElementById(step).classList.remove('active');
         });
@@ -30,6 +30,18 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('step3').style.display = 'none';
         document.getElementById('step2').style.display = 'block';
         updateStepsIndicator(2);
+    });
+
+    document.getElementById('nextToStep4').addEventListener('click', function () {
+        document.getElementById('step3').style.display = 'none';
+        document.getElementById('step4').style.display = 'block';
+        updateStepsIndicator(4);
+    });
+
+    document.getElementById('prevToStep3').addEventListener('click', function () {
+        document.getElementById('step4').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
+        updateStepsIndicator(3);
     });
 
     // 密码强度检测

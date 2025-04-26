@@ -15,12 +15,10 @@
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
             <h2>IdeaSphere</h2>
             <p class="tagline">开始您的创意之旅</p>
-
         </div>
 
         <div class="install-header">
             <p>请按照以下步骤完成论坛的初始设置</p>
-
         </div>
 
         <!-- 优化后的步骤指示器 -->
@@ -29,21 +27,28 @@
                 <div class="step-circle">
                     <span class="step-number">1</span>
                 </div>
-                <div class="step-label">环境检测</div>
+                <div class="step-label">Python 检测</div>
             </div>
             <div class="step-divider"></div>
             <div class="step" id="step2-indicator">
                 <div class="step-circle">
                     <span class="step-number">2</span>
                 </div>
-                <div class="step-label">创建数据库</div>
+                <div class="step-label">依赖检测</div>
             </div>
             <div class="step-divider"></div>
             <div class="step" id="step3-indicator">
                 <div class="step-circle">
                     <span class="step-number">3</span>
                 </div>
-                <div class="step-label">完成</div>
+                <div class="step-label">数据库选择</div>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step" id="step4-indicator">
+                <div class="step-circle">
+                    <span class="step-number">4</span>
+                </div>
+                <div class="step-label">管理员设置</div>
             </div>
         </div>
 
@@ -52,7 +57,7 @@
 
             <div class="install-step" id="step1" style="display: block;">
                 <div class="step-title">
-                    <h2>环境检测</h2>
+                    <h2>Python 环境检测</h2>
                 </div>
 
                 <div class="environment-check">
@@ -92,42 +97,21 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="redis-info">
-                        <div class="check-item">
-                            <div class="check-icon" id="redisCheckIcon">
-                                {% if redis_ok %}
-                                    <i class="fas fa-check-circle success"></i>
-                                {% else %}
-                                    <i class="fas fa-times-circle error"></i>
-                                {% endif %}
-                            </div>
-                            <div class="check-name">Redis 服务</div>
-                            <div class="check-result">
-                                <table class="dependency-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Redis 连接</th>
-                                            <th>状态</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Redis 服务</td>
-                                            <td class="dependency-status {% if redis_ok %}success{% else %}error{% endif %}">
-                                                {% if redis_ok %}
-                                                    <i class="fas fa-check-circle"></i> {{ redis_message }}
-                                                {% else %}
-                                                    <i class="fas fa-times-circle"></i> {{ redis_message }}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-end mt-4">
+                    <button type="button" class="btn btn-primary" id="nextToStep2" {% if not python_version_ok %}disabled{% endif %}>
+                        <i class="fas fa-arrow-right"></i> 下一步：依赖检测
+                    </button>
+                </div>
+            </div>
 
+            <div class="install-step" id="step2" style="display: none;">
+                <div class="step-title">
+                    <h2>依赖检测</h2>
+                </div>
+
+                <div class="environment-check">
                     <div class="dependencies-info">
                         <div class="check-item">
                             <div class="check-icon" id="dependenciesCheckIcon">
@@ -177,13 +161,16 @@
                 </div>
 
                 <div class="text-end mt-4">
-                    <button type="button" class="btn btn-primary" id="nextToStep2" {% if not python_version_ok or not dependencies_installed or not redis_ok %}disabled{% endif %}>
-                        <i class="fas fa-arrow-right"></i> 下一步：选择数据库
+                    <button type="button" class="btn btn-primary" id="prevToStep1">
+                        <i class="fas fa-arrow-left"></i> 上一步
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextToStep3" style="margin-left: 20px;" {% if not dependencies_installed %}disabled{% endif %}>
+                        <i class="fas fa-arrow-right"></i> 下一步：数据库选择
                     </button>
                 </div>
             </div>
 
-            <div class="install-step" id="step2" style="display: none;">
+            <div class="install-step" id="step3" style="display: none;">
                 <div class="step-title">
                     <h2>数据库选择配置</h2>
                 </div>
@@ -204,16 +191,16 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="button" class="btn btn-primary" id="prevToStep1">
+                    <button type="button" class="btn btn-primary" id="prevToStep2">
                         <i class="fas fa-arrow-left"></i> 上一步
                     </button>
-                    <button type="button" class="btn btn-primary" id="nextToStep3" style="margin-left: 20px;">
-                        <i class="fas fa-arrow-right"></i> 下一步：设置管理员账户
+                    <button type="button" class="btn btn-primary" id="nextToStep4" style="margin-left: 20px;">
+                        <i class="fas fa-arrow-right"></i> 下一步：管理员设置
                     </button>
                 </div>
             </div>
 
-            <div class="install-step" id="step3" style="display: none;">
+            <div class="install-step" id="step4" style="display: none;">
                 <div class="step-title">
                     <h2>设置管理员账户</h2>
                 </div>
@@ -240,7 +227,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="button" class="btn btn-primary" id="prevToStep2">
+                    <button type="button" class="btn btn-primary" id="prevToStep3">
                         <i class="fas fa-arrow-left"></i> 上一步
                     </button>
                     <button type="submit" class="btn btn-primary" style="margin-left: 20px;">
