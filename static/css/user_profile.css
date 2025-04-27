@@ -179,23 +179,54 @@
 }
 
 /* 活动热图区域 */
-.activity-heatmap {
-    background-color: transparent;
-    padding: 0;
-    margin-bottom: 0;
-    box-shadow: none;
+.contribution-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 5px;
+    margin-bottom: 20px;
 }
 
-.heatmap-container {
-    height: 220px;
-    margin-bottom: 15px;
+.grid-row {
+    display: contents;
+}
+
+.contribution-cell {
+    width: 90%;
+    height: 0;
+    padding-bottom: 25%;
+    border-radius: 3px;
+    transition: opacity 0.2s;
     position: relative;
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 6px;
 }
 
-.heatmap-legend {
+.contribution-cell:hover {
+    opacity: 0.8;
+}
+
+.contribution-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contribution-cell:hover .contribution-tooltip {
+    opacity: 1;
+}
+
+.contribution-legend {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
@@ -218,19 +249,6 @@
     font-size: 14px;
     color: #7f8c8d;
 }
-
-.heatmap-description {
-    text-align: right;
-    color: #95a5a6;
-    font-size: 14px;
-    margin-top: 10px;
-    font-style: italic;
-}
-
-.heatmap-description p {
-    margin: 0;
-}
-
 /* 帖子列表 */
 .user-posts-container {
     background-color: transparent;

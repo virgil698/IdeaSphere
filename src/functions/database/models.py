@@ -1,10 +1,8 @@
-"""
-数据库模型
-"""
-from email.policy import default
+# src/db_ext/models.py
+
+from datetime import datetime
 
 from src.db_ext import db
-from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -91,7 +89,7 @@ class Report(db.Model):
     status = db.Column(db.String(20), default='pending')  # pending, reviewed, closed
     post = db.relationship('Post', foreign_keys=[post_id], backref=db.backref('reports', lazy=True))
     comment = db.relationship('Comment', foreign_keys=[comment_id], backref=db.backref('reports', lazy=True))
-
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
 
 class Like(db.Model):
     __table_args__ = (
@@ -104,6 +102,7 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
 
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -117,7 +116,7 @@ class UserContribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    contribution_value = db.Column(db.Float, nullable=False)
+    contribution_value = db.Column(db.Integer, nullable=False)
 
     __table_args__ = (
         db.UniqueConstraint('user_uid', 'date', name='_user_uid_date_uc'),

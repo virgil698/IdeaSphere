@@ -3,7 +3,8 @@ import subprocess
 import pkg_resources
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash
-from src.functions.database.models import User, db, InstallationStatus
+from src.functions.database.models import User, db, InstallationStatus, UserContribution  # 导入 UserContribution 模型
+from src.functions.service.user_routes import calculate_contributions  # 导入贡献计算函数
 import os
 from ruamel.yaml import YAML  # 使用 ruamel.yaml 替代 PyYAML
 from src.functions.config.config import get_config, initialize_database  # 导入获取和初始化配置的函数
@@ -112,6 +113,9 @@ def install_logic():
                 install_status.is_installed = True
 
             db.session.commit()
+
+            # 计算并保存管理员用户的贡献数据
+            calculate_contributions(new_admin.user_uid)
 
             # 更新时区配置
             update_timezone_config(timezone)

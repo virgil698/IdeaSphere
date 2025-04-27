@@ -4,14 +4,13 @@ API
 """
 from datetime import datetime
 
-from flask import Blueprint, jsonify, request, g
+from flask import Blueprint, jsonify, request
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 from src.functions.service.user_operations import reply_logic
-from src.functions.service.user_routes import get_contributions_from_db, calculate_contributions
 
 # 创建一个API蓝图
 api_bp = Blueprint('api', __name__)
@@ -295,21 +294,6 @@ def reply_to_comment(comment_id):
 def get_comment_reply_count(comment_id):
     reply_count = Comment.query.filter_by(target_comment_id=comment_id).count()
     return jsonify({'reply_count': reply_count})
-
-# 获取用户贡献数据的API
-@api_bp.route('/user/<int:user_uid>/contributions', methods=['GET'])
-def get_contributions(user_uid):
-    contributions = get_contributions_from_db(user_uid)
-    return jsonify(contributions)
-
-# 计算用户贡献数据的API
-@api_bp.route('/user/<int:user_uid>/contributions', methods=['POST'])
-def api_calculate_contributions(user_uid):
-    result = calculate_contributions(user_uid)
-    if result:
-        return jsonify(result)
-    else:
-        return jsonify({'error': 'User not found'}), 404
 
 # 在API请求中验证CSRF Token
 @api_bp.before_request

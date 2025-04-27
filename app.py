@@ -1,37 +1,35 @@
 import os
-
 import pytz
 from flask import Flask, request, session, redirect, url_for, g, jsonify, render_template
 from flask_apscheduler import APScheduler
 from flask_wtf.csrf import CSRFProtect
 
 from src.db_ext import db
-from src.functions.api.api import api_bp  # 导入 API 蓝图
+from src.functions.api.api import api_bp
 from src.functions.config.config import get_config, initialize_database
-from src.functions.config.config_example import generate_config_example  # 导入生成示例配置文件的函数
-from src.functions.database.models import User, Post, Comment  # 确保导入 Section 模型
+from src.functions.config.config_example import generate_config_example
+from src.functions.database.models import User, Post, Comment
 from src.functions.icenter.db_operation import execute_sql_logic
 from src.functions.icenter.icenter_index_page import icenter_index
 from src.functions.icenter.icenter_login import icenter_login_logic
 from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, \
     return_icenter_execute_sql_templates, return_icenter_editor
-from src.functions.index import index_logic, newest_logic, global_logic  # 导入新的逻辑函数
+from src.functions.index import index_logic, newest_logic, global_logic
 from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
-from src.functions.section.section import section_bp  # 导入板块蓝图
+from src.functions.section.section import section_bp
 from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
 from src.functions.service.moderation import moderation_panel_logic, manage_reports_logic, manage_users_logic, \
-    manage_posts_logic, \
-    delete_post_logic
+    manage_posts_logic, delete_post_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import reply_logic, report_post_logic, like_post_logic, report_comment_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic, \
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
-from src.functions.service.user_routes import user_bp, scheduled_calculate_contributions  # 导入用户页面蓝图
+from src.functions.service.user_routes import user_bp
 from src.functions.utils.logger import Logger
 
 """
@@ -51,12 +49,11 @@ timezone_str = config.get('timezone', 'UTC')
 try:
     app.config['TIMEZONE'] = pytz.timezone(timezone_str)
 except pytz.UnknownTimeZoneError:
-    # 如果时区设置错误，使用默认的 UTC 时区
     app.config['TIMEZONE'] = pytz.utc
     print(f"Unknown timezone: {timezone_str}. Using UTC as default.")
 
 # 数据库配置
-app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']  # 动态设置数据库 URI
+app.config['SQLALCHEMY_DATABASE_URI'] = config['database']['uri']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['database']['track_modifications']
 
 # CSRF配置
@@ -70,7 +67,7 @@ csrf = CSRFProtect(app)
 app.register_blueprint(api_bp, url_prefix='/api')
 
 # 注册板块蓝图
-app.register_blueprint(section_bp)  # 注册板块蓝图
+app.register_blueprint(section_bp)
 
 # 注册用户页面蓝图
 app.register_blueprint(user_bp)
@@ -85,22 +82,9 @@ with app.app_context():
     scheduler.init_app(app)
     scheduler.start()
 
-# 配置定时任务
-@scheduler.task('cron', id='calculate_contributions_task', minute='*/10')
-def scheduled_task_every_10_minutes():
-    # 确保在应用上下文中执行定时任务
-    with app.app_context():
-        scheduled_calculate_contributions()
-
-@scheduler.task('cron', id='calculate_contributions_task_at_1am', hour=1, minute=0)
-def scheduled_task_at_1am():
-    # 确保在应用上下文中执行定时任务
-    with app.app_context():
-        scheduled_calculate_contributions()
 
 @app.before_request
 def before_request():
-    # 其他逻辑
     if 'user_id' not in session:
         if request.endpoint not in ['install', 'static'] and User.query.count() == 0:
             return redirect(url_for('install'))
@@ -147,7 +131,6 @@ def inject_online_users():
         online_users['total'] += 1
         online_users['guests'] += 1
     return {'online_users': online_users}
-
 """
 路由部分
 """

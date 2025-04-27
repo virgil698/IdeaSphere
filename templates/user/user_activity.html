@@ -1,9 +1,17 @@
-<div class="heatmap-container">
-    <canvas id="contributionHeatmap"></canvas>
+<div class="contribution-grid">
+    {% for row in contributionGrid %}
+        <div class="grid-row">
+            {% for cell in row %}
+                <div class="contribution-cell" style="background-color: {{ cell.color }}">
+                    <span class="contribution-tooltip">{{ cell.tooltip }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 </div>
-<div class="heatmap-legend">
+<div class="contribution-legend">
     <div class="legend-item">
-        <span class="legend-color" style="background-color: rgba(255, 255, 255, 0.3);"></span>
+        <span class="legend-color" style="background-color: rgba(200, 200, 200, 0.3);"></span>
         <span class="legend-label">无贡献</span>
     </div>
     <div class="legend-item">
@@ -22,195 +30,79 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 获取用户UID
         const userId = {{ user.user_uid }};
 
-        // 获取 CSRF Token
-        const fetchCsrfToken = () => {
-            return fetch('/api/csrf-token', {
-                method: 'GET',
-                credentials: 'same-origin'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        fetch(`/api/csrf-token`)
+            .then(response => response.json())
             .then(data => {
-                return data.csrf_token;
+                const csrfToken = data.csrf_token;
+                return fetch(`/user/${userId}/contributions`, {
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            })
+            .then(response => response.json())
+            .then(contributionsData => {
+                // 处理贡献数据并渲染贡献表
+                renderContributionGrid(contributionsData);
             })
             .catch(error => {
-                console.error('Error fetching CSRF token:', error);
-                throw error;
+                console.error('Error fetching contribution data:', error);
             });
-        };
 
-        // 获取贡献数据
-        fetchCsrfToken().then(csrfToken => {
-            return fetch(`/user/${userId}/contributions`, {
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                    'Content-Type': 'application/json'
+        function renderContributionGrid(contributionsData) {
+            const contributionGrid = document.querySelector('.contribution-grid');
+            contributionGrid.innerHTML = ''; // 清空现有内容
+
+            const days = Object.keys(contributionsData).sort((a, b) => new Date(b) - new Date(a));
+            const grid = [
+                [], [], [], [], [], [], []
+            ]; // 7排10列的网格
+
+            days.forEach((day, index) => {
+                const value = contributionsData[day];
+                const rowIndex = Math.floor(index / 10);
+                const colIndex = index % 10;
+
+                if (rowIndex < 7) {
+                    // 根据贡献值获取颜色
+                    const color = getContributionColor(value);
+                    grid[rowIndex][colIndex] = {
+                        date: day,
+                        value: value,
+                        color: color
+                    };
                 }
             });
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // 处理数据
-            const contributionData = Object.entries(data).map(([date, value]) => {
-                const [year, month, day] = date.split('-');
-                return {
-                    x: parseInt(day),
-                    y: parseInt(month),
-                    count: parseFloat(value)
-                };
-            });
 
-            // 渲染热图
-            renderHeatmap(contributionData);
-        })
-        .catch(error => {
-            console.error('Error fetching contribution data:', error);
-        });
+            // 渲染网格
+            grid.forEach((row, rowIndex) => {
+                const gridRow = document.createElement('div');
+                gridRow.className = 'grid-row';
 
-        // 渲染热图函数
-        function renderHeatmap(data) {
-            // 获取颜色值函数
-            function getColorForValue(value) {
-                if (value === 0) return 'rgba(255, 255, 255, 0.3)';
+                row.forEach(cell => {
+                    const cellElement = document.createElement('div');
+                    cellElement.className = 'contribution-cell';
+                    cellElement.style.backgroundColor = cell ? cell.color : 'rgba(200, 200, 200, 0.3)';
 
-                // 将贡献值映射到0-1范围
-                const normalizedValue = Math.min(Math.max(value / 10, 0), 1);
-                return `rgba(94, 114, 228, ${normalizedValue * 0.7 + 0.2})`;
-            }
-
-            // 创建热图
-            const ctx = document.getElementById('contributionHeatmap').getContext('2d');
-            const heatmap = new Chart(ctx, {
-                type: 'bubble',
-                data: {
-                    datasets: [{
-                        label: '贡献热图',
-                        data: data,
-                        backgroundColor: function(context) {
-                            const count = context.dataset.data[context.dataIndex].count;
-                            return getColorForValue(count);
-                        },
-                        hoverBackgroundColor: function(context) {
-                            const count = context.dataset.data[context.dataIndex].count;
-                            return `rgba(94, 114, 228, ${Math.min(count / 10 + 0.2, 1)})`;
-                        },
-                        borderColor: 'rgba(255, 255, 255, 0.4)',
-                        borderWidth: 1,
-                        pointRadius: function(context) {
-                            const count = context.dataset.data[context.dataIndex].count;
-                            // 根据贡献值动态调整气泡大小
-                            return 3 + count * 0.5;
-                        }
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            min: 0,
-                            max: 31,
-                            title: {
-                                display: true,
-                                text: '日期',
-                                color: '#7f8c8d',
-                                font: {
-                                    size: 12,
-                                    weight: 'normal'
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(200, 200, 200, 0.1)',
-                                borderColor: 'rgba(200, 200, 200, 0.2)'
-                            },
-                            ticks: {
-                                color: '#95a5a6',
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        y: {
-                            min: 0,
-                            max: 13,
-                            title: {
-                                display: true,
-                                text: '月份',
-                                color: '#7f8c8d',
-                                font: {
-                                    size: 12,
-                                    weight: 'normal'
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(200, 200, 200, 0.1)',
-                                borderColor: 'rgba(200, 200, 200, 0.2)'
-                            },
-                            ticks: {
-                                color: '#95a5a6',
-                                font: {
-                                    size: 10
-                                },
-                                callback: function(value) {
-                                    return ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'][value - 1];
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(44, 62, 80, 0.8)',
-                            titleColor: '#ecf0f1',
-                            bodyColor: '#ecf0f1',
-                            titleFont: {
-                                size: 13,
-                                weight: 'bold'
-                            },
-                            bodyFont: {
-                                size: 12
-                            },
-                            padding: 8,
-                            cornerRadius: 4,
-                            displayColors: false,
-                            callbacks: {
-                                title: function(context) {
-                                    const dateObj = new Date(
-                                        2023, context[0].raw.y - 1, context[0].raw.x
-                                    );
-                                    return `日期: ${dateObj.toLocaleDateString()}`;
-                                },
-                                label: function(context) {
-                                    return `贡献值: ${context.raw.count.toFixed(1)}`;
-                                }
-                            }
-                        }
-                    },
-                    animation: {
-                        duration: 0
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
+                    if (cell) {
+                        cellElement.setAttribute('title', `${cell.date}: ${cell.value}次贡献`);
                     }
-                }
+
+                    gridRow.appendChild(cellElement);
+                });
+
+                contributionGrid.appendChild(gridRow);
             });
+        }
+
+        function getContributionColor(value) {
+            if (value === 0) return 'rgba(200, 200, 200, 0.3)';
+            if (value <= 5) return 'rgba(94, 114, 228, 0.3)';
+            if (value <= 10) return 'rgba(94, 114, 228, 0.6)';
+            return 'rgba(94, 114, 228, 0.9)';
         }
     });
 </script>

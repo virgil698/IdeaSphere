@@ -133,75 +133,11 @@ def user_posts(user_uid):
     return render_template('user/user_posts.html', user=user_data['user'], posts=user_data['posts'])
 
 
-# 每10分钟和凌晨1点计算贡献的函数
-def scheduled_calculate_contributions():
-    # 获取所有用户UID
-    users = User.query.all()
-    for user in users:
-        calculate_contributions(user.user_uid)
-
-def calculate_contributions(user_uid):
-    user = User.query.filter_by(user_uid=user_uid).first()
-    if not user:
-        return None
-
-    # 获取用户在过去一年内的活动数据
+@user_bp.route('/user/<int:user_uid>/contributions')
+def get_user_contributions(user_uid):
+    # 获取用户过去70天的贡献数据
     end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=365)
-
-    # 删除旧的贡献记录
-    UserContribution.query.filter_by(user_uid=user_uid).delete()
-    db.session.commit()
-
-    current_date = start_date
-    while current_date <= end_date:
-        # 计算当天的帖子数
-        posts_count = Post.query.filter(
-            Post.author_id == user.id,
-            func.date(Post.created_at) == current_date
-        ).count()
-
-        # 计算当天的评论数
-        comments_count = Comment.query.filter(
-            Comment.author_id == user.id,
-            func.date(Comment.created_at) == current_date
-        ).count()
-
-        # 计算当天的回复数
-        reply_count = ReplyComment.query.filter(
-            func.date(ReplyComment.reply_at) == current_date
-        ).count()
-
-        # 计算当天的举报数
-        reports_count = Report.query.filter(
-            Report.user_id == user.id,
-            func.date(Report.created_at) == current_date
-        ).count()
-
-        # 计算总贡献值
-        total_contribution = (posts_count * 1 +
-                              comments_count * 0.5 +
-                              reply_count * 0.5 +
-                              reports_count * 1)
-
-        # 添加到数据库
-        new_contribution = UserContribution(
-            user_uid=user_uid,
-            date=current_date,
-            contribution_value=total_contribution
-        )
-        db.session.add(new_contribution)
-
-        current_date += timedelta(days=1)
-
-    db.session.commit()
-    return {'message': 'Contributions calculated and updated successfully'}
-
-
-def get_contributions_from_db(user_uid):
-    # 查询过去一年的数据
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=365)
+    start_date = end_date - timedelta(days=69)
 
     contributions = UserContribution.query.filter(
         UserContribution.user_uid == user_uid,
@@ -209,8 +145,87 @@ def get_contributions_from_db(user_uid):
     ).all()
 
     # 格式化数据
-    result = {}
+    contributions_data = {}
     for contribution in contributions:
-        result[contribution.date.isoformat()] = contribution.contribution_value
+        contributions_data[contribution.date.isoformat()] = contribution.contribution_value
 
-    return result
+    # 补全缺失的日期（贡献值为0）
+    current_date = start_date
+    while current_date <= end_date:
+        if current_date.isoformat() not in contributions_data:
+            contributions_data[current_date.isoformat()] = 0
+        current_date += timedelta(days=1)
+
+    return jsonify(contributions_data)
+
+
+def calculate_contributions(user_uid):
+    user = User.query.filter_by(user_uid=user_uid).first()
+    if not user:
+        return None
+
+    # 获取用户过去70天的活动数据
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=69)
+
+    # 删除旧的贡献记录（保留最近70天）
+    UserContribution.query.filter(
+        UserContribution.user_uid == user_uid,
+        UserContribution.date < start_date
+    ).delete()
+    db.session.commit()
+
+    current_date = start_date
+    while current_date <= end_date:
+        # 计算当天的活动数（帖子、评论、回复、点赞、举报）
+        posts_count = Post.query.filter(
+            Post.author_id == user.id,
+            func.date(Post.created_at) == current_date
+        ).count()
+
+        comments_count = Comment.query.filter(
+            Comment.author_id == user.id,
+            func.date(Comment.created_at) == current_date
+        ).count()
+
+        reply_count = ReplyComment.query.filter(
+            func.date(ReplyComment.reply_at) == current_date
+        ).count()
+
+        like_count = Like.query.filter(
+            Like.user_id == user.id,
+            func.date(Like.created_at) == current_date
+        ).count()
+
+        report_count = Report.query.filter(
+            Report.user_id == user.id,
+            func.date(Report.created_at) == current_date
+        ).count()
+
+        # 总贡献值（每个活动算1点）
+        total_contribution = posts_count + comments_count + reply_count + like_count + report_count
+
+        # 新用户注册当天贡献为20
+        if current_date == user.created_at.date():
+            total_contribution = 20
+
+        # 添加或更新贡献记录
+        existing_contribution = UserContribution.query.filter_by(
+            user_uid=user_uid,
+            date=current_date
+        ).first()
+
+        if existing_contribution:
+            existing_contribution.contribution_value = total_contribution
+        else:
+            new_contribution = UserContribution(
+                user_uid=user_uid,
+                date=current_date,
+                contribution_value=total_contribution
+            )
+            db.session.add(new_contribution)
+
+        current_date += timedelta(days=1)
+
+    db.session.commit()
+    return {'message': 'Contributions calculated and updated successfully'}
