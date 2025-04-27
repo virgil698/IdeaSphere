@@ -64,6 +64,7 @@
                     <span>{{ '管理员' if session['role'] == 'admin' else '用户' }} ({{ session['user_id'] }})</span>
                 </a>
                 <div class="user-dropdown">
+                    <a href="/user/{{ session.get('user_id') }}"><i class="fas fa-circle-user"></i> 个人主页</a>
                     {% if session['role'] in ['admin', 'moderator'] %}
                     <a href="{{ url_for('moderation_panel') }}"><i class="fas fa-tachometer-alt"></i> 版务中心</a>
                     {% endif %}
