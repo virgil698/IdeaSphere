@@ -62,14 +62,14 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 | **🎈 API Transmission** | ✅ | v0.3.0 |
 | **📊 Post Time and Like Sorting** | ✅ | v0.3.0 |
 | **📝 Rich Text Editor** | ✅ | v0.3.0 |
+| **👤 User Page** | ✅ | v0.3.0 |
+| **📊 Contribution Graph System** | ✅ | v0.3.0 |
 | **📝 Logs Recording** | 🚧 |        |
 | **🔍 ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5  )** | 🚧 |        |
 | **✅ Full Permission Group Completion** | 🚧 |        |
 | **💬 Content Replies** | 🚧 |        |
 | **👍 Content Reactions** | 🚧 |        |
 | **⚙️ User Custom Settings** | 🚧 |        |
-| **👤 User Page** | 🚧 |        |
-| **📊 Contribution Graph System** | 🚧 |        |
 | **👥 Follow and Fans** | 🚧 |        |
 | **🔄 Dynamic System** | 🚧 |        |
 | **✉️ Private Messaging System** | ⏳ |        |
