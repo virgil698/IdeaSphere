@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask_wtf.csrf import validate_csrf
 from sqlalchemy import func
 
 from src.db_ext import db
@@ -156,12 +157,12 @@ def section_analytics():
     )
 
 # 编辑板块
-@section_bp.route('/edit/<int:section_id>', methods=['GET'])
+@section_bp.route('/edit/<int:section_id>', methods=['GET', 'POST'])
 def edit_section(section_id):
     section = Section.query.get_or_404(section_id)
 
-    # 修改板块信息
     if request.method == 'POST':
+        # 修改板块信息的逻辑保持不变
         name = request.form.get('name')
         description = request.form.get('description')
         icon = request.form.get('icon')
@@ -191,11 +192,23 @@ def edit_section(section_id):
 
         flash('板块更新成功', 'success')
         return redirect(url_for('section.sections'))
-    return render_template('section/section_edit.html', section=section)
+    else:
+        # GET 请求，显示编辑表单
+        return render_template('section/section_edit.html', section=section)
 
 # 删除板块
 @section_bp.route('/delete/<int:section_id>', methods=['POST'])
 def delete_section(section_id):
+    # 验证 CSRF Token
+    csrf_token = request.form.get('csrf_token')
+    if not csrf_token:
+        return jsonify({'message': 'CSRF Token missing'}), 403
+
+    try:
+        validate_csrf(csrf_token)
+    except:
+        return jsonify({'message': 'Invalid CSRF Token'}), 403
+
     section = Section.query.get_or_404(section_id)
 
     # 删除板块关联的帖子和评论

@@ -139,3 +139,23 @@
     padding-bottom: 20px; /* 可选：增加底部内边距 */
     border-bottom: 1px solid #eee; /* 可选：增加分隔线 */
 }
+
+.delete-section-btn {
+    margin-left: 10px;
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.delete-section-btn i {
+    margin-right: 5px;
+}
+
+.delete-section-btn:hover {
+    background-color: #c82333;
+}

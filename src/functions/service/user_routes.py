@@ -1,5 +1,3 @@
-# src/functions/service/user_routes.py
-
 from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, jsonify
@@ -32,7 +30,8 @@ def get_user_data(user_uid):
         'blog': "https://blog.beixibaobao.com/",
         'posts_count': Post.query.filter_by(author_id=user.id, deleted=False).count(),
         'following_count': 7,
-        'followers_count': 49
+        'followers_count': 49,
+        'kanji': "感谢大家的支持"
     }
 
     # 获取用户的活动信息
@@ -45,13 +44,15 @@ def get_user_data(user_uid):
             'time': post.created_at.strftime('%Y-%m-%d %H:%M:%S')
         })
 
-    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(10).all():
-        activity_data.append({
-            'id': comment.id,
-            'type': 'comment',
-            'content': comment.content,
-            'time': comment.created_at.strftime('%Y-%m-%d %H:%M:%S')
-        })
+    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(
+            10).all():
+        if comment:  # 确保评论存在
+            activity_data.append({
+                'id': comment.id,
+                'type': 'comment',
+                'content': comment.content,
+                'time': comment.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            })
 
     # 获取用户的点赞信息
     likes = Like.query.filter_by(user_id=user.id).all()
@@ -59,20 +60,22 @@ def get_user_data(user_uid):
     for like in likes:
         if like.post_id:
             post = Post.query.get(like.post_id)
-            like_data.append({
-                'id': post.id,
-                'type': 'post',
-                'title': post.title,
-                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            })
+            if post:  # 确保帖子存在
+                like_data.append({
+                    'id': post.id,
+                    'type': 'post',
+                    'title': post.title,
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                })
         elif like.comment_id:
             comment = Comment.query.get(like.comment_id)
-            like_data.append({
-                'id': comment.id,
-                'type': 'comment',
-                'content': comment.content,
-                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            })
+            if comment:  # 确保评论存在
+                like_data.append({
+                    'id': comment.id,
+                    'type': 'comment',
+                    'content': comment.content,
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                })
 
     # 获取用户的投稿帖子
     posts = Post.query.filter_by(author_id=user.id, deleted=False).order_by(Post.created_at.desc()).all()

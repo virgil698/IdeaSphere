@@ -57,6 +57,10 @@
                 <span class="detail-label">注册时间</span>
                 <span class="detail-value">{{ user.registered_time if user.registered_time else '未知' }}</span>
             </div>
+            <div class="detail-item">
+                <span class="detail-label">个人简介</span>
+                <span class="detail-value">{{ user.kanji if user.kanji else '暂未设置' }}</span>
+            </div>
         </div>
 
         <div class="detail-section">

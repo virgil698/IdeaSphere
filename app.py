@@ -126,7 +126,7 @@ def inject_online_users():
     if g.user:
         online_users['total'] += 1
         online_users['users'] += 1
-        online_users['users_list'].append(g.user.username)
+        online_users['users_list'].append({'user_uid': g.user.user_uid, 'username': g.user.username})
     else:
         online_users['total'] += 1
         online_users['guests'] += 1

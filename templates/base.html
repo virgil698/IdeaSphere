@@ -105,7 +105,7 @@
                                     {% for user in online_users.users_list %}
                                     <div class="user-tag">
                                         <i class="fas fa-user-circle"></i>
-                                        <span>{{ user }}</span>
+                                        <a href="/user/{{ user.user_uid }}" class="online-username">{{ user.username }}</a>
                                     </div>
                                     {% endfor %}
                                 </div>

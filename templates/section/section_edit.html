@@ -12,6 +12,7 @@
         
         <form method="POST" class="edit-section-form" id="editSectionForm">
             <input type="hidden" name="section_id" value="{{ section.id }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="form-group">
                 <label for="name">板块名称</label>
@@ -49,52 +50,38 @@
 
 {% block scripts %}
 <script>
-    // 获取 CSRF Token
-    async function getCSRFToken() {
-        const response = await fetch('/api/csrf-token');
-        const data = await response.json();
-        return data.csrf_token;
-    }
+document.getElementById('editSectionForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-    // 实时预览图标
-    document.getElementById('icon').addEventListener('input', function() {
-        const iconPreview = document.querySelector('.icon-preview i');
-        iconPreview.className = this.value;
-    });
+    try {
+        const csrfToken = await getCSRFToken();
+        const formData = new FormData(this);
+        const data = {};
 
-    // 表单提交处理
-    document.getElementById('editSectionForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        try {
-            const csrfToken = await getCSRFToken();
-            const formData = new FormData(this);
-            const data = {};
-
-            for (const [key, value] of formData.entries()) {
-                data[key] = value;
-            }
-
-            const response = await fetch(`/section/edit/{{ section.id }}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('板块更新成功');
-                window.location.href = "{{ url_for('section.sections') }}";
-            } else {
-                const error = await response.json();
-                alert('更新板块失败: ' + error.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('更新板块时发生错误');
+        for (const [key, value] of formData.entries()) {
+            data[key] = value;
         }
-    });
+
+        const response = await fetch(`/section/edit/${{ section.id }}`, { // 确保这里使用 POST 方法
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('板块更新成功');
+            window.location.href = "{{ url_for('section.sections') }}";
+        } else {
+            const error = await response.json();
+            alert('更新板块失败: ' + error.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('更新板块时发生错误');
+    }
+});
 </script>
 {% endblock %}

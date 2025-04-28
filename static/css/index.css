@@ -345,8 +345,23 @@ section {
     font-size: 0.875rem;
 }
 
+.user-tag .fas {
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.online-username {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
 .user-tag:hover {
-    background: var(--primary-color);
+    background-color: #7a87e0;
+}
+
+.user-tag:hover .fas,
+.user-tag:hover .online-username {
     color: white;
 }
 

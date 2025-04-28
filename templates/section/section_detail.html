@@ -32,6 +32,13 @@
         <a href="{{ url_for('section.edit_section', section_id=section.id) }}" class="edit-section-btn">
             <i class="fas fa-edit"></i> 编辑板块
         </a>
+        <form action="{{ url_for('section.delete_section', section_id=section.id) }}" method="POST" style="display: inline;">
+            <!-- 获取 CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="delete-section-btn" onclick="return confirm('确定要删除这个板块吗？此操作不可逆！')">
+                <i class="fas fa-trash"></i> 删除板块
+            </button>
+        </form>
         {% endif %}
     </div>
 
@@ -106,4 +113,5 @@
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/section_detail.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/sorting.css') }}">
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 {% endblock %}
