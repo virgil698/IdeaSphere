@@ -19,7 +19,7 @@ def create_post_logic():
         # 检查是否选择了板块
         if not section_id:
             flash('请选择板块后才能发布帖子', 'danger')  # 提示用户选择板块
-            return render_template('post.html', sections=sections)  # 返回到发帖页面并传递板块信息
+            return render_template('post/post.html', sections=sections)  # 返回到发帖页面并传递板块信息
 
         html_content = convert_markdown_to_html(content)
         new_post = Post(
@@ -33,7 +33,7 @@ def create_post_logic():
         db.session.commit()
         flash('帖子创建成功！', 'success')
         return redirect(url_for('index'))
-    return render_template('post.html', sections=sections)  # 传递板块信息到前端
+    return render_template('post/post.html', sections=sections)  # 传递板块信息到前端
 
 
 def view_post_logic(post_id):
@@ -85,4 +85,4 @@ def view_post_logic(post_id):
             return redirect(url_for('view_post', post_id=post.id))
 
     comments = Comment.query.filter_by(post_id=post.id, deleted=False).all()
-    return render_template('view_post.html', post=post, comments=comments, section=section)
+    return render_template('post/view_post.html', post=post, comments=comments, section=section)

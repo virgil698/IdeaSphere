@@ -151,7 +151,7 @@ def edit_post_logic(post_id):
         flash('帖子编辑成功！', 'success')
         return redirect(url_for('manage_posts'))
 
-    return render_template('edit_post.html', post=post)
+    return render_template('post/edit_post.html', post=post)
 
 def follow_user_logic(follower_id, following_id):
     if not g.user:
