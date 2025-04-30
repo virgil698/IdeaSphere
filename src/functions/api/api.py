@@ -8,7 +8,7 @@ from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, UserFollowerCount, \
-    UserFollowRelation
+    UserFollowRelation, UserFollowingCount
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 from src.functions.service.user_operations import reply_logic
 
@@ -244,7 +244,7 @@ def follow_user():
     )
     db.session.add(new_follow)
 
-    # 更新粉丝数量
+    # 更新粉丝数量（被关注者）
     follower_count_entry = UserFollowerCount.query.filter_by(
         user_user_uid=target_user_uid
     ).first()
@@ -257,6 +257,20 @@ def follow_user():
             follower_count=1
         )
         db.session.add(new_follower_count)
+
+    # 更新关注数量（当前用户）
+    following_count_entry = UserFollowingCount.query.filter_by(
+        user_user_uid=request.user.user_uid
+    ).first()
+
+    if following_count_entry:
+        following_count_entry.following_count += 1
+    else:
+        new_following_count = UserFollowingCount(
+            user_user_uid=request.user.user_uid,
+            following_count=1
+        )
+        db.session.add(new_following_count)
 
     db.session.commit()
 
@@ -297,7 +311,7 @@ def unfollow_user():
     # 删除关注关系
     db.session.delete(existing_follow)
 
-    # 更新粉丝数量
+    # 更新粉丝数量（被关注者）
     follower_count_entry = UserFollowerCount.query.filter_by(
         user_user_uid=target_user_uid
     ).first()
@@ -306,6 +320,16 @@ def unfollow_user():
         follower_count_entry.follower_count -= 1
         if follower_count_entry.follower_count < 0:
             follower_count_entry.follower_count = 0
+
+    # 更新关注数量（当前用户）
+    following_count_entry = UserFollowingCount.query.filter_by(
+        user_user_uid=request.user.user_uid
+    ).first()
+
+    if following_count_entry:
+        following_count_entry.following_count -= 1
+        if following_count_entry.following_count < 0:
+            following_count_entry.following_count = 0
 
     db.session.commit()
 

@@ -515,6 +515,10 @@
     background-color: #f0f3ff;
 }
 
+.unfollow-link {
+    font-size: 15px;
+}
+
 /* 菜单样式 */
 .follow-menu {
     display: none;

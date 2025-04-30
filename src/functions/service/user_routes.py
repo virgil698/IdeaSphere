@@ -5,20 +5,31 @@ from sqlalchemy import func
 
 from src.db_ext import db
 from src.functions.database.models import User, Post, Comment, Report, Like, UserContribution, ReplyComment, \
-    UserFollowRelation
+    UserFollowRelation, UserFollowingCount, UserFollowerCount
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route('/user')
 def get_user_data(user_uid):
     user = User.query.filter_by(user_uid=user_uid).first()
     if not user:
         return None
 
+    # 获取用户的关注数量
+    following_count_entry = UserFollowingCount.query.filter_by(
+        user_user_uid=user_uid
+    ).first()
+    following_count = following_count_entry.following_count if following_count_entry else 0
+
+    # 获取用户的粉丝数量
+    follower_count_entry = UserFollowerCount.query.filter_by(
+        user_user_uid=user_uid
+    ).first()
+    follower_count = follower_count_entry.follower_count if follower_count_entry else 0
+
     # 获取用户的基本信息
     user_data = {
         'id': user.id,
-        'user_uid': user.user_uid,
+        'user_uid': user.user_uid,  # 确保这里返回的是正确的 user_uid
         'username': user.username,
         'brief': f"用户 {user.username} 的个人空间",
         'location': "四川，中国",
@@ -30,8 +41,8 @@ def get_user_data(user_uid):
         'weibo': "https://weibo.com/u/123456789",
         'blog': "https://blog.beixibaobao.com/",
         'posts_count': Post.query.filter_by(author_id=user.id, deleted=False).count(),
-        'following_count': 7,
-        'followers_count': 49,
+        'following_count': following_count,
+        'followers_count': follower_count,
         'kanji': "感谢大家的支持"
     }
 
@@ -45,8 +56,7 @@ def get_user_data(user_uid):
             'time': post.created_at.strftime('%Y-%m-%d %H:%M:%S')
         })
 
-    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(
-            10).all():
+    for comment in Comment.query.filter_by(author_id=user.id, deleted=False).order_by(Comment.created_at.desc()).limit(10).all():
         if comment:  # 确保评论存在
             activity_data.append({
                 'id': comment.id,
@@ -115,8 +125,34 @@ def profile(user_uid):
         ).first()
         is_following = existing_follow is not None
 
-    return render_template('user/user_profile.html', user=user_data['user'], activities=user_data['activities'],
-                           likes=user_data['likes'], posts=user_data['posts'], is_following=is_following, current_user=g.user)
+    # 获取用户的关注数量
+    following_count_entry = UserFollowingCount.query.filter_by(
+        user_user_uid=user_uid
+    ).first()
+    following_count = following_count_entry.following_count if following_count_entry else 0
+
+    # 获取用户的粉丝数量
+    follower_count_entry = UserFollowerCount.query.filter_by(
+        user_user_uid=user_uid
+    ).first()
+    follower_count = follower_count_entry.follower_count if follower_count_entry else 0
+
+    # 调试输出
+    print(f"Current User UID: {g.user.user_uid if g.user else None}")
+    print(f"Target User UID: {user_uid}")
+    print(f"Is Following: {is_following}")
+
+    return render_template(
+        'user/user_profile.html',
+        user=user_data['user'],
+        activities=user_data['activities'],
+        likes=user_data['likes'],
+        posts=user_data['posts'],
+        is_following=is_following,
+        following_count=following_count,
+        follower_count=follower_count,
+        current_user=g.user
+    )
 
 
 @user_bp.route('/user/<int:user_uid>/activity')

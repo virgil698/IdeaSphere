@@ -146,3 +146,8 @@ class UserFollowerCount(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), unique=True, nullable=False)
     follower_count = db.Column(db.Integer, default=0)
+
+class UserFollowingCount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), unique=True, nullable=False)
+    following_count = db.Column(db.Integer, default=0)

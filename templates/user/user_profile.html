@@ -193,41 +193,49 @@ function followUser(userId) {
             showNotification('关注成功');
             // 更新按钮状态
             const btn = document.querySelector(`.follow-btn[data-user-id="${userId}"]`);
-            btn.remove();
+            if (btn) {  // 确保按钮元素存在
+                btn.remove();
 
-            const followedBtnContainer = document.createElement('div');
-            followedBtnContainer.className = 'followed-btn-container';
+                const followedBtnContainer = document.createElement('div');
+                followedBtnContainer.className = 'followed-btn-container';
 
-            const followedBtn = document.createElement('button');
-            followedBtn.className = 'followed-btn';
-            followedBtn.setAttribute('data-user-id', userId);
-            followedBtn.innerHTML = '<i class="fa-solid fa-bars"></i> 已关注';
+                const followedBtn = document.createElement('button');
+                followedBtn.className = 'followed-btn';
+                followedBtn.setAttribute('data-user-id', userId);
+                followedBtn.innerHTML = '<i class="fa-solid fa-bars"></i> 已关注';
 
-            const followMenu = document.createElement('div');
-            followMenu.className = 'follow-menu';
+                const followMenu = document.createElement('div');
+                followMenu.className = 'follow-menu';
 
-            const unfollowLink = document.createElement('a');
-            unfollowLink.className = 'unfollow-link';
-            unfollowLink.setAttribute('data-user-id', userId);
-            unfollowLink.href = '#';
-            unfollowLink.textContent = '取消关注';
+                const unfollowLink = document.createElement('a');
+                unfollowLink.className = 'unfollow-link';
+                unfollowLink.setAttribute('data-user-id', userId);
+                unfollowLink.href = '#';
+                unfollowLink.textContent = '取消关注';
 
-            followMenu.appendChild(unfollowLink);
-            followedBtnContainer.appendChild(followedBtn);
-            followedBtnContainer.appendChild(followMenu);
+                followMenu.appendChild(unfollowLink);
+                followedBtnContainer.appendChild(followedBtn);
+                followedBtnContainer.appendChild(followMenu);
 
-            btn.parentNode.appendChild(followedBtnContainer);
+                // 确保父元素存在
+                if (btn.parentNode) {
+                    btn.parentNode.appendChild(followedBtnContainer);
+                }
 
-            // 重新绑定事件
-            followedBtn.addEventListener('click', function() {
-                const menu = this.nextElementSibling;
-                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-            });
+                // 重新绑定事件
+                followedBtn.addEventListener('click', function() {
+                    const menu = this.nextElementSibling;
+                    if (menu) {
+                        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
 
-            unfollowLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                unfollowUser(userId);
-            });
+                unfollowLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-user-id');
+                    unfollowUser(userId);
+                });
+            }
         } else {
             showNotification(data.message, 'error');
         }
