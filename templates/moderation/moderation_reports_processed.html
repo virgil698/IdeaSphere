@@ -1,0 +1,82 @@
+{% extends "moderation/moderation_panel.html" %}
+
+{% set active_tab = "processed" %}
+
+{% block moderation_content %}
+<div class="moderation-content">
+    <div class="tab-header">
+        <h4>已处理举报</h4>
+        <div class="tab-actions">
+            <div class="search-box">
+                <input type="text" placeholder="搜索举报..." id="reportSearch">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </div>
+    
+    {% if processed_reports %}
+        <div class="report-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>举报ID</th>
+                        <th>举报人</th>
+                        <th>被举报人</th>
+                        <th>举报类别</th>
+                        <th>举报内容</th>
+                        <th>举报原因</th>
+                        <th>处理方式</th>
+                        <th>处理时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in processed_reports %}
+                    <tr>
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.reporter.username }}</td>
+                        <td>{{ report.offender.username }}</td>
+                        <td>{{ report.category }}</td>
+                        <td>
+                            {% if report.category == 'post' %}
+                                <a href="{{ url_for('view_post', post_id=report.post_id) }}" class="report-link">
+                                    <i class="fas fa-link"></i> 查看帖子
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('view_comment', comment_id=report.comment_id) }}" class="report-link">
+                                    <i class="fas fa-link"></i> 查看评论
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>{{ report.reason }}</td>
+                        <td>
+                            {% if report.status == 'invalid' %}
+                                <span class="badge badge-danger">已违规</span>
+                            {% else %}
+                                <span class="badge badge-success">未违规</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ report.processed_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            {% for page in pagination_pages %}
+                {% if page == current_page %}
+                    <span class="page-number active">{{ page }}</span>
+                {% else %}
+                    <a href="{{ url_for('moderation_reports_processed', page=page) }}" class="page-number">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> 暂无已处理举报记录
+        </div>
+    {% endif %}
+</div>
+
+<script type="module" src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/report.js') }}"></script>
+{% endblock %}

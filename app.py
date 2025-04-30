@@ -1,4 +1,5 @@
 import os
+
 import pytz
 from flask import Flask, request, session, redirect, url_for, g, jsonify, render_template
 from flask_apscheduler import APScheduler
@@ -15,18 +16,18 @@ from src.functions.icenter.icenter_login import icenter_login_logic
 from src.functions.icenter.index_logic_for_icenter import return_icenter_index_templates, \
     return_icenter_execute_sql_templates, return_icenter_editor
 from src.functions.index import index_logic, newest_logic, global_logic
+from src.functions.moderation.moderation import moderation_bp
 from src.functions.parser.markdown_parser import remove_markdown
 from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.section.section import section_bp
 from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
-from src.functions.service.moderation import moderation_panel_logic, manage_reports_logic, manage_users_logic, \
-    manage_posts_logic, delete_post_logic
+from src.functions.service.moderation import manage_posts_logic, delete_post_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
-from src.functions.service.user_operations import reply_logic, report_post_logic, like_post_logic, report_comment_logic, \
+from src.functions.service.user_operations import reply_logic, like_post_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic, \
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
 from src.functions.service.user_routes import user_bp
@@ -71,6 +72,9 @@ app.register_blueprint(section_bp)
 
 # 注册用户页面蓝图
 app.register_blueprint(user_bp)
+
+# 注册版务中心页面蓝图
+app.register_blueprint(moderation_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
@@ -173,26 +177,6 @@ def create_post():
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def view_post(post_id):
     return view_post_logic(post_id)
-
-@app.route('/moderation')
-def moderation_panel():
-    return moderation_panel_logic()
-
-@app.route('/manage_users')
-def manage_users():
-    return manage_users_logic()
-
-@app.route('/manage_reports')
-def manage_reports():
-    return manage_reports_logic()
-
-@app.route('/report_post/<int:post_id>', methods=['POST'])
-def report_post(post_id):
-    return report_post_logic(post_id)
-
-@app.route('/report_comment/<int:comment_id>', methods=['POST'])
-def report_comment(comment_id):
-    return report_comment_logic(comment_id)
 
 @app.route('/like_post/<int:post_id>', methods=['POST'])
 def like_post(post_id):

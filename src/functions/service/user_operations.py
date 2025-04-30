@@ -6,42 +6,6 @@ from src.functions.database.models import Report, db, Like, Post, Comment, User,
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 
-def report_post_logic(post_id):
-    if not g.user:
-        return jsonify({'success': False, 'message': '请登录后再进行举报'})
-
-    reason = request.json.get('reason', '')
-    if not reason:
-        return jsonify({'success': False, 'message': '举报原因不能为空'})
-
-    existing_report = Report.query.filter_by(post_id=post_id, user_id=g.user.id).first()
-    if existing_report:
-        return jsonify({'success': False, 'message': '您已经举报过此帖子'})
-
-    new_report = Report(post_id=post_id, user_id=g.user.id, reason=reason)
-    db.session.add(new_report)
-    db.session.commit()
-    return jsonify({'success': True, 'message': '举报成功！'})
-
-
-def report_comment_logic(comment_id):
-    if not g.user:
-        return jsonify({'success': False, 'message': '请登录后再进行举报'})
-
-    reason = request.json.get('reason', '')
-    if not reason:
-        return jsonify({'success': False, 'message': '举报原因不能为空'})
-
-    existing_report = Report.query.filter_by(comment_id=comment_id, user_id=g.user.id).first()
-    if existing_report:
-        return jsonify({'success': False, 'message': '您已经举报过此评论'})
-
-    new_report = Report(comment_id=comment_id, user_id=g.user.id, reason=reason)
-    db.session.add(new_report)
-    db.session.commit()
-    return jsonify({'success': True, 'message': '举报成功！'})
-
-
 def like_post_logic(post_id):
     if not g.user:
         return jsonify({'success': False, 'message': '未登录'})

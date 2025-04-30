@@ -91,7 +91,7 @@ def like_post(post_id):
     return jsonify({'message': 'Post liked successfully'}), 200
 
 # 示例：举报帖子的API
-@api_bp.route('/post/<int:post_id>/report', methods=['POST'])
+@api_bp.route('/report_post/<int:post_id>', methods=['POST'])
 def report_post(post_id):
     # 确保用户已登录
     if not request.user:
@@ -106,6 +106,22 @@ def report_post(post_id):
     db.session.add(new_report)
     db.session.commit()
     return jsonify({'message': 'Post reported successfully'}), 200
+
+@api_bp.route('/report_comment/<int:comment_id>', methods=['POST'])
+def report_comment(comment_id):
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized'}), 401
+    data = request.get_json()
+    if not data or 'reason' not in data:
+        return jsonify({'message': 'Invalid data'}), 400
+    existing_report = Report.query.filter_by(comment_id=comment_id, user_id=request.user.id).first()
+    if existing_report:
+        return jsonify({'message': 'You have already reported this comment'}), 400
+    new_report = Report(comment_id=comment_id, user_id=request.user.id, reason=data['reason'])
+    db.session.add(new_report)
+    db.session.commit()
+    return jsonify({'message': 'Comment reported successfully'}), 200
 
 # 示例：评论帖子的API
 @api_bp.route('/post/<int:post_id>/comment', methods=['POST'])

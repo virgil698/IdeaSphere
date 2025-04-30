@@ -45,7 +45,7 @@
                 <a href="{{ url_for('index') }}" class="nav-link">首页</a>
                 <a href="{{ url_for('section.sections') }}" class="nav-link">版块分类</a>
                 {% if 'role' in session and session['role'] in ['admin', 'moderator'] %}
-                <a href="{{ url_for('moderation_panel') }}" class="nav-link">版务中心</a>
+                <a href="{{ url_for('moderation.moderation_panel') }}" class="nav-link">版务中心</a>
                 {% endif %}
             </div>
         </div>
@@ -66,7 +66,7 @@
                 <div class="user-dropdown">
                     <a href="/user/{{ session.get('user_id') }}"><i class="fas fa-circle-user"></i> 个人主页</a>
                     {% if session['role'] in ['admin', 'moderator'] %}
-                    <a href="{{ url_for('moderation_panel') }}"><i class="fas fa-tachometer-alt"></i> 版务中心</a>
+                    <a href="{{ url_for('moderation.moderation_panel') }}"><i class="fas fa-tachometer-alt"></i> 版务中心</a>
                     {% endif %}
                     <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
                 </div>
