@@ -2,13 +2,13 @@
 API
 @Dev virgil698
 """
-from datetime import datetime
 
 from flask import Blueprint, jsonify, request
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from src.db_ext import db
-from src.functions.database.models import Post, Comment, Report, Like, Section, User  # 确保导入 User 模型
+from src.functions.database.models import Post, Comment, Report, Like, Section, UserFollowerCount, \
+    UserFollowRelation
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 from src.functions.service.user_operations import reply_logic
 
@@ -206,8 +206,8 @@ def edit_section(section_id):
     return jsonify({'message': '板块更新成功', 'section_id': section.id}), 200
 
 # 关注用户的API
-@api_bp.route('/user/<int:user_id>/follow', methods=['POST'])
-def follow_user(user_id):
+@api_bp.route('/follow-user', methods=['POST'])
+def follow_user():
     # 验证 CSRF Token
     csrf_token = request.headers.get('X-CSRFToken')
     if not csrf_token:
@@ -222,21 +222,49 @@ def follow_user(user_id):
     if not request.user:
         return jsonify({'message': 'Unauthorized'}), 401
 
+    data = request.get_json()
+    target_user_uid = data.get('target_user_uid')
+
+    if not target_user_uid:
+        return jsonify({'message': 'Missing target_user_uid'}), 400
+
     # 检查是否已经关注
-    existing_follow = request.user.following.filter_by(following_id=user_id).first()
+    existing_follow = UserFollowRelation.query.filter_by(
+        follower_user_uid=request.user.user_uid,
+        following_user_uid=target_user_uid
+    ).first()
+
     if existing_follow:
         return jsonify({'message': 'You have already followed this user'}), 400
 
     # 添加关注关系
-    current_time = datetime.now().timestamp()
-    request.user.following.append(User(id=user_id))
+    new_follow = UserFollowRelation(
+        follower_user_uid=request.user.user_uid,
+        following_user_uid=target_user_uid
+    )
+    db.session.add(new_follow)
+
+    # 更新粉丝数量
+    follower_count_entry = UserFollowerCount.query.filter_by(
+        user_user_uid=target_user_uid
+    ).first()
+
+    if follower_count_entry:
+        follower_count_entry.follower_count += 1
+    else:
+        new_follower_count = UserFollowerCount(
+            user_user_uid=target_user_uid,
+            follower_count=1
+        )
+        db.session.add(new_follower_count)
+
     db.session.commit()
 
-    return jsonify({'message': 'User followed successfully'}), 200
+    return jsonify({'success': True, 'message': 'User followed successfully'}), 200
 
 # 取消关注用户的API
-@api_bp.route('/user/<int:user_id>/unfollow', methods=['POST'])
-def unfollow_user(user_id):
+@api_bp.route('/unfollow-user', methods=['POST'])
+def unfollow_user():
     # 验证 CSRF Token
     csrf_token = request.headers.get('X-CSRFToken')
     if not csrf_token:
@@ -251,16 +279,37 @@ def unfollow_user(user_id):
     if not request.user:
         return jsonify({'message': 'Unauthorized'}), 401
 
-    # 检查是否已经关注
-    existing_follow = request.user.following.filter_by(following_id=user_id).first()
+    data = request.get_json()
+    target_user_uid = data.get('target_user_uid')
+
+    if not target_user_uid:
+        return jsonify({'message': 'Missing target_user_uid'}), 400
+
+    # 查找关注记录
+    existing_follow = UserFollowRelation.query.filter_by(
+        follower_user_uid=request.user.user_uid,
+        following_user_uid=target_user_uid
+    ).first()
+
     if not existing_follow:
         return jsonify({'message': 'You have not followed this user'}), 400
 
-    # 移除关注关系
-    request.user.following.remove(existing_follow)
+    # 删除关注关系
+    db.session.delete(existing_follow)
+
+    # 更新粉丝数量
+    follower_count_entry = UserFollowerCount.query.filter_by(
+        user_user_uid=target_user_uid
+    ).first()
+
+    if follower_count_entry:
+        follower_count_entry.follower_count -= 1
+        if follower_count_entry.follower_count < 0:
+            follower_count_entry.follower_count = 0
+
     db.session.commit()
 
-    return jsonify({'message': 'User unfollowed successfully'}), 200
+    return jsonify({'success': True, 'message': 'User unfollowed successfully'}), 200
 
 # 评论回复的 API
 @api_bp.route('/comment/<int:comment_id>/reply', methods=['POST'])

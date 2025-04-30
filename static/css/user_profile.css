@@ -464,58 +464,136 @@
     margin-right: 5px;
 }
 
-/* 树洞样式连接 */
-.treeholes-link {
-    display: flex;
+/* 关注按钮样式 */
+.follow-btn {
+    background-color: #6C63FF;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
-    padding: 12px 15px;
-    color: #5e72e4;
-    font-weight: 500;
-    font-size: 17px;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.2s ease;
+    margin-left: 10px;
+    transition: background-color 0.2s;
 }
 
-.treeholes-link i {
-    margin-right: 8px;
-    font-size: 19px;
+.follow-btn i {
+    margin-right: 5px;
 }
 
-.treeholes-link:hover {
-    color: #4c5ec9;
+.follow-btn:hover {
+    background-color: #5a52d9;
+}
+
+/* 已关注按钮样式 */
+.followed-btn-container {
+    position: relative;
+    display: inline-block;
+}
+
+.followed-btn {
+    background-color: white;
+    color: #5E72E4;
+    border: 1px solid #5E72E4;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+    transition: all 0.2s;
+}
+
+.followed-btn i {
+    margin-right: 5px;
+}
+
+.followed-btn:hover {
+    background-color: #f0f3ff;
+}
+
+/* 菜单样式 */
+.follow-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+    margin-top: 5px;
+    z-index: 100;
+}
+
+.follow-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
     text-decoration: none;
-    background-color: #f7f7ff;
+    transition: background-color 0.2s;
 }
 
+.follow-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+/* 通知样式 */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification.error {
+    background-color: #F44336;
+}
+
+.notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
 /* 响应式调整 */
 @media (max-width: 768px) {
     .user-profile {
         border-radius: 0;
     }
-    
+
     .user-cover {
         height: 160px;
     }
-    
+
     .profile-content {
         padding: 15px;
     }
-    
+
     .user-avatar-container {
         left: 15px;
         width: 85px;
         height: 85px;
     }
-    
+
     .user-name {
         margin-top: 35px;
         font-size: 24px;
     }
-    
+
     .content-section {
         padding: 15px;
     }
-    
+
     .detail-label {
         width: 100px;
     }

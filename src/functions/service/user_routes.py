@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, g
 from sqlalchemy import func
 
 from src.db_ext import db
-from src.functions.database.models import User, Post, Comment, Report, Like, UserContribution, ReplyComment
+from src.functions.database.models import User, Post, Comment, Report, Like, UserContribution, ReplyComment, \
+    UserFollowRelation
 
 user_bp = Blueprint('user', __name__)
 
@@ -105,8 +106,17 @@ def profile(user_uid):
     if not user_data:
         return jsonify({'error': '用户不存在'}), 404
 
+    # 获取当前用户是否已关注该用户
+    is_following = False
+    if g.user:
+        existing_follow = UserFollowRelation.query.filter_by(
+            follower_user_uid=g.user.user_uid,
+            following_user_uid=user_uid
+        ).first()
+        is_following = existing_follow is not None
+
     return render_template('user/user_profile.html', user=user_data['user'], activities=user_data['activities'],
-                           likes=user_data['likes'], posts=user_data['posts'])
+                           likes=user_data['likes'], posts=user_data['posts'], is_following=is_following, current_user=g.user)
 
 
 @user_bp.route('/user/<int:user_uid>/activity')

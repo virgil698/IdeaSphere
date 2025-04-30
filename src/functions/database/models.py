@@ -135,3 +135,14 @@ class InstallationStatus(db.Model):
 class SearchModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(100), unique=True, nullable=False)
+
+class UserFollowRelation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    follower_user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), nullable=False)
+    following_user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), nullable=False)
+    follow_time = db.Column(db.DateTime, default=datetime.utcnow)
+
+class UserFollowerCount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_user_uid = db.Column(db.Integer, db.ForeignKey('user.user_uid'), unique=True, nullable=False)
+    follower_count = db.Column(db.Integer, default=0)

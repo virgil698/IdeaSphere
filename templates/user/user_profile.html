@@ -13,9 +13,27 @@
                 <img src="{{ url_for('static', filename='img/user-avatar.jpg') }}" alt="用户头像" class="user-avatar">
             </div>
             
-            <h1 class="user-name">{{ user.username }}</h1>
+            <h1 class="user-name">
+                {{ user.username }}
+                {% if current_user and current_user.user_uid != user.user_uid %}
+                    {% if not is_following %}
+                        <button class="follow-btn" data-user-id="{{ user.user_uid }}">
+                            <i class="fa-solid fa-plus"></i> 关注
+                        </button>
+                    {% else %}
+                        <div class="followed-btn-container">
+                            <button class="followed-btn" data-user-id="{{ user.user_uid }}">
+                                <i class="fa-solid fa-bars"></i> 已关注
+                            </button>
+                            <div class="follow-menu">
+                                <a href="#" class="unfollow-link" data-user-id="{{ user.user_uid }}">取消关注</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </h1>
             <p class="user-brief">{{ user.brief if user.brief else '这个人很懒，什么都没有写~' }}</p>
-            
+
             <div class="user-stats">
                 <div class="stat-item">
                     <span class="stat-value">{{ user.user_uid }}</span>
@@ -110,5 +128,182 @@
         {% include "user/user_posts.html" %}
     </div>
 </div>
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user_profile.css') }}">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 关注按钮点击事件
+        const followBtns = document.querySelectorAll('.follow-btn');
+        followBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.getAttribute('data-user-id');
+                followUser(userId);
+            });
+        });
+
+        // 取消关注链接点击事件
+        const unfollowLinks = document.querySelectorAll('.unfollow-link');
+        unfollowLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const userId = this.getAttribute('data-user-id');
+                unfollowUser(userId);
+            });
+        });
+
+        // 已关注按钮点击事件（显示菜单）
+        const followedBtns = document.querySelectorAll('.followed-btn');
+        followedBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const menu = this.nextElementSibling;
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // 点击页面其他地方关闭菜单
+        document.addEventListener('click', function(e) {
+            const followMenus = document.querySelectorAll('.follow-menu');
+            followMenus.forEach(menu => {
+                if (!menu.contains(e.target) && e.target !== menu.previousElementSibling) {
+                    menu.style.display = 'none';
+                }
+            });
+        });
+
+// 关注用户函数
+function followUser(userId) {
+    fetch('/api/follow-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            target_user_uid: userId
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showNotification('关注成功');
+            // 更新按钮状态
+            const btn = document.querySelector(`.follow-btn[data-user-id="${userId}"]`);
+            btn.remove();
+
+            const followedBtnContainer = document.createElement('div');
+            followedBtnContainer.className = 'followed-btn-container';
+
+            const followedBtn = document.createElement('button');
+            followedBtn.className = 'followed-btn';
+            followedBtn.setAttribute('data-user-id', userId);
+            followedBtn.innerHTML = '<i class="fa-solid fa-bars"></i> 已关注';
+
+            const followMenu = document.createElement('div');
+            followMenu.className = 'follow-menu';
+
+            const unfollowLink = document.createElement('a');
+            unfollowLink.className = 'unfollow-link';
+            unfollowLink.setAttribute('data-user-id', userId);
+            unfollowLink.href = '#';
+            unfollowLink.textContent = '取消关注';
+
+            followMenu.appendChild(unfollowLink);
+            followedBtnContainer.appendChild(followedBtn);
+            followedBtnContainer.appendChild(followMenu);
+
+            btn.parentNode.appendChild(followedBtnContainer);
+
+            // 重新绑定事件
+            followedBtn.addEventListener('click', function() {
+                const menu = this.nextElementSibling;
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            unfollowLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                unfollowUser(userId);
+            });
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('关注失败，请稍后再试', 'error');
+    });
+}
+
+// 取消关注用户函数
+function unfollowUser(userId) {
+    fetch('/api/unfollow-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            target_user_uid: userId
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showNotification('取消关注成功');
+            // 更新按钮状态
+            const followedBtnContainer = document.querySelector(`.followed-btn-container [data-user-id="${userId}"]`);
+            const container = followedBtnContainer.parentNode;
+
+            container.innerHTML = `
+                <button class="follow-btn" data-user-id="${userId}">
+                    <i class="fa-solid fa-plus"></i> 关注
+                </button>
+            `;
+
+            // 绑定事件
+            const newFollowBtn = container.querySelector('.follow-btn');
+            newFollowBtn.addEventListener('click', function() {
+                const userId = this.getAttribute('data-user-id');
+                followUser(userId);
+            });
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('取消关注失败，请稍后再试', 'error');
+    });
+}
+
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    });
+</script>
 {% endblock %}

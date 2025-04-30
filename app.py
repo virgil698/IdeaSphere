@@ -93,13 +93,16 @@ def before_request():
         user = db.session.get(User, session['user_id'])
         if user:
             g.user = user
+            request.user = user  # 将用户信息附加到 request 对象上
             g.role = user.role
         else:
             session.pop('user_id', None)
             g.user = None
+            request.user = None  # 如果用户不存在，将 request.user 设置为 None
             g.role = None
     else:
         g.user = None
+        request.user = None  # 如果没有登录，将 request.user 设置为 None
         g.role = None
 
     user_agent = request.headers.get('User-Agent', 'Unknown')
