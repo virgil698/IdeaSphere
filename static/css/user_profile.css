@@ -546,11 +546,12 @@
 }
 
 /* 通知样式 */
+/* 通知样式 */
 .notification {
     position: fixed;
-    bottom: 20px;
+    top: 20px; /* 从上方弹出 */
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
+    transform: translateX(-50%) translateY(-100px); /* 初始位置在上方 */
     background-color: #4CAF50;
     color: white;
     padding: 12px 20px;
@@ -566,7 +567,7 @@
 }
 
 .notification.show {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0); /* 显示时移动到屏幕中央 */
     opacity: 1;
 }
 /* 响应式调整 */
