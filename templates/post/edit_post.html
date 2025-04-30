@@ -67,6 +67,18 @@
                             <button type="button" class="toolbar-btn" id="emojiButton" title="添加表情">
                                 <i class="fas fa-smile"></i>
                             </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: tip\n', '\n:::', '代码块')" title="信息块-提示">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: info\n', '\n:::', '代码块')" title="信息块-信息">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: warning\n', '\n:::', '代码块')" title="信息块-警告">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: danger\n', '\n:::', '代码块')" title="信息块-危险">
+                                <i class="fa-solid fa-skull"></i>
+                            </button>
                         </div>
                         <textarea class="form-control" id="content" name="content" rows="12" placeholder="输入帖子内容" required>{{ post.content }}</textarea>
                         <div class="form-text">添加丰富的内容，支持 Markdown 格式，可以插入代码、图片和链接</div>
@@ -138,26 +150,26 @@
         const end = textarea.selectionEnd;
         const selectedText = textarea.value.substring(start, end);
         const replacement = before + (selectedText || placeholder) + after;
-        
+
         textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
-        
+
         // 设置光标位置
         const newPosition = selectedText ? start + replacement.length : start + before.length + placeholder.length;
         textarea.focus();
         textarea.selectionStart = newPosition;
         textarea.selectionEnd = newPosition;
-        
+
         // 触发内容变化事件
         textarea.dispatchEvent(new Event('input'));
     }
-    
+
     // 预览功能
     document.addEventListener('DOMContentLoaded', function() {
         const previewPanel = document.querySelector('.markdown-preview-panel');
         const previewContent = document.querySelector('.preview-content');
         const closeBtn = document.querySelector('.close-preview-btn');
         const textarea = document.getElementById('content');
-        
+
         // 添加实时预览按钮
         const toolbar = document.querySelector('.editor-toolbar');
         const previewBtn = document.createElement('button');
@@ -166,7 +178,7 @@
         previewBtn.title = '预览';
         previewBtn.innerHTML = '<i class="fas fa-eye"></i>';
         toolbar.appendChild(previewBtn);
-        
+
         // 预览按钮点击事件
         previewBtn.addEventListener('click', function() {
             if (previewPanel.classList.contains('active')) {
@@ -176,12 +188,12 @@
                 previewPanel.classList.add('active');
             }
         });
-        
+
         // 关闭预览
         closeBtn.addEventListener('click', function() {
             previewPanel.classList.remove('active');
         });
-        
+
         // 更新预览内容
         function updatePreview() {
             // 简单的Markdown转HTML实现
@@ -197,17 +209,17 @@
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/^>\s*(.*?)$/gm, '<blockquote>$1</blockquote>')
                 .replace(/\n/g, '<br>');
-            
+
             previewContent.innerHTML = html;
         }
-        
+
         // 监听文本变化
         textarea.addEventListener('input', function() {
             if (previewPanel.classList.contains('active')) {
                 updatePreview();
             }
         });
-        
+
         // 初始加载时更新预览
         updatePreview();
     });
