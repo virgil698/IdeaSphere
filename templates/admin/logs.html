@@ -1,0 +1,398 @@
+{% extends "admin/base.html" %}
+
+{% block title %}系统日志 - IdeaSphere 管理后台{% endblock %}
+
+{% block header_title %}系统日志{% endblock %}
+{% block header_subtitle %}查看和管理系统运行日志{% endblock %}
+
+{% block content %}
+<!-- 统计卡片 -->
+<div class="stats-cards">
+    <div class="stat-card">
+        <div class="stat-card-icon bg-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="stat-card-content">
+            <div class="stat-card-value">{{ error_count }}</div>
+            <div class="stat-card-label">错误日志</div>
+        </div>
+        <div class="stat-card-chart">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-icon bg-info">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="stat-card-content">
+            <div class="stat-card-value">{{ info_count }}</div>
+            <div class="stat-card-label">信息日志</div>
+        </div>
+        <div class="stat-card-chart">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-icon bg-warning">
+            <i class="fas fa-exclamation"></i>
+        </div>
+        <div class="stat-card-content">
+            <div class="stat-card-value">{{ warning_count }}</div>
+            <div class="stat-card-label">警告日志</div>
+        </div>
+        <div class="stat-card-chart">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-icon bg-primary">
+            <i class="fas fa-wrench"></i>
+        </div>
+        <div class="stat-card-content">
+            <div class="stat-card-value">{{ debug_count }}</div>
+            <div class="stat-card-label">调试日志</div>
+        </div>
+        <div class="stat-card-chart">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
+</div>
+
+<!-- 功能栏 -->
+<div class="function-bar">
+    <div class="function-bar-left">
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label for="levelFilter" class="mr-2">级别:</label>
+                <select id="levelFilter" class="form-control form-control-sm">
+                    <option value="all" {% if filter_level == 'all' %}selected{% endif %}>全部</option>
+                    <option value="error" {% if filter_level == 'error' %}selected{% endif %}>错误</option>
+                    <option value="warning" {% if filter_level == 'warning' %}selected{% endif %}>警告</option>
+                    <option value="info" {% if filter_level == 'info' %}selected{% endif %}>信息</option>
+                    <option value="debug" {% if filter_level == 'debug' %}selected{% endif %}>调试</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="dateRange" class="mr-2">日期范围:</label>
+                <input type="text" id="dateRange" class="form-control form-control-sm" placeholder="选择日期范围"
+                       value="{{ start_date.strftime('%Y-%m-%d') if start_date }} - {{ end_date.strftime('%Y-%m-%d') if end_date }}">
+            </div>
+            <div class="col-auto">
+                <button id="filterButton" class="btn btn-sm btn-primary">
+                    <i class="fas fa-filter"></i> 筛选
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="function-bar-right">
+        <div class="input-group input-group-sm">
+            <input type="text" id="searchInput" class="form-control" placeholder="搜索日志..." value="{{ search_term if search_term }}">
+            <div class="input-group-append">
+                <button id="searchButton" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <button id="exportLogs" class="btn btn-sm btn-secondary ml-2">
+            <i class="fas fa-download"></i> 导出日志
+        </button>
+    </div>
+</div>
+
+<!-- 日志列表 -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">系统日志列表</h5>
+        <div class="badge-filters">
+            <button class="badge-filter {% if filter_level == 'all' %}active{% endif %}" data-level="all">全部</button>
+            <button class="badge-filter {% if filter_level == 'error' %}active{% endif %}" data-level="error">
+                <span class="badge badge-danger">错误</span>
+            </button>
+            <button class="badge-filter {% if filter_level == 'warning' %}active{% endif %}" data-level="warning">
+                <span class="badge badge-warning">警告</span>
+            </button>
+            <button class="badge-filter {% if filter_level == 'info' %}active{% endif %}" data-level="info">
+                <span class="badge badge-info">信息</span>
+            </button>
+            <button class="badge-filter {% if filter_level == 'debug' %}active{% endif %}" data-level="debug">
+                <span class="badge badge-primary">调试</span>
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+                        <th>级别</th>
+                        <th>来源</th>
+                        <th>消息</th>
+                        <th>用户</th>
+                        <th>IP地址</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.id }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if log.level == 'error' %}badge-danger
+                                {% elif log.level == 'warning' %}badge-warning
+                                {% elif log.level == 'info' %}badge-info
+                                {% else %}badge-primary{% endif %}">
+                                {{ log.level }}
+                            </span>
+                        </td>
+                        <td>{{ log.source }}</td>
+                        <td>
+                            <div class="log-message">{{ log.message|truncate(50) }}</div>
+                        </td>
+                        <td>
+                            {% if log.user %}
+                            <div class="user-avatar">{{ log.user.username[0] }}</div>
+                            <span>{{ log.user.username }}</span>
+                            {% else %}
+                            <span class="text-muted">系统</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ log.ip_address or '-' }}</td>
+                        <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info view-log" data-log-id="{{ log.id }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="pagination-info">
+            显示 {{ pagination.start }} 到 {{ pagination.end }} 条，共 {{ pagination.total }} 条记录
+        </div>
+        <div class="pagination">
+            <a href="{{ url_for('admin_logs', page=pagination.prev_page, level=filter_level, start_date=start_date.strftime('%Y-%m-%d') if start_date, end_date=end_date.strftime('%Y-%m-%d') if end_date, search=search_term) }}" class="pagination-btn {% if not pagination.has_prev %}disabled{% endif %}">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% for page in pagination.pages %}
+                {% if page == pagination.page %}
+                <a href="{{ url_for('admin_logs', page=page, level=filter_level, start_date=start_date.strftime('%Y-%m-%d') if start_date, end_date=end_date.strftime('%Y-%m-%d') if end_date, search=search_term) }}" class="pagination-btn active">{{ page }}</a>
+                {% else %}
+                <a href="{{ url_for('admin_logs', page=page, level=filter_level, start_date=start_date.strftime('%Y-%m-%d') if start_date, end_date=end_date.strftime('%Y-%m-%d') if end_date, search=search_term) }}" class="pagination-btn">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+            <a href="{{ url_for('admin_logs', page=pagination.next_page, level=filter_level, start_date=start_date.strftime('%Y-%m-%d') if start_date, end_date=end_date.strftime('%Y-%m-%d') if end_date, search=search_term) }}" class="pagination-btn {% if not pagination.has_next %}disabled{% endif %}">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 日志详情模态框 -->
+<div class="modal fade" id="logDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">日志详情</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>基本信息</h6>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">ID:</span>
+                            <span class="log-detail-value" id="logDetailId"></span>
+                        </div>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">级别:</span>
+                            <span class="log-detail-value" id="logDetailLevel"></span>
+                        </div>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">来源:</span>
+                            <span class="log-detail-value" id="logDetailSource"></span>
+                        </div>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">时间:</span>
+                            <span class="log-detail-value" id="logDetailTime"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>用户信息</h6>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">用户:</span>
+                            <span class="log-detail-value" id="logDetailUser"></span>
+                        </div>
+                        <div class="log-detail-item">
+                            <span class="log-detail-label">IP地址:</span>
+                            <span class="log-detail-value" id="logDetailIp"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6>日志消息</h6>
+                <div class="log-message-box" id="logDetailMessage"></div>
+                
+                <div id="stackTraceSection" style="display: none;">
+                    <h6 class="mt-4">堆栈跟踪</h6>
+                    <div class="stack-trace-box" id="logDetailStackTrace"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // 日期选择器初始化
+    $('#dateRange').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD',
+            applyLabel: '确定',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义范围',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+        },
+        startDate: '{{ start_date.strftime("%Y-%m-%d") if start_date else "now"|date("Y-m-d", "-7 days") }}',
+        endDate: '{{ end_date.strftime("%Y-%m-%d") if end_date else "now"|date("Y-m-d") }}',
+        ranges: {
+           '今天': [moment(), moment()],
+           '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           '最近7天': [moment().subtract(6, 'days'), moment()],
+           '最近30天': [moment().subtract(29, 'days'), moment()],
+           '本月': [moment().startOf('month'), moment().endOf('month')],
+           '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    });
+    
+    // 筛选按钮点击事件
+    $('#filterButton').click(function() {
+        var level = $('#levelFilter').val();
+        var dateRange = $('#dateRange').val().split(' - ');
+        var startDate = dateRange[0];
+        var endDate = dateRange[1];
+        var searchTerm = $('#searchInput').val();
+        
+        window.location.href = "{{ url_for('admin_logs') }}?" + $.param({
+            level: level,
+            start_date: startDate,
+            end_date: endDate,
+            search: searchTerm
+        });
+    });
+    
+    // 搜索按钮点击事件
+    $('#searchButton').click(function() {
+        var searchTerm = $('#searchInput').val();
+        var level = $('#levelFilter').val();
+        var dateRange = $('#dateRange').val().split(' - ');
+        var startDate = dateRange[0];
+        var endDate = dateRange[1];
+        
+        window.location.href = "{{ url_for('admin_logs') }}?" + $.param({
+            level: level,
+            start_date: startDate,
+            end_date: endDate,
+            search: searchTerm
+        });
+    });
+    
+    // 回车键搜索
+    $('#searchInput').keypress(function(e) {
+        if(e.which == 13) {
+            $('#searchButton').click();
+        }
+    });
+    
+    // 导出日志按钮点击事件
+    $('#exportLogs').click(function() {
+        var level = $('#levelFilter').val();
+        var dateRange = $('#dateRange').val().split(' - ');
+        var startDate = dateRange[0];
+        var endDate = dateRange[1];
+        
+        window.location.href = "{{ url_for('api_export_logs') }}?" + $.param({
+            level: level,
+            start_date: startDate,
+            end_date: endDate
+        });
+    });
+    
+    // 标签筛选点击事件
+    $('.badge-filter').click(function() {
+        var level = $(this).data('level');
+        var dateRange = $('#dateRange').val().split(' - ');
+        var startDate = dateRange[0];
+        var endDate = dateRange[1];
+        var searchTerm = $('#searchInput').val();
+        
+        window.location.href = "{{ url_for('admin_logs') }}?" + $.param({
+            level: level,
+            start_date: startDate,
+            end_date: endDate,
+            search: searchTerm
+        });
+    });
+    
+    // 查看日志详情
+    $('.view-log').click(function() {
+        var logId = $(this).data('log-id');
+        
+        // 通过AJAX获取日志详情
+        $.ajax({
+            url: "/api/admin/log/" + logId,
+            type: "GET",
+            success: function(response) {
+                if (response.success) {
+                    var log = response.data;
+                    
+                    // 填充模态框
+                    $('#logDetailId').text(log.id);
+                    $('#logDetailLevel').html('<span class="badge ' + 
+                        (log.level === 'error' ? 'badge-danger' : 
+                        (log.level === 'warning' ? 'badge-warning' : 
+                        (log.level === 'info' ? 'badge-info' : 'badge-primary'))) + 
+                        '">' + log.level + '</span>');
+                    $('#logDetailSource').text(log.source);
+                    $('#logDetailTime').text(log.created_at);
+                    $('#logDetailUser').text(log.user_name || '系统');
+                    $('#logDetailIp').text(log.ip_address || '-');
+                    $('#logDetailMessage').text(log.message);
+                    
+                    // 堆栈跟踪处理
+                    if (log.stack_trace) {
+                        $('#stackTraceSection').show();
+                        $('#logDetailStackTrace').text(log.stack_trace);
+                    } else {
+                        $('#stackTraceSection').hide();
+                    }
+                    
+                    $('#logDetailModal').modal('show');
+                } else {
+                    alert('获取日志详情失败: ' + response.message);
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 
