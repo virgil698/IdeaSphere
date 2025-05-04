@@ -14,17 +14,27 @@ def moderation_panel():
 
 @moderation_bp.route('/reports/pending')
 def moderation_reports_pending():
-    reports = Report.query.filter_by(status='pending').all()
-    pagination_pages = [1, 2, 3, 4, 5]  # 示例分页数据
-    current_page = 1  # 示例当前页码
-    return render_template('moderation/moderation_reports_pending.html', pending_reports=reports, pagination_pages=pagination_pages, current_page=current_page)
+    page = request.args.get('page', 1, type=int)
+    per_page = 20  # 每页显示20条
+    pagination = Report.query.filter_by(status='pending').paginate(page=page, per_page=per_page, error_out=False)
+    reports = pagination.items
+    return render_template(
+        'moderation/moderation_reports_pending.html',
+        pending_reports=reports,
+        pagination=pagination
+    )
 
 @moderation_bp.route('/reports/processed')
 def moderation_reports_processed():
-    reports = Report.query.filter(Report.status != 'pending').all()
-    pagination_pages = [1, 2, 3, 4, 5]  # 示例分页数据
-    current_page = 1  # 示例当前页码
-    return render_template('moderation/moderation_reports_processed.html', processed_reports=reports, pagination_pages=pagination_pages, current_page=current_page)
+    page = request.args.get('page', 1, type=int)
+    per_page = 20  # 每页显示20条
+    pagination = Report.query.filter(Report.status != 'pending').paginate(page=page, per_page=per_page, error_out=False)
+    reports = pagination.items
+    return render_template(
+        'moderation/moderation_reports_processed.html',
+        processed_reports=reports,
+        pagination=pagination
+    )
 
 @moderation_bp.route('/handle_report/<int:report_id>', methods=['POST'])
 def handle_report(report_id):

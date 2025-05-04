@@ -60,14 +60,22 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- 分页控件 -->
         <div class="pagination">
-            {% for page in pagination_pages %}
-                {% if page == current_page %}
-                    <span class="page-number active">{{ page }}</span>
-                {% else %}
-                    <a href="{{ url_for('moderation_reports_pending', page=page) }}" class="page-number">{{ page }}</a>
-                {% endif %}
-            {% endfor %}
+            {% if pagination.has_prev %}
+            <a href="{{ url_for('moderation_reports_pending', page=pagination.prev_num) }}" class="page-link">
+                <i class="fas fa-chevron-left"></i> 上一页
+            </a>
+            {% endif %}
+
+            <span class="page-info">{{ pagination.page }} / {{ pagination.pages }}</span>
+
+            {% if pagination.has_next %}
+            <a href="{{ url_for('moderation_reports_pending', page=pagination.next_num) }}" class="page-link">
+                下一页 <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
         </div>
     {% else %}
         <div class="alert alert-info text-center">
@@ -76,6 +84,7 @@
     {% endif %}
 </div>
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/section_detail.css') }}">
 <script type="module" src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 <script type="module" src="{{ url_for('static', filename='js/report.js') }}"></script>
 {% endblock %}
