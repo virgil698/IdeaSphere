@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from flask import Blueprint, g, jsonify, request, abort, render_template
+from sqlalchemy.orm import joinedload
 
 from src.functions.database.models import Report, Post, Comment, db
 
@@ -14,7 +13,11 @@ def moderation_panel():
 def moderation_reports_pending():
     page = request.args.get('page', 1, type=int)
     per_page = 20
-    pagination = Report.query.filter_by(status='pending').paginate(page=page, per_page=per_page, error_out=False)
+    pagination = Report.query.filter_by(status='pending') \
+        .options(joinedload(Report.user)) \
+        .options(joinedload(Report.post).joinedload(Post.author)) \
+        .options(joinedload(Report.comment).joinedload(Comment.author)) \
+        .paginate(page=page, per_page=per_page, error_out=False)
     reports = pagination.items
     return render_template(
         'moderation/moderation_reports_pending.html',
@@ -26,7 +29,11 @@ def moderation_reports_pending():
 def moderation_reports_processed():
     page = request.args.get('page', 1, type=int)
     per_page = 20
-    pagination = Report.query.filter(Report.status != 'pending').paginate(page=page, per_page=per_page, error_out=False)
+    pagination = Report.query.filter(Report.status != 'pending') \
+        .options(joinedload(Report.user)) \
+        .options(joinedload(Report.post).joinedload(Post.author)) \
+        .options(joinedload(Report.comment).joinedload(Comment.author)) \
+        .paginate(page=page, per_page=per_page, error_out=False)
     reports = pagination.items
     return render_template(
         'moderation/moderation_reports_processed.html',
@@ -44,7 +51,7 @@ def handle_report(report_id):
     status = request.json.get('status')
     if status not in ['valid', 'invalid']:
         return jsonify({'success': False, 'message': '无效的状态值'})
-    if status == 'valid':
+    if status == 'invalid':
         if report.post:
             # 删除帖子及其所有评论
             for comment in report.post.comments:
@@ -53,13 +60,12 @@ def handle_report(report_id):
         elif report.comment:
             # 删除评论
             db.session.delete(report.comment)
-        report.status = 'closed'
+        report.status = 'invalid'
         report.resolved_by = g.user.id if g.user else None
         db.session.commit()
         return jsonify({'success': True, 'message': '已违规，内容已删除'})
-
-    elif status == 'invalid':
-        report.status = 'closed'
+    elif status == 'valid':
+        report.status = 'valid'
         report.resolved_by = g.user.id if g.user else None
         db.session.commit()
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})

@@ -42,7 +42,7 @@ async function reportPost(postId) {
     }
 
     const csrfToken = await getCSRFToken();
-    fetch(`/report_post/${postId}`, {
+    fetch(`/api/report_post/${postId}`, {  // 修正 URL
         method: 'POST',
         headers: {
             'X-CSRFToken': csrfToken,
@@ -54,29 +54,6 @@ async function reportPost(postId) {
     .then(data => {
         if (data.success) {
             alert(data.message);
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// 定义评论点赞函数
-async function incrementLikeComment(commentId) {
-    const csrfToken = await getCSRFToken();
-    fetch(`/like_comment/${commentId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // 更新评论的点赞计数
-            const likeCountElement = document.querySelector(`.comment-like-count-${commentId}`);
-            likeCountElement.textContent = `点赞: ${data.like_count}`;
         } else {
             alert(data.message);
         }
@@ -93,7 +70,7 @@ async function reportComment(commentId) {
     }
 
     const csrfToken = await getCSRFToken();
-    fetch(`/report_comment/${commentId}`, {
+    fetch(`/api/report_comment/${commentId}`, {  // 修正 URL
         method: 'POST',
         headers: {
             'X-CSRFToken': csrfToken,
@@ -105,6 +82,28 @@ async function reportComment(commentId) {
     .then(data => {
         if (data.success) {
             alert(data.message);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+// 定义评论点赞函数
+async function incrementLikeComment(commentId) {
+    const csrfToken = await getCSRFToken();
+    fetch(`/like_comment/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 更新评论的点赞计数
+            const likeCountElement = document.querySelector(`.comment-like-count-${commentId}`);
+            likeCountElement.textContent = `点赞: ${data.like_count}`;
         } else {
             alert(data.message);
         }

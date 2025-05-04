@@ -33,17 +33,35 @@
                     <tr>
                         <td>{{ report.id }}</td>
                         <td>{{ report.reporter.username }}</td>
-                        <td>{{ report.offender.username }}</td>
-                        <td>{{ report.category }}</td>
                         <td>
-                            {% if report.category == 'post' %}
+                            {% if report.post %}
+                                {{ report.offender.username }}
+                            {% elif report.comment %}
+                                {{ report.offender.username }}
+                            {% else %}
+                                未知
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if report.post %}
+                                帖子
+                            {% elif report.comment %}
+                                评论
+                            {% else %}
+                                未知
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if report.post %}
                                 <a href="{{ url_for('view_post', post_id=report.post_id) }}" class="report-link">
                                     <i class="fas fa-link"></i> 查看帖子
                                 </a>
-                            {% else %}
+                            {% elif report.comment %}
                                 <a href="{{ url_for('view_comment', comment_id=report.comment_id) }}" class="report-link">
                                     <i class="fas fa-link"></i> 查看评论
                                 </a>
+                            {% else %}
+                                未知内容
                             {% endif %}
                         </td>
                         <td>{{ report.reason }}</td>

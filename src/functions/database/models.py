@@ -91,6 +91,19 @@ class Report(db.Model):
     comment = db.relationship('Comment', foreign_keys=[comment_id], backref=db.backref('reports', lazy=True))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
 
+    @property
+    def reporter(self):
+        return self.user
+
+    @property
+    def offender(self):
+        if self.post:
+            return self.post.author
+        elif self.comment:
+            return self.comment.author
+        else:
+            return None
+
 class Like(db.Model):
     __table_args__ = (
         db.CheckConstraint(

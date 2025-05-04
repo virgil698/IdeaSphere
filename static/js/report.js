@@ -3,14 +3,7 @@
  * @Dev virgil698
  * @StructRefactor Jason
  */
-
-async function getCSRFToken() {
-    const response = await fetch('/api/csrf-token');
-    const data = await response.json();
-    return data.csrf_token;
-}
-
-async function handleReport(reportId, status) {
+window.handleReport = async function (reportId, status) {
     if (status !== 'valid' && status !== 'invalid') {
         alert('处理失败：无效的状态值');
         return;

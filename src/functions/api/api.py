@@ -90,7 +90,7 @@ def like_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post liked successfully'}), 200
 
-# 示例：举报帖子的API
+# 举报帖子的API
 @api_bp.route('/report_post/<int:post_id>', methods=['POST'])
 def report_post(post_id):
     # 确保用户已登录
@@ -107,6 +107,7 @@ def report_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post reported successfully'}), 200
 
+# 举报评论的API
 @api_bp.route('/report_comment/<int:comment_id>', methods=['POST'])
 def report_comment(comment_id):
     # 确保用户已登录
