@@ -3,7 +3,7 @@
 {% block content %}
 <section class="sections-page">
     <div class="section-header">
-        <h2>版块分类</h2>
+        <h2>{% block title %}版块分类{% endblock %}</h2>
         <div class="section-actions">
             {% if g.role == 'admin' %}
             <a href="{{ url_for('section.section_analytics') }}" class="btn-outline">

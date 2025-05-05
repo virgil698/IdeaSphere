@@ -3,7 +3,7 @@
 {% block content %}
 <div class="analytics-container">
     <div class="analytics-header">
-        <h2>版块数据分析</h2>
+        <h2>{% block title %}版块数据分析{% endblock %}</h2>
         <div class="header-actions">
             <a href="{{ url_for('section.sections') }}" class="btn-outline">
                 <i class="fas fa-arrow-left"></i> 返回版块列表

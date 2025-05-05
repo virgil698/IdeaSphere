@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
-<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header">
-                <h1 class="card-title">{{ post.title }}</h1>
+                <h1 class="card-title">{% block title %}{{ post.title }}{% endblock %}</h1>
             </div>
             <div class="card-body">
                 <div class="d-flex justify-content-start align-items-center mb-3">

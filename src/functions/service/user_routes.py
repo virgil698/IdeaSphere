@@ -31,7 +31,7 @@ def get_user_data(user_uid):
         'id': user.id,
         'user_uid': user.user_uid,  # 确保这里返回的是正确的 user_uid
         'username': user.username,
-        'brief': f"用户 {user.username} 的个人空间",
+        'brief': "这个人很懒，什么都没有写~",
         'location': "四川，中国",
         'birthday': "2021/03/12",
         'gender': "男",
@@ -43,7 +43,6 @@ def get_user_data(user_uid):
         'posts_count': Post.query.filter_by(author_id=user.id, deleted=False).count(),
         'following_count': following_count,
         'followers_count': follower_count,
-        'kanji': "感谢大家的支持"
     }
 
     # 获取用户的活动信息

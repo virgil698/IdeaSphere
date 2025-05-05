@@ -14,7 +14,7 @@
             </div>
             
             <h1 class="user-name">
-                {{ user.username }}
+                {% block title %}{{ user.username }} 的个人空间{% endblock %}
                 {% if current_user and current_user.user_uid != user.user_uid %}
                     {% if not is_following %}
                         <button class="follow-btn" data-user-id="{{ user.user_uid }}">
@@ -74,10 +74,6 @@
             <div class="detail-item">
                 <span class="detail-label">注册时间</span>
                 <span class="detail-value">{{ user.registered_time if user.registered_time else '未知' }}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">个人简介</span>
-                <span class="detail-value">{{ user.kanji if user.kanji else '暂未设置' }}</span>
             </div>
         </div>
 

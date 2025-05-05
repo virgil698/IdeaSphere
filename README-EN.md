@@ -173,6 +173,10 @@ If you have any questions or suggestions, feel free to reach out to us through t
 
 [![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
+## 💡 Status
+
+![Alt](https://repobeats.axiom.co/api/embed/ae7daea15634a93b5e54eab266bdc6c4a0fb8671.svg "Repobeats analytics image")
+
 ## 😊 Disclaimer
 
 > [!NOTE]

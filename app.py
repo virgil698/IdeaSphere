@@ -32,6 +32,8 @@ from src.functions.service.user_operations import reply_logic, like_post_logic, 
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
 from src.functions.service.user_routes import user_bp
 from src.functions.utils.logger import Logger
+from src.functions.other.about import about_bp
+from src.functions.other.faq import faq_bp
 
 """
 初始化部分   
@@ -80,6 +82,12 @@ app.register_blueprint(user_bp)
 
 # 注册版务中心页面蓝图
 app.register_blueprint(moderation_bp)
+
+# 注册论坛其他页面蓝图
+app.register_blueprint(about_bp)
+
+# 注册论坛准则页面蓝图
+app.register_blueprint(faq_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 

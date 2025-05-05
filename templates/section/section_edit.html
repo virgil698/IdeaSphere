@@ -4,7 +4,7 @@
 <section class="edit-section-page">
     <div class="edit-section-container">
         <div class="edit-section-header">
-            <h2>编辑板块</h2>
+            <h2>{% block title %}编辑板块{% endblock %}</h2>
             <a href="{{ url_for('section.sections') }}" class="btn-outline">
                 <i class="fas fa-arrow-left"></i> 返回版块列表
             </a>

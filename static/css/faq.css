@@ -1,0 +1,188 @@
+/* FAQ 页面样式 */
+.faq-section {
+    padding: 3rem 0;
+    background-color: var(--background-primary);
+}
+
+.faq-container {
+    max-width: 850px;
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin: 0 auto 2rem;
+}
+
+.faq-title {
+    text-align: start;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.faq-title::after {
+    content: '';
+    display: block;
+    width: 130px;
+    height: 4px;
+    background-color: var(--primary-color);
+    margin: 0.75rem auto 0 0;
+    border-radius: 2px;
+}
+
+.welcome-message {
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--primary-color);
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    margin: 1rem 0;
+}
+
+.intro-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    padding: 1rem 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 0.5rem;
+}
+
+.prohibited-intro {
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.positive-behavior,
+.prohibited-content,
+.malicious-spam-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+}
+
+.positive-behavior li,
+.prohibited-content li,
+.malicious-spam-list li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.positive-behavior li::before,
+.prohibited-content li::before,
+.malicious-spam-list li::before {
+    content: '•';
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.malicious-spam {
+    margin-top: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.legal-disclaimer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f0f4ff;
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    border-left: 4px solid var(--primary-color);
+}
+
+/* 新增的样式 */
+.faq-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: none;
+    padding: 2rem;
+}
+
+.faq-content h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.faq-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.faq-content p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.faq-content ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.faq-content li {
+    margin-bottom: 0.75rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .faq-container {
+        padding: 1.5rem;
+    }
+
+    .faq-title {
+        font-size: 1.75rem;
+    }
+
+    .welcome-message,
+    .intro-message {
+        font-size: 1rem;
+    }
+
+    .faq-content {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .faq-section {
+        padding: 2rem 0;
+    }
+
+    .faq-title {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .faq-content {
+        padding: 1rem;
+    }
+}

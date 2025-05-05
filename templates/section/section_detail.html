@@ -7,7 +7,7 @@
             <a href="{{ url_for('section.sections') }}" class="back-link">
                 <i class="fas fa-arrow-left"></i> 返回版块列表
             </a>
-            <h2><i class="{{ section.icon }}"></i> {{ section.name }}</h2>
+            <h2><i class="{{ section.icon }}"></i> {% block title %}{{ section.name }}{% endblock %}</h2>
             <p class="section-description">{{ section.description }}</p>
         </div>
         <div class="header-right">

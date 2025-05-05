@@ -174,6 +174,10 @@ python app.py
 
 [![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
+# 💡 状态
+
+![Alt](https://repobeats.axiom.co/api/embed/ae7daea15634a93b5e54eab266bdc6c4a0fb8671.svg "Repobeats analytics image")
+
 # 😊 免责声明
 
 > [!NOTE]
