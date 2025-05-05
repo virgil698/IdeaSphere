@@ -165,6 +165,7 @@ python app.py
 - 提交 [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose)
 - QQ交流群：[![QQ](https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-1036347298-20B2AA?style=for-the-badge)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298)
 - Discode：[![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
+- Telegram 群组：[Telegram 群组](https://t.me/+vp7hIx464JUwMzk1)
 
 # 🤝 贡献者
 
