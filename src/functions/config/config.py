@@ -20,6 +20,11 @@ def get_config():
 port: 5000 # 释放端口，默认 http
 debug: True # debug 模式，默认开启
 
+# 路径配置
+paths:
+  templates: 'templates' # 模板文件夹路径
+  static: 'static' # 静态文件夹路径
+
 # 时区配置
 timezone: 'UTC' # 默认时区为 UTC，可以设置为 'Asia/Shanghai' 等其他时区
 

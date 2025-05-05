@@ -19,6 +19,10 @@ def generate_config_example():
     config_example_content = {
         'port': 5000,
         'debug': True,
+        'paths': {
+            'templates': 'templates',
+            'static': 'static'
+        },
         'timezone': 'UTC',
         'database': {
             'uri': 'sqlite:///forum.db',
@@ -34,6 +38,10 @@ def generate_config_example():
     comments = {
         'port': '# 释放端口，默认 http',
         'debug': '# debug 模式，默认开启',
+        'paths': {
+            'templates': '# 模板文件夹路径',
+            'static': '# 静态文件夹路径'
+        },
         'timezone': '# 默认时区为 UTC，可以设置为其他时区（如 Asia/Shanghai）',
         'database': {
             'uri': '# 数据库地址',
@@ -55,6 +63,12 @@ def generate_config_example():
         f.write("# 基础配置\n")
         f.write(f"port: {config_example_content['port']} {comments['port']}\n")
         f.write(f"debug: {config_example_content['debug']} {comments['debug']}\n\n")
+
+        # 添加路径配置注释
+        f.write("# 路径配置\n")
+        f.write("paths:\n")
+        f.write(f"  templates: '{config_example_content['paths']['templates']}' {comments['paths']['templates']}\n")
+        f.write(f"  static: '{config_example_content['paths']['static']}' {comments['paths']['static']}\n\n")
 
         # 添加时区配置注释
         f.write("# 时区配置\n")

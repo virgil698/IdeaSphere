@@ -36,7 +36,7 @@ from src.functions.utils.logger import Logger
 """
 初始化部分   
 """
-app = Flask(__name__, static_folder="static", static_url_path='/static', template_folder='templates')
+app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "your_secret_key_should_be_complex")
 
 # 生成示例配置文件
@@ -44,6 +44,11 @@ generate_config_example()
 
 # 从配置文件中读取配置
 config = get_config()
+
+# 设置模板和静态文件夹路径
+app.template_folder = config.get('paths', {}).get('templates', 'templates')
+app.static_folder = config.get('paths', {}).get('static', 'static')
+app.static_url_path = '/static'
 
 # 设置时区
 timezone_str = config.get('timezone', 'UTC')
