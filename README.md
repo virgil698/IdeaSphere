@@ -90,59 +90,7 @@ IdeaSphere 是一个基于 Python3 和 Flask 构建的开源社交平台，旨�
 
 # 🛠️ 安装指南
 
-1. 环境要求
-
-- **Python 版本**：3.11 或更高
-- **操作系统**：Windows, Linux, macOS
-
-2. 下载项目
-
-```bash
-git clone https://github.com/IdeaSphere-team/IdeaSphere.git
-cd IdeaSphere
-```
-
-3. 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-4. 配置参数
-
-修改 `config.yml` 文件以适配您的环境：
-
-（事实上，第一次启动程序时会自动生成该文件）
-
-```bash
-port: 5000  # 程序运行端口
-```
-
-5. 启动程序
-
-```bash
-python app.py
-```
-
-默认访问地址为：`http://localhost:5000`
-
-# 🎯 使用说明
-
-1. 安装向导
-
-首次访问论坛时，会自动进入安装向导页面（`/install`），按照提示完成安装。
-
-2. 用户注册与登录
-
-用户可以通过 `/register` 页面注册新账号。注册完成后，使用 `/login` 页面登录。
-
-3. 发布帖子与评论
-
-登录后，用户可以访问 `/post` 页面发布新帖子。在帖子详情页（`/view_post`），用户可以发表评论。
-
-4. 管理后台
-
-管理员可以通过 `/admin` 页面管理用户、帖子和评论。
+详见 [wiki/install](https://github.com/IdeaSphere-team/IdeaSphere/wiki/Install)
 
 # ⬆️ 提交贡献
 
