@@ -2,57 +2,39 @@
 
 {% block content %}
 <section class="faq-section">
-    <div class="container">
-        <div class="faq-container">
-            <h1 class="faq-title">{% block title %}论坛准则{% endblock %}</h1>
-            <div class="faq-content">
-                <div class="welcome-message">
-                    <strong>欢迎来到IdeaSphere开源社区论坛，请像对待其他任何公共平台一样尊重本论坛。我们希望通过持续的分享和交流，搭建技能、知识和兴趣的共享资源社区。</strong>
+    <!-- 侧边菜单 -->
+    <div class="layout-container">
+        <div class="vertical-menu">
+            <a href="/about" class="menu-item">
+                <i class="fas fa-info-circle menu-icon"></i>
+                <span class="menu-text">关于</span>
+            </a>
+            <a href="/faq" class="menu-item">
+                <i class="fas fa-book menu-icon"></i>
+                <span class="menu-text">论坛准则</span>
+            </a>
+            <a href="/tos" class="menu-item">
+                <i class="fas fa-file-contract menu-icon"></i>
+                <span class="menu-text">服务条款</span>
+            </a>
+            <a href="/privacy" class="menu-item">
+                <i class="fas fa-lock menu-icon"></i>
+                <span class="menu-text">隐私政策</span>
+            </a>
+        </div>
+
+        <div class="container">
+            <div class="faq-container">
+                <h1 class="faq-title">{% block title %}论坛准则{% endblock %}</h1>
+                <div class="faq-content">
+                    {{ faq_content | safe }}
                 </div>
-
-                <p class="intro-message">我们欢迎每个用户在社区论坛中以健康和建设性的方式作出贡献，并且重视每个用户的参与，希望所有参与者都拥有愉快和充实的体验。以下准则旨在帮助大家将论坛打造成一个友善的场所，推动论坛文明公开的讨论。</p>
-
-                <h2 class="section-title">鼓励有助于营造积极环境的行为：</h2>
-                <ul class="positive-behavior">
-                    <li>尊重开源精神：尊重所参与项目的开源精神和文化，不进行任何破坏或者阻挠项目发展的行为；</li>
-                    <li>共建共享：积极参与到讨论和贡献过程中，分享自己的经验、见解和资源，共同推动项目的发展；</li>
-                    <li>保持友好氛围：保持友善的对话，尊重不同的观点和经验，在讨论过程中的言论保持客观、理性；</li>
-                    <li>保持主题相关：清晰表达、紧扣主题，分享有价值的相关资源；</li>
-                    <li>保护个人隐私：不公开其他用户的个人信息，包括但不限于电话号码、电子邮件地址、家庭住址等。</li>
-                </ul>
-
-                <h2 class="section-title">严禁发表包含下列内容的信息：</h2>
-                <p class="prohibited-intro">论坛用户享有言论自由的权利，但不得违反法律法规及政策规定，不得违反诚实信用原则及公序良俗，不得损害国家、论坛用户及第三方权利及利益，以下内容禁止在论坛发布和讨论：</p>
-
-                <ul class="prohibited-content">
-                    <li>违反宪法确定的基本原则的；</li>
-                    <li>危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；</li>
-                    <li>损害国家荣誉和利益的；</li>
-                    <li>煽动民族仇恨、民族歧视，破坏民族团结的；</li>
-                    <li>破坏国家宗教政策，宣扬邪教和封建迷信的；</li>
-                    <li>散布谣言，扰乱社会秩序，破坏社会稳定的；</li>
-                    <li>散布淫秽、色情、赌博、暴力、恐怖或者教唆犯罪的；</li>
-                    <li>侮辱或者诽谤他人，侵害他人合法权益的；</li>
-                    <li>煽动非法集会、结社、游行、示威、聚众扰乱社会秩序的；</li>
-                    <li>以非法民间组织名义活动的；</li>
-                    <li>可能教唆他人犯罪的；</li>
-                    <li>其他违反中华人民共和国法律、法规、政策，违反诚实信用及公序良俗，或者论坛用户认为不当及不宜传播的信息；</li>
-                </ul>
-
-                <h3 class="malicious-spam">恶性灌水的帖子：</h3>
-                <ul class="malicious-spam-list">
-                    <li>连续发布大量相同内容的帖子</li>
-                    <li>发布大量没有意义文字图形</li>
-                    <li>发布广告、垃圾网站链接</li>
-                    <li>大量拷贝别人的内容（解决技术问题的拷贝不在此列）</li>
-                    <li>论坛管理员/版主及其他用户认为符合"恶性灌水"性质的帖子。</li>
-                </ul>
-
-                <p class="legal-disclaimer"><strong>论坛用户发表的文章、言论或其他信息仅代表其自身观点与立场，用户须承担一切因自己的行为而直接或间接导致的民事、行政或刑事法律责任。当发现不良行为时，我们鼓励其他用户进行举报或者联系管理员，感谢大家的支持与配合。</strong></p>
             </div>
         </div>
     </div>
 </section>
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/faq.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/other_cd.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/other_markdown.css') }}">
+<script src="{{ url_for('static', filename='js/other_cd.js') }}"></script>
 {% endblock %}

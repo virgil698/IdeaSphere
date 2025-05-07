@@ -111,7 +111,7 @@
     border-left: 4px solid var(--primary-color);
 }
 
-/* 新增的样式 */
+/* Markdown 渲染的 HTML 样式 */
 .faq-content {
     background: white;
     border-radius: 8px;
@@ -119,7 +119,14 @@
     padding: 2rem;
 }
 
+.faq-content h1 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
 .faq-content h2 {
+    font-size: 1.5rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
     font-weight: 600;
@@ -138,6 +145,7 @@
 .faq-content p {
     margin-bottom: 1.5rem;
     color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 .faq-content ul {
@@ -147,6 +155,24 @@
 
 .faq-content li {
     margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.faq-content strong {
+    color: var(--primary-color);
+}
+
+.faq-content blockquote {
+    padding-left: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+    background-color: #f8f9fa;
+    margin-bottom: 1.5rem;
+}
+
+.faq-content hr {
+    border: none;
+    border-top: 2px solid var(--border-light);
+    margin: 2rem 0;
 }
 
 /* 响应式调整 */

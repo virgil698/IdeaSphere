@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<section class="faq-section">
+    <!-- 侧边菜单 -->
+    <div class="layout-container">
+        <div class="vertical-menu">
+            <a href="/about" class="menu-item">
+                <i class="fas fa-info-circle menu-icon"></i>
+                <span class="menu-text">关于</span>
+            </a>
+            <a href="/faq" class="menu-item">
+                <i class="fas fa-book menu-icon"></i>
+                <span class="menu-text">论坛准则</span>
+            </a>
+            <a href="/tos" class="menu-item">
+                <i class="fas fa-file-contract menu-icon"></i>
+                <span class="menu-text">服务条款</span>
+            </a>
+            <a href="/privacy" class="menu-item">
+                <i class="fas fa-lock menu-icon"></i>
+                <span class="menu-text">隐私政策</span>
+            </a>
+        </div>
+
+        <div class="container">
+            <div class="faq-container">
+                <h1 class="faq-title">{% block title %}隐私政策{% endblock %}</h1>
+                <div class="faq-content">
+                    {{ privacy_content | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/other_cd.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/other_markdown.css') }}">
+<script src="{{ url_for('static', filename='js/other_cd.js') }}"></script>
+{% endblock %}

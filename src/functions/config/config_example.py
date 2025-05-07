@@ -87,7 +87,6 @@ def generate_config_example():
         f.write(f"  enabled: {config_example_content['csrf']['enabled']} {comments['csrf']['enabled']}\n")
         f.write(f"  ssl_strict: {config_example_content['csrf']['ssl_strict']} {comments['csrf']['ssl_strict']}\n\n")
 
-    print(f"示例配置文件已生成: {config_example_path}")
 
 if __name__ == '__main__':
     generate_config_example()

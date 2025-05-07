@@ -34,6 +34,8 @@ from src.functions.service.user_routes import user_bp
 from src.functions.utils.logger import Logger
 from src.functions.other.about import about_bp
 from src.functions.other.faq import faq_bp
+from src.functions.other.tos import tos_bp
+from src.functions.other.privacy import privacy_bp
 
 """
 初始化部分   
@@ -85,9 +87,9 @@ app.register_blueprint(moderation_bp)
 
 # 注册论坛其他页面蓝图
 app.register_blueprint(about_bp)
-
-# 注册论坛准则页面蓝图
 app.register_blueprint(faq_bp)
+app.register_blueprint(tos_bp)
+app.register_blueprint(privacy_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
