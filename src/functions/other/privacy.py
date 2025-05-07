@@ -12,8 +12,6 @@ privacy_bp = Blueprint('privacy', __name__, url_prefix='/privacy')
 
 # 默认隐私政策内容
 DEFAULT_PRIVACY_CONTENT = """
-# 隐私政策
-
 ## 概述
 
 IdeaSphere 致力于保护和尊重您的个人隐私。如果您对自己的个人信息有任何疑问，请[联系我们](/about)。
