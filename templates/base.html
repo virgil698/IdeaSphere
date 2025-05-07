@@ -146,6 +146,12 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    {% if footer_enabled %}
+    <div class="custom-footer">
+        {{ footer_content|safe }}
+    </div>
+    {% endif %}
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>

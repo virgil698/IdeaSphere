@@ -36,6 +36,8 @@ from src.functions.other.about import about_bp
 from src.functions.other.faq import faq_bp
 from src.functions.other.tos import tos_bp
 from src.functions.other.privacy import privacy_bp
+from src.functions.config.site_settings import load_site_settings
+from src.functions.other.foot import init_footer
 
 """
 初始化部分   
@@ -70,6 +72,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['database']['track_modific
 app.config['WTF_CSRF_ENABLED'] = config['csrf']['enabled']
 app.config['WTF_CSRF_SSL_STRICT'] = config['csrf']['ssl_strict']
 
+# 加载站点设置
+site_settings = load_site_settings()
+app.config["FOOTER_ENABLED"] = site_settings.get("footer_enabled", False)
+
 db.init_app(app)
 csrf = CSRFProtect(app)
 
@@ -92,6 +98,9 @@ app.register_blueprint(tos_bp)
 app.register_blueprint(privacy_bp)
 
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
+
+# 初始化页脚功能
+init_footer(app)
 
 # 初始化调度器
 scheduler = APScheduler()
