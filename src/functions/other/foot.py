@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from flask import render_template, current_app
+
+from flask import current_app
 
 
 def init_footer(app):
