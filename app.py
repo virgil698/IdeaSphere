@@ -9,6 +9,7 @@ from src.db_ext import db
 from src.functions.api.api import api_bp
 from src.functions.config.config import get_config, initialize_database
 from src.functions.config.config_example import generate_config_example
+from src.functions.config.site_settings import load_site_settings
 from src.functions.database.models import User, Post, Comment
 from src.functions.icenter.db_operation import execute_sql_logic
 from src.functions.icenter.icenter_index_page import icenter_index
@@ -36,7 +37,6 @@ from src.functions.other.about import about_bp
 from src.functions.other.faq import faq_bp
 from src.functions.other.tos import tos_bp
 from src.functions.other.privacy import privacy_bp
-from src.functions.config.site_settings import load_site_settings
 from src.functions.other.foot import init_footer
 
 """
