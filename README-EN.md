@@ -40,13 +40,13 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 
 ### 🌟 Implemented Features
 
-| Task Overview | Current Status | Implementation Version |
-|---------------|----------------|------------------------|
+| Approximate Task | Current Status | Implementation Version |
+|---|---|---|
 | **⌨️ Login** | ✅ | v0.1.0 |
-| **⌨️ Registration** | ✅ | v0.1.0 |
-| **⌨️ Posting** | ✅ | v0.1.0 |
-| **🖼 Super Admin** | ✅ | v0.1.0 |
-| **🖼 Moderator Admin** | ✅ | v0.1.0 |
+| **⌨️ Register** | ✅ | v0.1.0 |
+| **⌨️ Post Thread** | ✅ | v0.1.0 |
+| **🖼 Super Administrator** | ✅ | v0.1.0 |
+| **🖼 Moderator Administrator** | ✅ | v0.1.0 |
 | **👍 Like** | ✅ | v0.1.0 |
 | **🧱 Reporting System** | ✅ | v0.1.0 |
 | **📦 Online Users** | ✅ | v0.1.0 |
@@ -55,31 +55,37 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 | **📊 Site Statistics** | ✅ | v0.1.5 |
 | **🚀 Admin Panel** | ✅ | v0.2.0 |
 | **📦 Emoji Support** | ✅ | v0.2.0 |
-| **🗑 Delete Posts** | ✅ | v0.2.5 |
-| **👤 Permission Group Implementation** | ✅ | v0.2.5 |
-| **🎈 Post Sections** | ✅ | v0.3.0 |
+| **🗑 Delete Thread** | ✅ | v0.2.5 |
+| **👤 Permission Groups** | ✅ | v0.2.5 |
+| **🎈 Thread Sections** | ✅ | v0.3.0 |
 | **🎈 404 Page** | ✅ | v0.3.0 |
 | **🎈 API Transmission** | ✅ | v0.3.0 |
-| **📊 Post Time and Like Sorting** | ✅ | v0.3.0 |
+| **📊 Thread Post Time, Like Count Sorting** | ✅ | v0.3.0 |
 | **📝 Rich Text Editor** | ✅ | v0.3.0 |
 | **👤 User Page** | ✅ | v0.3.0 |
 | **📊 Contribution Graph System** | ✅ | v0.3.0 |
-| **📝 Logs Recording** | 🚧 |        |
-| **🔍 ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5  )** | 🚧 |        |
-| **✅ Full Permission Group Completion** | 🚧 |        |
-| **💬 Content Replies** | 🚧 |        |
-| **👍 Content Reactions** | 🚧 |        |
-| **⚙️ User Custom Settings** | 🚧 |        |
-| **👥 Follow and Fans** | 🚧 |        |
-| **🔄 Dynamic System** | 🚧 |        |
-| **✉️ Private Messaging System** | ⏳ |        |
-| **📧 Email Registration, Password Reset** | ⏳ |        |
-| **🔄 Go+Py+TS Rewrite** | ⏳ |        |
-| **📄 Templates** | ⏳ |        |
-| **🔌 Plugins** | ⏳ |        |
-| **🔒 Data Security** | ⏳ |        |
-| **🔍 SEO Optimization** | ⏳ |        |
-| **🗺️ Site Map** | ⏳ |        |
+| **📝 Logs Recording** | 🚧 | |
+| **🔍 ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
+| **✅ Full Completion of Permission Groups** | 🚧 | |
+| **💬 Content Replies** | 🚧 | |
+| **👍 Advanced Markdown Syntax Support (Refer to [here](https://shiro.innei.in/#/markdown))** | 🚧 | |
+| **⚙️ User Custom Settings** | 🚧 | |
+| **👥 Follow and Fans** | 🚧 | |
+| **🔄 Dynamic System** | 🚧 | |
+| **✉️ Private Messaging System** | ⏳ | |
+| **📧 Email Registration, Password Reset** | ⏳ | |
+| **🔄 Go+Py+TS Rewrite** | ⏳ | |
+| **📄 Templates** | ⏳ | |
+| **🔌 Plugins** | ⏳ | |
+| **🔏 ProgocoSQL Database Support** | ⏳ | |
+| **🔏 Redis Caching Support** | ⏳ | |
+| **🔒 Data Security** | ⏳ | |
+| **📱 Two-step Login Verification** | ⏳ | |
+| **💽 Auto Backup + Migration** | ⏳ | |
+| **💾 Object Storage** | ⏳ | |
+| **🔍 SEO Optimization** | ⏳ | |
+| **🗺️ Site Map** | ⏳ | |
+| **🗺️ Active Search Engine Push** | ⏳ | |
 
 Here is the translation of the legend for your reference:
 
