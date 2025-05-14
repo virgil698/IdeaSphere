@@ -1,0 +1,36 @@
+.replies-container {
+    margin-left: 2rem;
+    border-left: 2px solid #ddd;
+    padding-left: 1rem;
+}
+
+.reply {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.reply-form {
+    margin-top: 1rem;
+}
+
+.reply-form textarea {
+    resize: vertical;
+    max-height: 100px;
+}
+
+.reply-btn {
+    margin-left: 5px;
+}
+
+.reply-btn:hover {
+    background-color: #3077c2;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .replies-container {
+        margin-left: 1rem;
+        padding-left: 0.5rem;
+    }
+}

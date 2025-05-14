@@ -355,7 +355,6 @@ def unfollow_user():
 # 评论回复的 API
 @api_bp.route('/comment/<int:comment_id>/reply', methods=['POST'])
 def reply_to_comment(comment_id):
-    # 验证 CSRF Token
     csrf_token = request.headers.get('X-CSRFToken')
     if not csrf_token:
         return jsonify({'message': 'CSRF Token missing'}), 403
@@ -365,7 +364,6 @@ def reply_to_comment(comment_id):
     except:
         return jsonify({'message': 'Invalid CSRF Token'}), 403
 
-    # 确保用户已登录
     if not request.user:
         return jsonify({'message': 'Unauthorized'}), 401
 
@@ -374,8 +372,6 @@ def reply_to_comment(comment_id):
         return jsonify({'message': 'Invalid data'}), 400
 
     reply_content = data['content']
-
-    # 调用 reply_logic 函数处理回复逻辑
     result = reply_logic(comment_id, reply_content)
     return result
 

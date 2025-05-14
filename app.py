@@ -24,12 +24,11 @@ from src.functions.section.section import section_bp
 from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
-from src.functions.service.moderation import manage_posts_logic, delete_post_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
 from src.functions.service.search import search_logic
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import reply_logic, like_post_logic, \
-    like_comment_logic, upgrade_user_logic, downgrade_user_logic, handle_report_logic, edit_post_logic, \
+    like_comment_logic, upgrade_user_logic, downgrade_user_logic, edit_post_logic, \
     follow_user_logic, unfollow_user_logic, get_following_logic, get_followers_logic
 from src.functions.service.user_routes import user_bp
 from src.functions.utils.logger import Logger
@@ -97,6 +96,7 @@ app.register_blueprint(faq_bp)
 app.register_blueprint(tos_bp)
 app.register_blueprint(privacy_bp)
 
+# 注册 markdown 渲染蓝图
 app.jinja_env.globals.update(remove_markdown=remove_markdown)
 
 # 初始化页脚功能
@@ -111,6 +111,7 @@ with app.app_context():
     scheduler.start()
 
 
+# 注册一些小功能
 @app.before_request
 def before_request():
     if 'user_id' not in session:
@@ -218,25 +219,13 @@ def upgrade_user(user_id):
 def downgrade_user(user_id):
     return downgrade_user_logic(user_id)
 
-@app.route('/handle_report/<int:report_id>', methods=['POST'])
-def handle_report(report_id):
-    return handle_report_logic(report_id)
-
 @app.route('/search/<keywords>', methods=['GET'])
 def search(keywords):
     return search_logic(keywords)
 
-@app.route('/manage_posts')
-def manage_posts():
-    return manage_posts_logic()
-
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
     return edit_post_logic(post_id)
-
-@app.route('/delete_post/<int:post_id>')
-def delete_post(post_id):
-    return delete_post_logic(post_id)
 
 @app.route('/perm_groups/<int:user_id>/<string:user_perm>/<string:operation>', methods=['GET', 'POST'])
 def perm_groups(user_id, user_perm, operation):

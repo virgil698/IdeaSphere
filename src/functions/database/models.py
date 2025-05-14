@@ -53,6 +53,7 @@ class ReplyComment(db.Model):
         db.ForeignKey('comment.id', ondelete='CASCADE'),  # 添加外键
         nullable=False
     )
+    comment = db.relationship('Comment', back_populates='replies')
     reply_at = db.Column(
         db.DateTime,
         server_default=db.func.now(),
@@ -76,6 +77,7 @@ class Comment(db.Model):
     like_count = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
     target_comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=True)
+    replies = db.relationship('ReplyComment', back_populates='comment')
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
