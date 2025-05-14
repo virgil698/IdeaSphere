@@ -1,24 +1,36 @@
+// 显示/隐藏回复框
 function showReplyBox(commentId) {
     const replyForm = document.getElementById(`reply-form-${commentId}`);
-    const repliesContainer = document.getElementById(`replies-${commentId}`);
 
-    if (replyForm.classList.contains('d-none')) {
-        // 如果没有其他回复表单显示，则显示当前表单
-        replyForm.classList.remove('d-none');
+    // 切换当前表单状态
+    const isActive = replyForm.classList.contains('active');
+
+    // 关闭所有其他回复框
+    document.querySelectorAll('.reply-form').forEach(form => {
+        form.classList.remove('active');
+        form.style.maxHeight = null;
+    });
+
+    // 切换当前表单
+    if (!isActive) {
+        replyForm.classList.add('active');
+        replyForm.style.maxHeight = replyForm.scrollHeight + "px";
         replyForm.querySelector('textarea').focus();
     } else {
-        // 如果当前表单已显示，则隐藏它
-        replyForm.classList.add('d-none');
+        replyForm.style.maxHeight = null;
+        replyForm.classList.remove('active');
     }
 
-    // 隐藏同级评论的回复表单
-    const otherReplyForms = document.querySelectorAll('.reply-form:not(#reply-form-' + commentId + ')');
-    otherReplyForms.forEach(form => {
-        form.classList.add('d-none');
-    });
+    // 添加过渡结束监听
+    replyForm.addEventListener('transitionend', () => {
+        if (!replyForm.classList.contains('active')) {
+            replyForm.style.maxHeight = null;
+        }
+    }, { once: true });
 }
 
-function submitReply(event, commentId) {
+// 提交回复
+async function submitReply(event, commentId) {
     event.preventDefault();
 
     const form = event.target;
@@ -29,17 +41,26 @@ function submitReply(event, commentId) {
         return;
     }
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    // 显示加载状态
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = '提交中...';
+    submitButton.disabled = true;
+
+    // 获取CSRF Token
+    const csrfToken = await getCSRFToken();
+
+    // 获取当前登录的用户名
+    const userInfoDiv = document.getElementById('user-info');
+    const userInfo = userInfoDiv.getAttribute('data-username');
 
     fetch('/api/comment/' + commentId + '/reply', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            content: content
-        })
+        body: JSON.stringify({content: content})
     })
     .then(response => {
         if (!response.ok) {
@@ -49,14 +70,13 @@ function submitReply(event, commentId) {
     })
     .then(data => {
         if (data.success) {
-            alert('回复成功');
+            // 创建新的回复元素
             const repliesContainer = document.getElementById(`replies-${commentId}`);
-
             const replyElement = document.createElement('div');
             replyElement.className = 'reply mt-3';
             replyElement.innerHTML = `
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mt-0">${g.user.username} 回复：</h5>
+                    <h5 class="mt-0">${userInfo} 回复：</h5>
                     <span class="text-success">点赞: 0</span>
                 </div>
                 <div class="markdown-content">
@@ -73,18 +93,52 @@ function submitReply(event, commentId) {
                 </div>
             `;
 
-            // 将回复添加到评论下方
-            repliesContainer.insertBefore(replyElement, form);
+            // 直接将回复添加到评论下方的 replies-container 中
+            if (repliesContainer) {
+                repliesContainer.appendChild(replyElement);
+            }
 
-            // 隐藏回复表单并清空内容
-            form.classList.add('d-none');
-            form.querySelector('textarea').value = '';
+            // 收起回复编辑框并清空内容
+            form.style.maxHeight = null;
+            form.classList.remove('active');
+
+            // 恢复按钮状态
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+
+            alert('回复成功');
         } else {
+            // 恢复按钮状态
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+
             alert(data.message || '回复失败');
         }
     })
     .catch(error => {
+        // 恢复按钮状态
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+
         console.error('Error:', error);
         alert('回复失败，请检查控制台日志');
     });
 }
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 默认隐藏所有回复框
+    const replyForms = document.querySelectorAll('.reply-form');
+    replyForms.forEach(form => {
+        form.classList.add('d-none');
+    });
+
+    // 为所有回复按钮添加点击事件
+    const replyButtons = document.querySelectorAll('.reply-btn');
+    replyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-comment-id');
+            showReplyBox(commentId);
+        });
+    });
+});

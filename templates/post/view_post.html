@@ -8,6 +8,9 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
+        <!-- 在这里添加用户名 -->
+        <div id="user-info" data-username="{{ g.user.username if g.user else '' }}"></div>
+
         <div class="card mb-4">
             <div class="card-header">
                 <h1 class="card-title">{% block title %}{{ post.title }}{% endblock %}</h1>
@@ -102,7 +105,7 @@
                             <a href="#" class="btn btn-warning btn-sm" onclick="reportComment('{{ comment.id }}')">
                                 <i class="fas fa-exclamation-triangle"></i> 举报评论
                             </a>
-                            <a href="#" class="btn btn-info btn-sm reply-btn" onclick="showReplyBox('{{ comment.id }}')">
+                            <a href="javascript:void(0)" class="btn btn-info btn-sm reply-btn" data-comment-id="{{ comment.id }}">
                                 <i class="fas fa-reply"></i> 回复
                             </a>
                             {% endif %}
@@ -136,7 +139,7 @@
                             {% endfor %}
 
                             <!-- 回复编辑框 -->
-                            <div class="reply-form d-none" id="reply-form-{{ comment.id }}">
+                            <div class="reply-form" id="reply-form-{{ comment.id }}">
                                 <form method="POST" onsubmit="submitReply(event, {{ comment.id }})">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
@@ -163,4 +166,16 @@
 <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 <script src="{{ url_for('static', filename='js/emoji_interact.js') }}"></script>
 <script src="{{ url_for('static', filename='js/reply.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reply_replies.js') }}"></script>
+<script>
+// 修改页面加载时的初始化逻辑
+document.addEventListener('DOMContentLoaded', function() {
+    // 移除所有回复框的active类
+    const replyForms = document.querySelectorAll('.reply-form');
+    replyForms.forEach(form => {
+        form.classList.remove('active');
+        form.style.maxHeight = null;
+    });
+});
+</script>
 {% endblock %}

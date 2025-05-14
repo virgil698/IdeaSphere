@@ -4,6 +4,20 @@
     padding-left: 1rem;
 }
 
+.reply-form {
+    margin-top: 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    opacity: 0;
+}
+
+.reply-form.active {
+    max-height: 200px; /* 根据实际内容高度调整 */
+    opacity: 1;
+    transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+}
+
 .reply {
     background-color: #f9f9f9;
     padding: 1rem;
@@ -25,6 +39,17 @@
 
 .reply-btn:hover {
     background-color: #3077c2;
+}
+
+/* 确保按钮间距 */
+.reply .btn-sm {
+    margin: 0 5px;
+}
+
+/* 加载状态提示 */
+.loading-replies {
+    color: #666;
+    font-style: italic;
 }
 
 /* 响应式调整 */
