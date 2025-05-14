@@ -326,7 +326,7 @@ def reply(front_end_reply_messsage, reply_to_users_id):
 
 if __name__ == '__main__':
     # 初始化日志
-    log_path = "./logs"  # 确保这个路径是正确的
+    log_path = "./logs"
     if not os.path.exists(log_path):
         os.makedirs(log_path, exist_ok=True)
 
