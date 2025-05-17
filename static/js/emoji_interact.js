@@ -39,9 +39,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const editorRect = contentEditor.getBoundingClientRect();
 
             // 6. 计算相对于编辑器的位置
-            const topPosition = buttonRect.bottom - editorRect.top + 10;
+            const topPosition = buttonRect.bottom - editorRect.top + 500;
             emojiPopup.style.top = topPosition + 'px';
-            emojiPopup.style.left = '10px';
+            emojiPopup.style.left = '350px';
             emojiPopup.style.transform = 'none';
 
             // 7. 添加显示动画效果
