@@ -137,13 +137,3 @@ async function replyComment(commentId) {
 }
 let cig_id = document.getElementById("comment-input-group");
 let comment_id = document.getElementById("comment");
-
-function comment_input_animation() {
-    cig_id.classList.add("a");
-    comment_id.classList.add("a");
-}
-
-function Rcomment_input_animation() {
-    cig_id.classList.remove("a");
-    comment_id.classList.remove("a");
-}

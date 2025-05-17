@@ -49,9 +49,8 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="mb-3" onmouseover="comment_input_animation()" onmouseout="Rcomment_input_animation()">
                     <label for="comment" class="form-label">发表评论</label>
-                    <div class="input-group" id="comment-input-group">
-                        <textarea class="form-control" id="comment" name="content" rows="3"
-                            placeholder="让大家来听听你得心声！"></textarea>
+                    <div class="input-group content-editor" id="comment-input-group">
+                        <textarea class="form-control" id="comment" name="content" rows="3" placeholder="让大家来听听你得心声！"></textarea>
                         <span class="input-group-text emoji-button" id="emojiButton" title="添加表情">
                             <i class="fas fa-smile"></i>
                         </span>
@@ -164,7 +163,7 @@
 <script src="{{ url_for('static', filename='js/user_control.js') }}"></script>
 <script src="{{ url_for('static', filename='js/perms.js') }}"></script>
 <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
-<script src="{{ url_for('static', filename='js/emoji_interact.js') }}"></script>
+<script src="{{ url_for('static', filename='js/emoji_interact.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/reply.js') }}"></script>
 <script src="{{ url_for('static', filename='js/reply_replies.js') }}"></script>
 <script>
@@ -177,5 +176,26 @@ document.addEventListener('DOMContentLoaded', function() {
         form.style.maxHeight = null;
     });
 });
+
+// 添加评论输入框悬停动画效果
+function comment_input_animation() {
+    const commentInputGroup = document.getElementById('comment-input-group');
+    if (commentInputGroup) {
+        commentInputGroup.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
+        commentInputGroup.style.transition = 'box-shadow 0.3s ease';
+    }
+    cig_id.classList.add("a");
+    comment_id.classList.add("a");
+}
+
+// 移除评论输入框悬停动画效果
+function Rcomment_input_animation() {
+    const commentInputGroup = document.getElementById('comment-input-group');
+    if (commentInputGroup) {
+        commentInputGroup.style.boxShadow = 'none';
+    }
+    cig_id.classList.remove("a");
+    comment_id.classList.remove("a");
+}
 </script>
 {% endblock %}
