@@ -1,3 +1,20 @@
+// 添加评论输入框悬停动画效果
+function comment_input_animation() {
+    const commentInputGroup = document.getElementById('comment-input-group');
+    if (commentInputGroup) {
+        commentInputGroup.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
+        commentInputGroup.style.transition = 'box-shadow 0.3s ease';
+    }
+}
+
+// 移除评论输入框悬停动画效果
+function Rcomment_input_animation() {
+    const commentInputGroup = document.getElementById('comment-input-group');
+    if (commentInputGroup) {
+        commentInputGroup.style.boxShadow = 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log("表情功能初始化开始");
 

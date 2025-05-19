@@ -52,6 +52,33 @@
     font-style: italic;
 }
 
+/* 分页样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: background-color 0.3s;
+}
+
+.page-link:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.page-info {
+    margin: 0 15px;
+    color: #666;
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
     .replies-container {

@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-12">
         <!-- 在这里添加用户名 -->
-        <div id="user-info" data-username="{{ g.user.username if g.user else '' }}"></div>
+        <div id="user-info" data-username="{{ g.user.username if g.user else '' }}" data-is-authenticated="{{ 'true' if g.user else 'false' }}"></div>
 
         <div class="card mb-4">
             <div class="card-header">
@@ -47,7 +47,7 @@
             {% if g.user %}
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="mb-3" onmouseover="comment_input_animation()" onmouseout="Rcomment_input_animation()">
+                <div class="mb-3">
                     <label for="comment" class="form-label">发表评论</label>
                     <div class="input-group content-editor" id="comment-input-group">
                         <textarea class="form-control" id="comment" name="content" rows="3" placeholder="让大家来听听你得心声！"></textarea>
@@ -111,31 +111,55 @@
                         </div>
 
                         <!-- 回复区域 -->
-                        <div class="replies-container" id="replies-{{ comment.id }}">
-                            {% for reply in comment.replies %}
-                            {% if not reply.deleted %}
-                            <div class="reply mt-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mt-0">{{ reply.author.username }} 回复：</h5>
-                                    <span class="text-success">点赞: {{ reply.like_count }}</span>
-                                </div>
-                                <div class="markdown-content">
-                                    {{ reply.html_content | safe }}
-                                </div>
-                                <meta name="csrf-token" content="{{ csrf_token }}">
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    {% if g.user %}
-                                    <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeReply('{{ reply.id }}'); send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')">
-                                        <i class="fas fa-thumbs-up"></i> 点赞
-                                    </a>
-                                    <a href="#" class="btn btn-warning btn-sm" onclick="reportReply('{{ reply.id }}')">
-                                        <i class="fas fa-exclamation-triangle"></i> 举报回复
-                                    </a>
-                                    {% endif %}
+                        <div class="replies-container mt-3" id="replies-{{ comment.id }}">
+                            <!-- 显示点赞数最高的1条和最新发布的1条评论回复 -->
+                            {% set replies = get_comment_replies_summary(comment.id) %}
+                            {% if replies %}
+                                {% if replies.total_replies > 0 %}
+                                    {% for reply in replies.top_replies %}
+                                        <div class="reply mt-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="mt-0">{{ reply.author }} 回复：</h5>
+                                                <span class="text-success">点赞: {{ reply.like_count }}</span>
+                                            </div>
+                                            <div class="markdown-content">
+                                                {{ reply.content | safe }}
+                                            </div>
+                                            <meta name="csrf-token" content="{{ csrf_token }}">
+                                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                                {% if g.user %}
+                                                <a href="#" class="btn btn-success btn-sm" onclick="incrementLikeReply('{{ reply.id }}'); send_perm_data_to_backend('{{ g.user }}', '{{ g.role }}', 'like_post')">
+                                                    <i class="fas fa-thumbs-up"></i> 点赞
+                                                </a>
+                                                <a href="#" class="btn btn-warning btn-sm" onclick="reportReply('{{ reply.id }}')">
+                                                    <i class="fas fa-exclamation-triangle"></i> 举报回复
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <!-- 回复数量提示和点击查看按钮 -->
+                                {% if replies.total_replies > 2 %}
+                                    <div class="text-center mt-2">
+                                        <p class="text-muted">共 {{ replies.total_replies }} 条回复</p>
+                                        <button class="btn btn-outline-primary view-all-replies-btn" data-comment-id="{{ comment.id }}">
+                                            点击查看回复
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                            <!-- 分页回复内容区域 -->
+                            <div class="all-replies-container" id="all-replies-{{ comment.id }}" style="display: none;">
+                                <div id="replies-list-{{ comment.id }}"></div>
+
+                                <!-- 分页 -->
+                                <div class="pagination mt-3" id="pagination-{{ comment.id }}">
+                                    <!-- 分页内容将通过JavaScript动态生成 -->
                                 </div>
                             </div>
-                            {% endif %}
-                            {% endfor %}
 
                             <!-- 回复编辑框 -->
                             <div class="reply-form" id="reply-form-{{ comment.id }}">
@@ -160,12 +184,13 @@
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_post.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reply.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sorting.css') }}">
 <script src="{{ url_for('static', filename='js/user_control.js') }}"></script>
 <script src="{{ url_for('static', filename='js/perms.js') }}"></script>
 <script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
 <script src="{{ url_for('static', filename='js/emoji_interact.js') }}"></script>
 <script src="{{ url_for('static', filename='js/reply.js') }}"></script>
-<script src="{{ url_for('static', filename='js/reply_replies.js') }}"></script>
+<script src="{{ url_for('static', filename='js/replies.js') }}"></script>
 <script>
 // 修改页面加载时的初始化逻辑
 document.addEventListener('DOMContentLoaded', function() {
@@ -176,26 +201,5 @@ document.addEventListener('DOMContentLoaded', function() {
         form.style.maxHeight = null;
     });
 });
-
-// 添加评论输入框悬停动画效果
-function comment_input_animation() {
-    const commentInputGroup = document.getElementById('comment-input-group');
-    if (commentInputGroup) {
-        commentInputGroup.style.boxShadow = '0 0 10px rgba(0, 123, 255, 0.5)';
-        commentInputGroup.style.transition = 'box-shadow 0.3s ease';
-    }
-    cig_id.classList.add("a");
-    comment_id.classList.add("a");
-}
-
-// 移除评论输入框悬停动画效果
-function Rcomment_input_animation() {
-    const commentInputGroup = document.getElementById('comment-input-group');
-    if (commentInputGroup) {
-        commentInputGroup.style.boxShadow = 'none';
-    }
-    cig_id.classList.remove("a");
-    comment_id.classList.remove("a");
-}
 </script>
 {% endblock %}

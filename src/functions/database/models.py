@@ -58,6 +58,7 @@ class ReplyComment(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now()
     )
+    like_count = db.Column(db.Integer, default=0)  # 添加 like_count 属性
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

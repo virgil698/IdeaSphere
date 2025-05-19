@@ -384,29 +384,73 @@ def get_comment_reply_count(comment_id):
 # 获取评论回复列表的 API
 @api_bp.route('/comment/<int:comment_id>/replies', methods=['GET'])
 def get_comment_replies(comment_id):
-    # 验证 CSRF Token
-    csrf_token = request.headers.get('X-CSRFToken')
-    if not csrf_token:
-        return jsonify({'message': 'CSRF Token missing'}), 403
-
-    try:
-        validate_csrf(csrf_token)
-    except:
-        return jsonify({'message': 'Invalid CSRF Token'}), 403
+    # 获取分页参数
+    page = request.args.get('page', 1, type=int)
+    per_page = 10  # 每页显示10条回复
 
     # 获取评论回复列表
-    replies = ReplyComment.query.filter_by(target_comment_id=comment_id).all()
+    replies = ReplyComment.query.filter_by(target_comment_id=comment_id).\
+        order_by(ReplyComment.like_count.desc(), ReplyComment.reply_at.desc())
+
+    # 使用关键字参数调用 paginate 方法
+    paginated_replies = replies.paginate(page=page, per_page=per_page, error_out=False)
+
+    # 准备返回数据
     reply_list = []
-    for reply in replies:
-        reply_data = {
+    for reply in paginated_replies.items:
+        reply_list.append({
             'id': reply.id,
             'content': reply.reply_message,
             'author': reply.reply_user,
-            'created_at': reply.reply_at.isoformat()
-        }
-        reply_list.append(reply_data)
+            'created_at': reply.reply_at.isoformat(),
+            'like_count': reply.like_count
+        })
+
     return jsonify({
-        "reply_list": reply_list
+        'reply_list': reply_list,
+        'page': paginated_replies.page,
+        'pages': paginated_replies.pages,
+        'has_prev': paginated_replies.has_prev,
+        'has_next': paginated_replies.has_next,
+        'prev_num': paginated_replies.prev_num if paginated_replies.has_prev else None,
+        'next_num': paginated_replies.next_num if paginated_replies.has_next else None
+    })
+
+@api_bp.route('/comment/<int:comment_id>/replies_summary', methods=['GET'])
+def get_comment_replies_summary(comment_id):
+    # 获取回复总数
+    total_replies = ReplyComment.query.filter_by(target_comment_id=comment_id).count()
+
+    # 获取点赞数最高的1条回复
+    top_liked_reply = ReplyComment.query.filter_by(target_comment_id=comment_id).\
+        order_by(ReplyComment.like_count.desc()).first()
+
+    # 获取最新发布的1条回复
+    latest_reply = ReplyComment.query.filter_by(target_comment_id=comment_id).\
+        order_by(ReplyComment.reply_at.desc()).first()
+
+    top_replies = []
+    if top_liked_reply:
+        top_replies.append({
+            'id': top_liked_reply.id,
+            'content': top_liked_reply.reply_message,
+            'author': top_liked_reply.reply_user,
+            'created_at': top_liked_reply.reply_at.isoformat(),
+            'like_count': top_liked_reply.like_count
+        })
+
+    if latest_reply and latest_reply.id != (top_liked_reply.id if top_liked_reply else None):
+        top_replies.append({
+            'id': latest_reply.id,
+            'content': latest_reply.reply_message,
+            'author': latest_reply.reply_user,
+            'created_at': latest_reply.reply_at.isoformat(),
+            'like_count': latest_reply.like_count
+        })
+
+    return jsonify({
+        'total_replies': total_replies,
+        'top_replies': top_replies
     })
 
 # # 点赞回复的 API

@@ -1,6 +1,7 @@
 from flask import flash, g, redirect, url_for, request, render_template, abort, jsonify
 from src.functions.database.models import Post, db, Comment, Section
 from src.functions.parser.markdown_parser import convert_markdown_to_html
+from src.functions.service.user_operations import get_comment_replies_summary
 
 
 def create_post_logic():
@@ -85,4 +86,4 @@ def view_post_logic(post_id):
             return redirect(url_for('view_post', post_id=post.id))
 
     comments = Comment.query.filter_by(post_id=post.id, deleted=False).all()
-    return render_template('post/view_post.html', post=post, comments=comments, section=section)
+    return render_template('post/view_post.html', post=post, comments=comments, section=section, get_comment_replies_summary=get_comment_replies_summary)

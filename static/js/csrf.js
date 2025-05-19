@@ -20,4 +20,5 @@ function setCSRFTokenInHeader(csrfToken) {
     };
 }
 
+// 将 getCSRFToken 函数暴露给全局作用域
 window.getCSRFToken = getCSRFToken;

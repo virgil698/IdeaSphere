@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from flask import g, jsonify, request, abort, flash, url_for, redirect, render_template
 
-from src.functions.database.models import Report, db, Like, Post, Comment, User, ReplyComment
+from src.functions.database.models import db, Like, Post, Comment, User, ReplyComment
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 
 
@@ -153,3 +151,40 @@ def reply_logic(comment_id, reply_content):
     db.session.commit()
 
     return jsonify({'success': True, 'message': '回复成功'})
+
+
+def get_comment_replies_summary(comment_id):
+    # 获取点赞数最高的1条回复
+    top_liked_reply = ReplyComment.query.filter_by(target_comment_id=comment_id).\
+        order_by(ReplyComment.like_count.desc()).first()
+
+    # 获取最新发布的1条回复
+    latest_reply = ReplyComment.query.filter_by(target_comment_id=comment_id).\
+        order_by(ReplyComment.reply_at.desc()).first()
+
+    top_replies = []
+    if top_liked_reply:
+        top_replies.append({
+            'id': top_liked_reply.id,
+            'content': top_liked_reply.reply_message,
+            'author': top_liked_reply.reply_user,
+            'created_at': top_liked_reply.reply_at.isoformat(),
+            'like_count': top_liked_reply.like_count
+        })
+
+    if latest_reply and latest_reply.id != (top_liked_reply.id if top_liked_reply else None):
+        top_replies.append({
+            'id': latest_reply.id,
+            'content': latest_reply.reply_message,
+            'author': latest_reply.reply_user,
+            'created_at': latest_reply.reply_at.isoformat(),
+            'like_count': latest_reply.like_count
+        })
+
+    # 获取回复总数
+    total_replies = ReplyComment.query.filter_by(target_comment_id=comment_id).count()
+
+    return {
+        'total_replies': total_replies,
+        'top_replies': top_replies
+    }
