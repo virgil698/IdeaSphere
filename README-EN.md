@@ -8,18 +8,12 @@
 <h3 align="center">IdeaSphere</h3>
 
 <p align="center">
-  IdeaSphere is a Python3 forum software, easy to configure, with better communication features and more customization options, etc.
-</p>
-<p align="center">
-  IdeaSphere 是 Python3 实现的论坛程序，易于配置、更好交流功能和更多定制等。
+  Open source first, configuration at will, outstanding functions, unlimited customization
 </p>
 
-[![GitHub forks](https://img.shields.io/github/forks/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.comIdeaSphere-team/IdeaSphere/network)
-[![Stars](https://img.shields.io/github/stars/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/stargazers)  
-[![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge&logo=python)](https://www.python.org/downloads/release/python-3110/)
-[![Flask](https://img.shields.io/badge/Flask-3.1.0-blueviolet?style=for-the-badge)](https://pypi.org/project/Flask/)
-[![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord)](https://discord.gg/eyn9GC88XP)
+<p align="center">
+  <a href="https://ideaspher.org">Official Website</a> | <a href="https://docs.ideasphere.org">Docs</a> | <a href="https://gitcode.com/IdeaSphere-team">GitCord</a> | <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298">QQ Developer Group</a> | <a href="https://discord.gg/eyn9GC88XP">Discord Channel</a> | <a href="https://t.me/+vp7hIx464JUwMzk1">Telegram Group</a>
+</p>
 
 <p align="center">
   <a href="https://github.com/IdeaSphere-team/IdeaSphere/blob/main/README.md">简体中文</a> | English
@@ -27,141 +21,94 @@
 
 </div>
 
-
-## 📖 Project introduction
-
 IdeaSphere is an open-source social platform built with Python3 and Flask, that aims to provide easy deployment, optimize performance, deeply integrate centralized/decentralized features, and support extensive customization. Future versions will use Go, Python, and TypeScript to enhance stability and scalability.
-# 🌟 Core Features
 
-- **Simple and Easy to Use**: Clean interface, practical functions, and easy to get started.
-- **Easy to Configure**: Most configurations can be completed through the `config.yml` file.
-- **Lightweight**: Developed with the Flask framework, ensuring high performance.
-- **Modular Design**: Clear code structure for easy expansion and maintenance.
+# 🛠️ Quick Start
 
-### 🌟 Implemented Features
+See [wiki/install](https://github.com/IdeaSphere-team/IdeaSphere/wiki/Install)
 
-| Approximate Task | Current Status | Implementation Version |
-|---|---|---|
-| **⌨️ Login** | ✅ | v0.1.0 |
-| **⌨️ Register** | ✅ | v0.1.0 |
-| **⌨️ Post Thread** | ✅ | v0.1.0 |
-| **🖼 Super Administrator** | ✅ | v0.1.0 |
-| **🖼 Moderator Administrator** | ✅ | v0.1.0 |
-| **👍 Like** | ✅ | v0.1.0 |
-| **🧱 Reporting System** | ✅ | v0.1.0 |
-| **📦 Online Users** | ✅ | v0.1.0 |
-| **⭐ Post Replies** | ✅ | v0.1.0 |
-| **🔬 Search** | ✅ | v0.1.5 |
-| **📊 Site Statistics** | ✅ | v0.1.5 |
-| **🚀 Admin Panel** | ✅ | v0.2.0 |
-| **📦 Emoji Support** | ✅ | v0.2.0 |
-| **🗑 Delete Thread** | ✅ | v0.2.5 |
-| **👤 Permission Groups** | ✅ | v0.2.5 |
-| **🎈 Thread Sections** | ✅ | v0.3.0 |
-| **🎈 404 Page** | ✅ | v0.3.0 |
-| **🎈 API Transmission** | ✅ | v0.3.0 |
-| **📊 Thread Post Time, Like Count Sorting** | ✅ | v0.3.0 |
-| **📝 Rich Text Editor** | ✅ | v0.3.0 |
-| **👤 User Page** | ✅ | v0.3.0 |
-| **📊 Contribution Graph System** | ✅ | v0.3.0 |
-| **📝 Logs Recording** | 🚧 | |
-| **🔍 ICenter Admin Panel (For details, see [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧 | |
-| **✅ Full Completion of Permission Groups** | 🚧 | |
-| **💬 Content Replies** | 🚧 | |
-| **👍 Advanced Markdown Syntax Support (Refer to [here](https://shiro.innei.in/#/markdown))** | 🚧 | |
-| **⚙️ User Custom Settings** | 🚧 | |
-| **👥 Follow and Fans** | 🚧 | |
-| **🔄 Dynamic System** | 🚧 | |
-| **✉️ Private Messaging System** | ⏳ | |
-| **📧 Email Registration, Password Reset** | ⏳ | |
-| **🔄 Go+Py+TS Rewrite** | ⏳ | |
-| **📄 Templates** | ⏳ | |
-| **🔌 Plugins** | ⏳ | |
-| **🔏 ProgocoSQL Database Support** | ⏳ | |
-| **🔏 Redis Caching Support** | ⏳ | |
-| **🔒 Data Security** | ⏳ | |
-| **📱 Two-step Login Verification** | ⏳ | |
-| **💽 Auto Backup + Migration** | ⏳ | |
-| **💾 Object Storage** | ⏳ | |
-| **🔍 SEO Optimization** | ⏳ | |
-| **🗺️ Site Map** | ⏳ | |
-| **🗺️ Active Search Engine Push** | ⏳ | |
+# ⬆️ Submit Contributions
 
-Here is the translation of the legend for your reference:
+Your contributions to IdeaSphere are welcome. Follow these steps:
 
+1. Fork this repository to your GitHub account.
+2. Clone your forked repository locally:
+   `git clone https://github.com/your-username/IdeaSphere.git`
+3. Make changes, build and test the documentation locally. Push changes to your repository once everything works.
+4. On this repository, click Pull requests -> New pull request to submit a PR.
+
+# 🎫 License
+
+[![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
+
+IdeaSphere is open-sourced under the MIT License. Please comply with the license terms.
+
+# 📫 Donate to Us
+
+If you like our work, you can donate via our [Open Collective](https://opencollective.com/ideasphere) or through [Aifadian](https://afdian.com/a/ideasphere).
+
+# 🌟 Implementation List
+
+| Task          | Status     | Version |
+|---------------|------------|---------|
+| **⌨️ Login**  | ✅         | v0.1.0  |
+| **⌨️ Register** | ✅         | v0.1.0  |
+| **⌨️ Post**   | ✅         | v0.1.0  |
+| **🖼 Super Admin** | ✅         | v0.1.0  |
+| **🖼 Moderator Admin** | ✅         | v0.1.0  |
+| **👍 Like**   | ✅         | v0.1.0  |
+| **🧱 Reporting System** | ✅         | v0.1.0  |
+| **📦 Online Users** | ✅         | v0.1.0  |
+| **⭐ Reply to Posts** | ✅         | v0.1.0  |
+| **🔬 Search**      | ✅         | v0.1.5  |
+| **📊 Site Statistics** | ✅         | v0.1.5  |
+| **🚀 Admin Panel** | ✅         | v0.2.0  |
+| **📦 Emoji Support** | ✅         | v0.2.0  |
+| **🗑 Delete Posts** | ✅         | v0.2.5  |
+| **👤 Permission Groups** | ✅         | v0.2.5  |
+| **🎈 Post Sections** | ✅         | v0.3.0  |
+| **🎈 404 Page** | ✅         | v0.3.0  |
+| **🎈 API Transfer** | ✅         | v0.3.0  |
+| **📊 Post Time and Like Sort** | ✅         | v0.3.0  |
+| **📝 Rich Text Editor** | ✅         | v0.3.0  |
+| **👤 User Page** | ✅         | v0.3.0  |
+| **📊 Contribution Graph** | ✅         | v0.3.0  |
+| **📝 Log Recording** | 🚧         |         |
+| **🔍 ICenter Admin Panel (Details [here](https://github.com/IdeaSphere-team/IdeaSphere/issues/5))** | 🚧         |         |
+| **✅ Full Permission Groups** | 🚧         |         |
+| **💬 Content Replies** | 🚧         |         |
+| **👍 Advanced Markdown Support (Ref [this](https://shiro.innei.in/#/markdown))** | 🚧         |         |
+| **⚙️ Custom User Settings** | 🚧         |         |
+| **👥 Follow and Fans** | 🚧         |         |
+| **🔄 Dynamic System** | 🚧         |         |
+| **✉️ Private Messaging** | ⏳         |         |
+| **📧 Email Registration and Password Reset** | ⏳         |         |
+| **🔄 Rewrite in Go+Py+TS** | ⏳         |         |
+| **📄 Templates** | ⏳         |         |
+| **🔌 Plugins** | ⏳         |         |
+| **🔏 ProgocoSQL Database Support** | ⏳         |         |
+| **🔏 Redis Cache Support** | ⏳         |         |
+| **🔒 Data Security** | ⏳         |         |
+| **📱 Two-step Verification** | ⏳         |         |
+| **💽 Auto Backup + Migration** | ⏳         |         |
+| **💾 Object Storage** | ⏳         |         |
+| **🔍 SEO Optimization** | ⏳         |         |
+| **🗺️ Site Map** | ⏳         |         |
+| **🗺️ Active Search Engine Push** | ⏳         |         |
+
+Legend:
 - ✅: Task completed. Great job! 🎉
 - 🚧: Task in progress. We're working hard! 💪
-- ⏳: Task upcoming. Something exciting is coming soon! 🌠
+- ⏳: Task upcoming. Something exciting is on the way! 🌠
 
-# 🛠️ Installation Guide
-
-For more details, please refer to [wiki/install](https://github.com/IdeaSphere-team/IdeaSphere/wiki/Install).
-
-# ⬆️ Contributing
-
-We welcome your participation in IdeaSphere's development. Follow these steps to submit your contributions:
-
-1. Fork this repository to your GitHub account
-2. Clone your account's repository to your local machine
-   `git clone https://github.com/  your_username/IdeaSphere.git`
-3. Make changes, build, and test the documentation locally. Once verified, push to your repository
-4. Return to this repository, click Pull requests -> New pull request to initiate a PR
-
-# 📬 Donate to Us
-
-If you like our work, you can donate anytime via our [Open Collective](https://opencollective.com/ideasphere) or IdeaSphere’s [AFDIAN](https://afdian.com/a/ideasphere).
-
-# 📞 Contact Us
-
-If you have any questions or suggestions, feel free to reach out to us through the following methods:
-
-- Submit [GitHub Issues](https://github.com/IdeaSphere-team/IdeaSphere/issues/new/choose  )
-- QQ Group: [1036347298](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0S7iEPBCDpSWgvzARFqxM_zyIlnQ2-km&authKey=AiX0JpNVU8d%2BIjMocMxVhE0OcxbdOaQAt1wnnekYg%2BYQ0GZfOy3KXuSFTBZ2pDD2&noverify=0&group_code=1036347298  )
-- Discord: [![Discord](https://img.shields.io/discord/1349304044723765258?style=for-the-badge&logo=discord  )](https://discord.gg/eyn9GC88XP)
-- Telegram Group: [Telegram Group](https://t.me/+vp7hIx464JUwMzk1)
-
-## 🤝 Contributor
+# 🤝 Contributors
 
 [![Contrib](https://contrib.rocks/image?repo=IdeaSphere-team/IdeaSphere)](https://github.com/IdeaSphere-team/IdeaSphere/graphs/contributors)
 
-## ⭐ Star history chart
+# ⭐ Star History Graph
 
 [![Stargazers over time](https://starchart.cc/IdeaSphere-team/IdeaSphere.svg?variant=adaptive)](https://starchart.cc/IdeaSphere-team/IdeaSphere)
 
-## 💡 Status
+# 💡 Status
 
 ![Alt](https://repobeats.axiom.co/api/embed/ae7daea15634a93b5e54eab266bdc6c4a0fb8671.svg "Repobeats analytics image")
-
-## 😊 Disclaimer
-
-> [!NOTE]
-> This project is intended for learning and reference purposes only. When using it, please ensure compliance with relevant laws, regulations, and website service terms.
-
-## 🎫 License
-
-> [!NOTE]
-> This project is licensed under the `MIT License`. For more details, please refer to the `LICENSE` file.
-
-```
-MIT License
-
-Copyright (c) 2025 IdeaSphere-team
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
