@@ -51,13 +51,10 @@
             </div>
         </div>
         <div class="nav-right">
-            <div class="search-box">
-                <input type="text" placeholder="搜索..." id="searchInput">
-                <i class="fas fa-search"></i>
-                <div class="search-results-popup" id="searchResultsPopup">
-                    <div class="search-results-content" id="searchResultsContent"></div>
-                </div>
-            </div>
+        <div class="search-box">
+            <input type="text" placeholder="搜索..." id="searchInput">
+            <button type="button" id="searchButton"><i class="fas fa-search"></i></button>
+        </div>
             {% if 'user_id' in session %}
             <div class="user-menu">
                 <a href="#" class="user-avatar">
@@ -201,6 +198,14 @@
             top: 0,
             behavior: 'smooth'
         });
+    });
+
+    // 点击搜索页面跳转到专门的搜索页
+    document.getElementById('searchButton').addEventListener('click', function() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            window.location.href = `/search?keyword=${encodeURIComponent(query)}`;
+        }
     });
 </script>
     {% with messages = get_flashed_messages(with_categories=true) %}

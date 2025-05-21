@@ -25,7 +25,7 @@ from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
-from src.functions.service.search import search_logic
+from src.functions.service.search_bp import search_bp  # 导入搜索蓝图
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import reply_logic, like_post_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, edit_post_logic, \
@@ -89,6 +89,9 @@ app.register_blueprint(user_bp)
 
 # 注册版务中心页面蓝图
 app.register_blueprint(moderation_bp)
+
+# 注册搜索页面蓝图
+app.register_blueprint(search_bp)
 
 # 注册论坛其他页面蓝图
 app.register_blueprint(about_bp)
@@ -218,10 +221,6 @@ def upgrade_user(user_id):
 @app.route('/downgrade_user/<int:user_id>')
 def downgrade_user(user_id):
     return downgrade_user_logic(user_id)
-
-@app.route('/search/<keywords>', methods=['GET'])
-def search(keywords):
-    return search_logic(keywords)
 
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):

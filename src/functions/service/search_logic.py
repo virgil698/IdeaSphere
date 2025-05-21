@@ -1,4 +1,3 @@
-from flask import url_for, redirect, jsonify
 from fuzzywuzzy import fuzz
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -16,8 +15,7 @@ def find_matches(data_field, field_name, keywords, threshold):
     matches = []
     for item in data_field:
         text = item.get('content') if field_name == '帖子内容' else item.get(
-            'title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get(
-            'content')
+            'title') if field_name == '帖子标题' else item.get('author') if field_name == '作者' else item.get('content')
 
         cosine_sim = cosine_simulator(keywords, text) if text else 0.0
         fuzzy_ratio = fuzz.token_sort_ratio(keywords, text) / 100.0 if text else 0.0
@@ -63,15 +61,15 @@ def get_data():
 
 def search_logic(keywords):
     if not keywords:
-        return redirect(url_for('index'))
+        return {'success': False, 'message': '未提供搜索关键词'}
 
     keyword_results = SearchModel.query.filter(SearchModel.keyword.ilike(f'%{keywords}%')).all()
     if keyword_results:
-        return jsonify({
+        return {
             'success': True,
             'type': '关键词匹配',
-            'results': [{} for k in keyword_results]
-        })
+            'results': [{'keyword': k.keyword} for k in keyword_results]
+        }
 
     data = get_data()
     threshold = 0.2
@@ -91,17 +89,17 @@ def search_logic(keywords):
                 'source': result_type,
                 'content': match['content'],
                 'similarity': match['similarity'],
-                'postId': match.get('postId'),
+                'postId': match.get('postId'),  # 确保 postId 存在
                 'commentId': match.get('commentId')
             })
 
     all_results = sorted(all_results, key=lambda x: x['similarity'], reverse=True)[:20]
 
     if all_results:
-        return jsonify({
+        return {
             'success': True,
             'type': '内容匹配',
             'results': all_results
-        })
+        }
 
-    return jsonify({'success': False, 'message': '未找到相关结果'})
+    return {'success': False, 'message': '未找到相关结果'}

@@ -187,30 +187,33 @@
 }
 
 .search-box {
-    position: relative;
+    display: flex;
     width: 300px;
 }
 
 .search-box input {
-    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
     background-color: var(--background-secondary);
     border: none;
     font-size: 1rem;
     height: 45px;
+    box-sizing: border-box;
 }
 
-.search-box i {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
+.search-box button {
+    height: 45px;
+    width: 45px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0; /* 去除圆形外观 */
     cursor: pointer;
     transition: var(--transition-base);
 }
 
-.search-box i:hover {
-    color: var(--primary-color);
+.search-box button i {
+    font-size: 1rem;
 }
 
 .user-menu {
