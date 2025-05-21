@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify
-from src.functions.service.search_logic import search_logic  # 从新文件导入
+from src.functions.service.search_logic import search_logic
 
 # 创建蓝图
 search_bp = Blueprint('search_bp', __name__)
