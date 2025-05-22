@@ -19,7 +19,6 @@ from src.functions.icenter.index_logic_for_icenter import return_icenter_index_t
 from src.functions.index import index_logic, newest_logic, global_logic
 from src.functions.moderation.moderation import moderation_bp
 from src.functions.parser.markdown_parser import remove_markdown
-from src.functions.perm.permission_groups import permission_group_logic
 from src.functions.section.section import section_bp
 from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
@@ -225,10 +224,6 @@ def downgrade_user(user_id):
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
     return edit_post_logic(post_id)
-
-@app.route('/perm_groups/<int:user_id>/<string:user_perm>/<string:operation>', methods=['GET', 'POST'])
-def perm_groups(user_id, user_perm, operation):
-    return permission_group_logic(user_id, user_perm, operation)
 
 @app.route('/follow/<int:follower_id>/<int:following_id>', methods=['POST'])
 def follow_user(follower_id, following_id):
