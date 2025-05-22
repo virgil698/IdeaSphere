@@ -76,24 +76,25 @@
         <!-- 主要内容区域 -->
         <main class="main-content">
             <div class="container">
-                <!-- 搜索准确搜框 -->
+                <!-- 搜索量框 -->
                 <div class="search-bar">
                     <h2>搜索结果</h2>
                     <p>“{{ keyword }}” 的搜索结果</p>
                 </div>
 
-                <!-- 搜框 -->
+                <!-- 搜索框 -->
                 <div class="search-results">
                     {% if results %}
                         {% for result in results %}
                             <div class="result-item">
-                                {% if result.postId %}
-                                    <h3><a href="{{ url_for('view_post', post_id=result.postId) }}">{{ result.content }}</a></h3>
-                                {% else %}
-                                    <h3>{{ result.content }}</h3>
-                                {% endif %}
-                                <p class="result-meta">来源：{{ result.source }}</p>
-                                <p class="result-excerpt">相似度：{{ result.similarity }}</p>
+                                <div class="result-left">
+                                    <h3 class="result-title">{% if result.postId %}<a href="{{ url_for('view_post', post_id=result.postId) }}">{{ result.content }}</a>{% else %}{{ result.content }}{% endif %}</h3>
+                                    <p class="result-content">内容预览：{{ result.excerpt }}</p>
+                                    <p class="result-meta">来源：{{ result.source }}</p>
+                                </div>
+                                <div class="result-right">
+                                    <p class="similarity">相似度：{{ result.similarity }}</p>
+                                </div>
                             </div>
                         {% endfor %}
                     {% else %}
