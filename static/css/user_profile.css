@@ -1,27 +1,30 @@
-.user-profile {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 0;
-    max-width: 100%;
-    margin: 0;
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    overflow: hidden;
-    height: 100%;
+/* 用户页面总体样式 */
+.user-profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    gap: 30px;
 }
 
-/* 主要信息卡片 */
+/* 主要内容区域 */
+.profile-main-container {
+    flex: 1;
+}
+
+/* 主要信息卡片样式 */
 .profile-main-card {
     background-color: white;
-    margin-bottom: 0;
-    overflow: hidden;
+    margin-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .user-cover {
     position: relative;
     height: 200px;
-    margin-bottom: 0;
     overflow: hidden;
 }
 
@@ -46,8 +49,6 @@
     border: 3px solid white;
     overflow: hidden;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    background-color: white;
 }
 
 .user-avatar {
@@ -97,72 +98,14 @@
     text-transform: uppercase;
 }
 
-/* 个人信息与联系方式 */
-.user-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-top: 0;
-    padding: 0;
-}
-
-.detail-section {
-    background-color: white;
-    padding: 20px 25px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.section-title {
-    font-size: 20px;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.detail-item {
-    display: flex;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #f0f0f0;
-}
-
-.detail-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.detail-label {
-    width: 110px;
-    color: #7f8c8d;
-    font-weight: 500;
-    flex-shrink: 0;
-    font-size: 16px;
-}
-
-.detail-value {
-    flex: 1;
-    color: #34495e;
-    word-break: break-all;
-    font-size: 16px;
-}
-
-.detail-value a {
-    color: #5e72e4;
-    text-decoration: none;
-}
-
-.detail-value a:hover {
-    text-decoration: underline;
-}
-
-/* 活动信息和帖子区域 */
+/* 用户帖子 */
 .content-section {
     background-color: white;
     padding: 20px 25px;
     border-bottom: 1px solid #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
 
 .content-section:last-child {
@@ -178,77 +121,6 @@
     font-weight: 600;
 }
 
-/* 活动热图区域 */
-.contribution-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-gap: 5px;
-    margin-bottom: 20px;
-}
-
-.grid-row {
-    display: contents;
-}
-
-.contribution-cell {
-    width: 90%;
-    height: 0;
-    padding-bottom: 25%;
-    border-radius: 3px;
-    transition: opacity 0.2s;
-    position: relative;
-}
-
-.contribution-cell:hover {
-    opacity: 0.8;
-}
-
-.contribution-tooltip {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.contribution-cell:hover .contribution-tooltip {
-    opacity: 1;
-}
-
-.contribution-legend {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-left: 15px;
-}
-
-.legend-color {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    margin-right: 5px;
-}
-
-.legend-label {
-    font-size: 14px;
-    color: #7f8c8d;
-}
 /* 帖子列表 */
 .user-posts-container {
     background-color: transparent;
@@ -546,12 +418,11 @@
 }
 
 /* 通知样式 */
-/* 通知样式 */
 .notification {
     position: fixed;
-    top: 20px; /* 从上方弹出 */
+    top: 20px;
     left: 50%;
-    transform: translateX(-50%) translateY(-100px); /* 初始位置在上方 */
+    transform: translateX(-50%) translateY(-100px);
     background-color: #4CAF50;
     color: white;
     padding: 12px 20px;
@@ -567,39 +438,145 @@
 }
 
 .notification.show {
-    transform: translateX(-50%) translateY(0); /* 显示时移动到屏幕中央 */
+    transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
+
+/* 右侧侧边栏 */
+.sidebar-card-container {
+    width: 300px;
+}
+
+.sidebar-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.sidebar-card h2 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* 个人信息与联系方式 */
+.detail-item {
+    display: flex;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 80px;
+    color: #7f8c8d;
+    font-weight: 500;
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.detail-value {
+    flex: 1;
+    color: #34495e;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+.detail-value a {
+    color: #5e72e4;
+    text-decoration: none;
+}
+
+.detail-value a:hover {
+    text-decoration: underline;
+}
+
+/* 活动热图区域 */
+.contribution-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 5px;
+    margin-bottom: 20px;
+}
+
+.grid-row {
+    display: contents;
+}
+
+.contribution-cell {
+    width: 90%;
+    height: 0;
+    padding-bottom: 25%;
+    border-radius: 3px;
+    transition: opacity 0.2s;
+    position: relative;
+}
+
+.contribution-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contribution-cell:hover .contribution-tooltip {
+    opacity: 1;
+}
+
+.contribution-legend {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.legend-label {
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
 /* 响应式调整 */
-@media (max-width: 768px) {
-    .user-profile {
-        border-radius: 0;
+@media (max-width: 992px) {
+    .user-profile-container {
+        flex-direction: column;
     }
-
-    .user-cover {
-        height: 160px;
-    }
-
-    .profile-content {
-        padding: 15px;
-    }
-
-    .user-avatar-container {
-        left: 15px;
-        width: 85px;
-        height: 85px;
-    }
-
-    .user-name {
-        margin-top: 35px;
-        font-size: 24px;
-    }
-
-    .content-section {
-        padding: 15px;
-    }
-
-    .detail-label {
-        width: 100px;
+    .sidebar-card-container {
+        width: 100%;
     }
 }
