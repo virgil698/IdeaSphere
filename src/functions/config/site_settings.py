@@ -6,7 +6,7 @@ from pathlib import Path
 DEFAULT_COMMENTS = {
     "site_name": "网站名称 - 显示在页面标题和相关位置",
     "footer_enabled": "页脚启用状态 - 是否在页面底部显示页脚信息",
-    "maintenance_mode": "维护模式 - 是否启用网站维护模式"
+    "loader_wrapper": "首页载入动画 - 是否开启首页载入动画"
 }
 
 
@@ -17,7 +17,7 @@ def load_site_settings():
         default_settings = {
             "site_name": "IdeaSphere",
             "footer_enabled": False,  # 默认关闭页脚
-            "maintenance_mode": False
+            "loader_wrapper": False  # 默认关闭首页加载动画
         }
 
         os.makedirs(settings_path.parent, exist_ok=True)
@@ -60,3 +60,8 @@ def generate_commented_yaml(data, file_path):
 def get_footer_setting():
     settings = load_site_settings()
     return settings.get("footer_enabled", False)
+
+
+def get_loader_setting():
+    settings = load_site_settings()
+    return settings.get("loader_wrapper", False)

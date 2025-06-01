@@ -2,6 +2,8 @@
 根目录
 """
 from flask import render_template, request, redirect, url_for
+
+from src.functions.other.loader_wrapper import should_show_loader
 from src.functions.database.models import Post
 
 def index_logic():
@@ -20,7 +22,8 @@ def newest_logic():
         error_out=False
     )
 
-    return render_template('index.html', posts=posts, sort='timeline')
+    loader_wrapper = should_show_loader()
+    return render_template('index.html', posts=posts, sort='timeline', loader_wrapper=loader_wrapper)
 
 def global_logic():
     page = request.args.get('page', 1, type=int)
@@ -36,4 +39,5 @@ def global_logic():
         error_out=False
     )
 
-    return render_template('index.html', posts=posts, sort='global')
+    loader_wrapper = should_show_loader()
+    return render_template('index.html', posts=posts, sort='global', loader_wrapper=loader_wrapper)

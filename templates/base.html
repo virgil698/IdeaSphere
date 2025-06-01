@@ -12,22 +12,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome-banner.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/active-users.css') }}">
+    {% if loader_wrapper %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/load.css') }}">
+    {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/backToTop.css') }}">
 </head>
 
 <body>
     <!-- 加载动画 -->
+    {% if loader_wrapper %}
     <div id="loaderWrapper" class="loader-wrapper">
         <div class="loader-container">
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="IdeaSphere Logo" class="logo">
             <div class="loader"></div>
         </div>
     </div>
+    {% endif %}
 
     <div class="welcome-banner">
         <div class="container">
@@ -156,10 +159,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         // 检查是否是第一次访问
         const hasVisited = sessionStorage.getItem('hasVisited');
+        const loaderWrapper = document.getElementById('loaderWrapper');
 
-        if (!hasVisited) {
+        if (!hasVisited && loaderWrapper) {
             // 如果是第一次访问，显示加载动画
-            const loaderWrapper = document.getElementById('loaderWrapper');
             loaderWrapper.classList.add('visible');
 
             // 页面加载完成后2秒后隐藏加载动画
@@ -170,9 +173,8 @@
                     sessionStorage.setItem('hasVisited', 'true');
                 }, 2000);
             });
-        } else {
-            // 如果不是第一次访问，直接隐藏加载动画
-            const loaderWrapper = document.getElementById('loaderWrapper');
+        } else if (loaderWrapper) {
+            // 如果不是第一次访问或者 loader_wrapper 设置为 false，直接隐藏加载动画
             loaderWrapper.classList.remove('visible');
         }
     });
