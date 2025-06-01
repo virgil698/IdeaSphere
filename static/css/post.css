@@ -412,8 +412,8 @@ textarea.form-control {
     overflow-wrap: break-word;
 }
 
-.markdown-content h1, 
-.markdown-content h2, 
+.markdown-content h1,
+.markdown-content h2,
 .markdown-content h3 {
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
@@ -496,16 +496,16 @@ textarea.form-control {
     .card-body {
         padding: 1.5rem;
     }
-    
+
     .form-actions {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .btn {
         width: 100%;
     }
-    
+
     .markdown-preview-panel {
         width: 85%;
         right: -85%;
