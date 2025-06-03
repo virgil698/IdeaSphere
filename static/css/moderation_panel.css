@@ -95,19 +95,19 @@
 }
 
 /* 搜索框 */
-.search-box {
+.search-box-m {
     position: relative;
     width: 250px;
 }
 
-.search-box input {
+.search-box-m input {
     padding: 0.5rem 1rem 0.5rem 2.5rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     background-color: var(--background-secondary);
 }
 
-.search-box i {
+.search-box-m i {
     position: absolute;
     left: 1rem;
     top: 50%;

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, g, jsonify, request, abort, render_template
 from sqlalchemy.orm import joinedload
 
@@ -53,19 +55,17 @@ def handle_report(report_id):
         return jsonify({'success': False, 'message': '无效的状态值'})
     if status == 'invalid':
         if report.post:
-            # 删除帖子及其所有评论
-            for comment in report.post.comments:
-                db.session.delete(comment)
-            db.session.delete(report.post)
+            report.post.deleted = True
+            report.post.delete_reason = "违规内容"
+            report.post.delete_time = datetime.utcnow()
         elif report.comment:
-            # 删除评论
             db.session.delete(report.comment)
-        report.status = 'invalid'
+        report.status = 'valid'
         report.resolved_by = g.user.id if g.user else None
         db.session.commit()
-        return jsonify({'success': True, 'message': '已违规，内容已删除'})
-    elif status == 'valid':
-        report.status = 'valid'
+        return jsonify({'success': True, 'message': '已违规，内容已隐藏'})
+    elif status == 'invalid':
+        report.status = 'invalid'
         report.resolved_by = g.user.id if g.user else None
         db.session.commit()
         return jsonify({'success': True, 'message': '未违规，举报已关闭'})
