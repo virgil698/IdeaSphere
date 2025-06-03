@@ -84,6 +84,8 @@ def convert_markdown_to_html(markdown_text):
 
     # 添加 PrismJS 的 CSS 和 JS
     prism_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css')
+    prism_line_numbers_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css')
+    prism_line_highlight_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.css')
     prism_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js')
     prism_toolbar_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css')
     prism_toolbar_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js')
@@ -97,6 +99,8 @@ def convert_markdown_to_html(markdown_text):
         soup.insert(0, head_tag)
     soup.head.append(prism_css)
     soup.head.append(prism_js)
+    soup.head.append(prism_line_numbers_css)
+    soup.head.append(prism_line_highlight_css)
     soup.head.append(prism_toolbar_css)
     soup.head.append(prism_toolbar_js)
     soup.head.append(prism_line_numbers_js)
