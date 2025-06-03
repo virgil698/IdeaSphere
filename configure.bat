@@ -1,30 +1,50 @@
 @echo off
-echo 正在检查 Python3 和 pip 环境...
+echo 正在安装IdeaSphere所需环境...
 
-REM 检查 Python3 是否存在
-where python3 >nul 2>nul
-if %errorlevel% neq 0 (
-    echo Python3 环境未找到，请先安装 Python3 后重新运行此脚本。
-    exit /b
-)
+:: 安装Python3.13
+echo 安装Python3.13...
+winget install --id Python.Python.3.13 --source winget
 
-REM 检查 pip 是否存在
-python3 -m ensurepip --default-pip >nul 2>nul
-python3 -m pip --version >nul 2>nul
-if %errorlevel% neq 0 (
-    echo pip 未找到，正在尝试安装...
-    python3 -m ensurepip --upgrade >nul 2>nul
-    if %errorlevel% neq 0 (
-        echo pip 安装失败，请手动安装 pip 后重新运行此脚本。
-        exit /b
-    )
-)
+:: 添加Python到环境变量（如果安装时未自动添加）
+setx PATH "%PATH%;C:\Python313;C:\Python313\Scripts"
 
-echo Python3 和 pip 环境正常，正在安装 IdeaSphere 论坛程序依赖...
-python3 -m pip install -r requirements.txt
-if %errorlevel% neq 0 (
-    echo 依赖安装失败，请检查 requirements.txt 文件路径是否正确，以及网络连接是否正常后重试。
-    exit /b
-)
+:: 安装git（如果尚未安装）
+echo 安装Git...
+winget install --id Git.Git --source winget
 
-echo 依赖安装完成！
+:: 克隆项目仓库
+echo 克隆IdeaSphere项目仓库...
+git clone https://github.com/IdeaSphere-team/IdeaSphere.git
+cd IdeaSphere
+
+:: 创建并激活虚拟环境
+echo 创建并激活虚拟环境...
+python -m venv myenv
+myenv\Scripts\activate
+
+:: 安装项目依赖
+echo 安装项目依赖...
+pip install -r requirements.txt
+
+:: 配置Nginx（如果需要）
+echo 配置Nginx...
+winget install --id nginx.nginx --source winget
+cd ..
+cd nginx/conf
+echo server {> nginx.conf
+echo     listen 80;>> nginx.conf
+echo     server_name your_server_ip;>> nginx.conf
+echo.>> nginx.conf
+echo     location / {>> nginx.conf
+echo         proxy_pass http://127.0.0.1:5000;>> nginx.conf
+echo         proxy_set_header Host $host;>> nginx.conf
+echo         proxy_set_header X-Real-IP $remote_addr;>> nginx.conf
+echo         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;>> nginx.conf
+echo         proxy_set_header X-Forwarded-Proto $scheme;>> nginx.conf
+echo     }>> nginx.conf
+echo }>> nginx.conf
+cd bin
+nginx.exe -s reload
+
+echo 安装完成！
+pause

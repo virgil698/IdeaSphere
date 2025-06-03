@@ -1,53 +1,55 @@
 #!/bin/bash
+echo "正在安装IdeaSphere所需环境..."
 
-# 检查并安装IdeaSphere论坛程序依赖的shell脚本
+# 安装Python3.13和pip
+echo "安装Python3.13和pip..."
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update -y
+sudo apt install python3.13 -y
+sudo apt install python3-pip -y
 
-# 定义颜色变量
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-NC='\033[0m' # No Color
+# 安装git（如果尚未安装）
+echo "安装Git..."
+sudo apt install git -y
 
-echo -e "${GREEN}开始检查并安装IdeaSphere论坛程序依赖${NC}\n"
+# 克隆项目仓库
+echo "克隆IdeaSphere项目仓库..."
+git clone https://github.com/IdeaSphere-team/IdeaSphere.git
+cd IdeaSphere
 
-# 检查Python3是否存在
-if ! command -v python3 &> /dev/null
-then
-    echo -e "${RED}错误：Python3未安装${NC}"
-    echo -e "${YELLOW}在Ubuntu/Debian上，可以使用以下命令安装：${NC}"
-    echo -e "${GREEN}sudo apt update && sudo apt install python3${NC}"
-    echo -e "${YELLOW}在CentOS/RHEL上，可以使用以下命令安装：${NC}"
-    echo -e "${GREEN}sudo yum install python3${NC}"
-    exit 1
-else
-    echo -e "${GREEN}检查通过：Python3已安装${NC}"
-fi
+# 创建并激活虚拟环境
+echo "创建并激活虚拟环境..."
+python3.13 -m venv myenv
+source myenv/bin/activate
 
-# 检查pip是否存在
-if ! command -v pip3 &> /dev/null
-then
-    echo -e "${YELLOW}警告：pip3未安装，正在尝试安装...${NC}"
+# 安装项目依赖
+echo "安装项目依赖..."
+pip install -r requirements.txt
 
-    # 尝试安装pip
-    if ! python3 -m ensurepip --upgrade --default-pip &> /dev/null; then
-        echo -e "${RED}自动安装pip失败，请手动安装pip3${NC}"
-        echo -e "${YELLOW}在Ubuntu/Debian上，可以使用以下命令安装：${NC}"
-        echo -e "${GREEN}sudo apt install python3-pip${NC}"
-        echo -e "${YELLOW}在CentOS/RHEL上，可以使用以下命令安装：${NC}"
-        echo -e "${GREEN}sudo yum install python3-pip${NC}"
-        exit 1
-    else
-        echo -e "${GREEN}成功安装pip3${NC}"
-    fi
-else
-    echo -e "${GREEN}检查通过：pip3已安装${NC}"
-fi
+# 安装和配置Nginx
+echo "安装和配置Nginx..."
+sudo apt update -y
+sudo apt install nginx -y
 
-# 安装依赖
-echo -e "\n${GREEN}开始安装IdeaSphere论坛程序依赖...${NC}"
-if pip3 install -r requirements.txt; then
-    echo -e "\n${GREEN}所有依赖安装完成！${NC}"
-else
-    echo -e "${RED}安装依赖失败，请检查requirements.txt文件或网络连接${NC}"
-    exit 1
-fi
+# 创建Nginx配置文件
+echo "创建Nginx配置文件..."
+sudo tee /etc/nginx/sites-available/ideasphere <<EOF
+server {
+    listen 80;
+    server_name your_server_ip;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+EOF
+
+# 启用并重启Nginx
+sudo ln -sf /etc/nginx/sites-available/ideasphere /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+
+echo "安装完成！"
