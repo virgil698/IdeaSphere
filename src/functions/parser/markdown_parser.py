@@ -32,7 +32,6 @@ def convert_markdown_to_html(markdown_text):
         )
 
     # 预处理嵌套无序列表的缩进
-    # 检测星号或者+号-号前有两个空格即判断为嵌套无序列表项
     markdown_text = re.sub(r'(\n\s{2})(\*|\+|-)\s', r'\1    \2 ', markdown_text)
 
     # 启用tables、breaks和fenced_code扩展
@@ -64,8 +63,8 @@ def convert_markdown_to_html(markdown_text):
         'td': ['class', 'style'],
         'th': ['class', 'style'],
         'tr': ['class', 'style'],
-        'pre': ['class', 'style'],
-        'code': ['class', 'style'],
+        'pre': ['class', 'style', 'data-line', 'data-line-offset', 'data-start'],
+        'code': ['class', 'style', 'data-prismjs-copy', 'data-prismjs-copy-error', 'data-prismjs-copy-success', 'data-prismjs-copy-timeout'],
         'script': ['src', 'async'],
         'i': ['class'],
         'iframe': ['src','scrolling', 'border', 'framespacing', 'width', 'height', 'frameborder', 'allowfullscreen', 'allow', 'referrerpolicy'],
@@ -83,29 +82,124 @@ def convert_markdown_to_html(markdown_text):
 
     soup = BeautifulSoup(sanitized_html, 'html.parser')
 
-    # 为表格添加类
-    for table in soup.find_all('table'):
-        table['class'] = 'styled-table'
+    # 添加 PrismJS 的 CSS 和 JS
+    prism_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css')
+    prism_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js')
+    prism_toolbar_css = soup.new_tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css')
+    prism_toolbar_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js')
+    prism_line_numbers_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js')
+    prism_line_highlight_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.js')
+    prism_copy_to_clipboard_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js')
+    prism_show_language_js = soup.new_tag('script', src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/show-language/prism-show-language.min.js')
 
-    # 为代码块添加样式
-    for pre in soup.find_all('pre'):
-        pre['class'] = 'code-block'
-        pre['style'] = 'background-color: #282c34; color: #abb2bf; font-family: monospace; border-radius: 5px; overflow-x: auto; margin: 15px 0;'
+    if not soup.head:
+        head_tag = soup.new_tag('head')
+        soup.insert(0, head_tag)
+    soup.head.append(prism_css)
+    soup.head.append(prism_js)
+    soup.head.append(prism_toolbar_css)
+    soup.head.append(prism_toolbar_js)
+    soup.head.append(prism_line_numbers_js)
+    soup.head.append(prism_line_highlight_js)
+    soup.head.append(prism_copy_to_clipboard_js)
+    soup.head.append(prism_show_language_js)
 
-    # 为小段代码添加样式
-    for code in soup.find_all('code'):
-        # 检测代码块的长度，如果长度小于等于1行，则认为是小段代码
-        if len(code.text.split('\n')) <= 1:
-            code['class'] = 'code-inline'
-            code['style'] = 'background-color: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace;'
-        else:
-            code['class'] = 'code-block'
-            code['style'] = 'background-color: #282c34; color: #abb2bf; font-family: monospace; border-radius: 5px; overflow-x: auto; margin: 15px 0;'
+    # 处理代码块
+    for code_block in soup.find_all('code'):
+        parent_pre = code_block.find_parent('pre')
+        if parent_pre:
+            # 添加 PrismJS 需要的类
+            parent_pre['class'] = parent_pre.get('class', []) + ['line-numbers']
+            # 添加代码语言信息
+            if 'class' in code_block.attrs:
+                for cls in code_block['class']:
+                    if cls.startswith('language-'):
+                        code_block['class'] = [cls]
+                        break
+            else:
+                code_block['class'] = ['language-text']
 
-    # 为图片添加 FancyBox 支持
+    # 添加 CSS 样式
+    style_tag = soup.new_tag('style')
+    style_tag.string = '''
+    .styled-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .styled-table th, .styled-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .styled-table tr:hover {
+        background-color: #f5f5f5;
+    }
+    .banner {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+    }
+    .banner i {
+        margin-right: 10px;
+    }
+    .banner-tip {
+        border-color: #e6f6e6;
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .banner-info {
+        border-color: #d1ecf1;
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+    .banner-danger {
+        border-color: #f8d7da;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .banner-warning {
+        border-color: #fff3cd;
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    .tiktok-embed {
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+    '''
+    if not soup.head:
+        head_tag = soup.new_tag('head')
+        soup.insert(0, head_tag)
+    soup.head.append(style_tag)
+
+    # 添加 FancyBox 的 CSS 和 JS
+    fancybox_css = soup.new_tag('link', rel='stylesheet', href='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css')
+    fancybox_js = soup.new_tag('script', src='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js')
+    fancybox_js_initialization = soup.new_tag('script')
+    fancybox_js_initialization.string = '''
+    document.addEventListener("DOMContentLoaded", function() {
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            loop: true,
+            buttons: ["zoom", "slideShow", "fullScreen", "thumbs", "close"],
+            image: {
+                zoom: true
+            }
+        });
+    });
+    '''
+    soup.head.append(fancybox_css)
+    soup.head.append(fancybox_js)
+    soup.head.append(fancybox_js_initialization)
+
+    # 处理图片添加 FancyBox 支持
     for img in soup.find_all('img'):
         if 'src' in img.attrs:
-            # 添加 FancyBox 所需的类和属性
             img['class'] = img.get('class', []) + ['fancybox']
             img['data-fancybox'] = 'gallery'
             img['data-caption'] = img.get('alt', '')
@@ -156,7 +250,6 @@ def convert_markdown_to_html(markdown_text):
                 iframe['referrerpolicy'] = iframe.get('referrerpolicy', 'strict-origin-when-cross-origin')
                 iframe['allowfullscreen'] = iframe.get('allowfullscreen', 'true')
             else:
-                # 如果不是支持的嵌入代码，移除 iframe
                 iframe.decompose()
 
     # 处理 TikTok 嵌入代码
@@ -166,128 +259,6 @@ def convert_markdown_to_html(markdown_text):
         # 确保 blockquote 内的 script 标签被保留
         script_tag = soup.new_tag('script', src='https://www.tiktok.com/embed.js', async_=True)
         blockquote.append(script_tag)
-
-    # 添加CSS样式
-    style_tag = soup.new_tag('style')
-    style_tag.string = '''
-    .styled-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    .styled-table th, .styled-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    .styled-table tr:hover {
-        background-color: #f5f5f5;
-    }
-    .banner {
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-    }
-    .banner i {
-        margin-right: 10px;
-    }
-    .banner-tip {
-        border-color: #e6f6e6;
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .banner-info {
-        border-color: #d1ecf1;
-        background-color: #d1ecf1;
-        color: #0c5460;
-    }
-    .banner-danger {
-        border-color: #f8d7da;
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-    .banner-warning {
-        border-color: #fff3cd;
-        background-color: #fff3cd;
-        color: #856404;
-    }
-    .code-inline {
-        background-color: #f5f5f5;
-        padding: 2px 4px;
-        border-radius: 3px;
-        font-family: monospace;
-    }
-    .code-block {
-        background-color: #282c34;
-        color: #abb2bf;
-        font-family: monospace;
-        border-radius: 5px;
-        overflow-x: auto;
-        margin: 15px 0;
-        position: relative;
-    }
-    .code-block::before {
-        content: attr(data-language);
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background-color: #3e4451;
-        color: #abb2bf;
-        padding: 2px 5px;
-        border-radius: 3px;
-        font-size: 0.8em;
-    }
-    .line-numbers {
-        float: left;
-        text-align: right;
-        padding: 10px 10px 10px 0;
-        margin-right: 10px;
-        color: #8da0c4;
-        border-right: 1px solid #494d5f;
-        user-select: none;
-    }
-    .line-numbers span {
-        display: block;
-        counter-increment: linenumber;
-    }
-    .line-numbers span:before {
-        content: counter(linenumber);
-        color: #8da0bf;
-    }
-    .tiktok-embed {
-        margin: 20px 0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 15px;
-        background-color: #f9f9f9;
-    }
-    '''
-    if not soup.head:
-        head_tag = soup.new_tag('head')
-        soup.insert(0, head_tag)
-    soup.head.append(style_tag)
-
-    # 添加 FancyBox 的 CSS 和 JS
-    fancybox_css = soup.new_tag('link', rel='stylesheet', href='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css')
-    fancybox_js = soup.new_tag('script', src='https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js')
-    fancybox_js_initialization = soup.new_tag('script')
-    fancybox_js_initialization.string = '''
-    document.addEventListener("DOMContentLoaded", function() {
-        Fancybox.bind('[data-fancybox="gallery"]', {
-            // 配置选项
-            loop: true,
-            buttons: ["zoom", "slideShow", "fullScreen", "thumbs", "close"],
-            image: {
-                zoom: true
-            }
-        });
-    });
-    '''
-    soup.head.append(fancybox_css)
-    soup.head.append(fancybox_js)
-    soup.head.append(fancybox_js_initialization)
 
     cleaned_html = str(soup)
     return cleaned_html

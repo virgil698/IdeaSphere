@@ -79,6 +79,16 @@
             {% endif %}
         </div>
 
+    {% if comments|length == 0 %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">评论</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted text-center"><i class="fas fa-comments"></i>没有更多评论</p>
+            </div>
+        </div>
+    {% else %}
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">评论</h3>
@@ -179,6 +189,7 @@
                 {% endfor %}
             </div>
         </div>
+    {% endif %}
     </div>
 </div>
 
