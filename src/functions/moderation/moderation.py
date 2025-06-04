@@ -43,6 +43,7 @@ def moderation_reports_processed():
         pagination=pagination
     )
 
+
 @moderation_bp.route('/handle_report/<int:report_id>', methods=['POST'])
 def handle_report(report_id):
     if g.role not in ['admin', 'moderator']:
@@ -53,7 +54,12 @@ def handle_report(report_id):
     status = request.json.get('status')
     if status not in ['valid', 'invalid']:
         return jsonify({'success': False, 'message': '无效的状态值'})
-    if status == 'invalid':
+
+    # 设置 resolved_by 和 resolved_at
+    report.resolved_by = g.user.id if g.user else None
+    report.resolved_at = datetime.utcnow()  # 设置处理时间为当前时间
+
+    if status == 'valid':
         if report.post:
             report.post.deleted = True
             report.post.delete_reason = "违规内容"
@@ -61,11 +67,8 @@ def handle_report(report_id):
         elif report.comment:
             db.session.delete(report.comment)
         report.status = 'valid'
-        report.resolved_by = g.user.id if g.user else None
-        db.session.commit()
-        return jsonify({'success': True, 'message': '已违规，内容已隐藏'})
     elif status == 'invalid':
         report.status = 'invalid'
-        report.resolved_by = g.user.id if g.user else None
-        db.session.commit()
-        return jsonify({'success': True, 'message': '未违规，举报已关闭'})
+
+    db.session.commit()
+    return jsonify({'success': True, 'message': '举报已处理'})

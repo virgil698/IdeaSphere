@@ -141,17 +141,26 @@
                                                     <button type="button" class="toolbar-btn" id="emojiButton" title="添加表情">
                                                         <i class="fas fa-smile"></i>
                                                     </button>
-                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: tip\n', '\n:::', '信息块-提示')" title="信息块-提示">
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::tip\n', '\n:::', '信息块-提示')" title="信息块-提示">
                                                         <i class="fa-solid fa-lightbulb"></i>
                                                     </button>
-                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: info\n', '\n:::', '信息块-信息')" title="信息块-信息">
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::info\n', '\n:::', '信息块-信息')" title="信息块-信息">
                                                         <i class="fa-solid fa-circle-info"></i>
                                                     </button>
-                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: warning\n', '\n:::', '信息块-警告')" title="信息块-警告">
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::warning\n', '\n:::', '信息块-警告')" title="信息块-警告">
+                                                        <i class="fa-solid fa-exclamation-triangle"></i>
+                                                    </button>
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::danger\n', '\n:::', '信息块-危险')" title="信息块-危险">
+                                                        <i class="fa-solid fa-skull"></i>
+                                                    </button>
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::caution\n', '\n:::', '信息块-注意')" title="信息块-注意">
                                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                                     </button>
-                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown('::: danger\n', '\n:::', '信息块-危险')" title="信息块-危险">
-                                                        <i class="fa-solid fa-skull"></i>
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::check\n', '\n:::', '信息块-检查')" title="信息块-检查">
+                                                        <i class="fa-solid fa-check-circle"></i>
+                                                    </button>
+                                                    <button type="button" class="toolbar-btn" onclick="insertMarkdown(':::note\n', '\n:::', '信息块-备注')" title="信息块-备注">
+                                                        <i class="fa-solid fa-book"></i>
                                                     </button>
                                                 </div>
                                                 <textarea class="form-control" id="content" name="content" rows="12" placeholder="输入帖子内容" required></textarea>

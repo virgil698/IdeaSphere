@@ -66,10 +66,10 @@
                         </td>
                         <td>{{ report.reason }}</td>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="handleReport({{ report.id }}, 'invalid')">
+                            <button class="btn btn-danger btn-sm" onclick="handleReport({{ report.id }}, 'valid')">
                                 <i class="fas fa-check"></i> 已违规
                             </button>
-                            <button class="btn btn-success btn-sm" onclick="handleReport({{ report.id }}, 'valid')">
+                            <button class="btn btn-success btn-sm" onclick="handleReport({{ report.id }}, 'invalid')">
                                 <i class="fas fa-times"></i> 未违规
                             </button>
                         </td>

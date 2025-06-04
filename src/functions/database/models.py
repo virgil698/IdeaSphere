@@ -91,6 +91,7 @@ class Report(db.Model):
     post = db.relationship('Post', foreign_keys=[post_id], backref=db.backref('reports', lazy=True))
     comment = db.relationship('Comment', foreign_keys=[comment_id], backref=db.backref('reports', lazy=True))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 添加 created_at 字段
+    resolved_at = db.Column(db.DateTime)
 
     @property
     def reporter(self):

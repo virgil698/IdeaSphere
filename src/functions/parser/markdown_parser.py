@@ -6,27 +6,65 @@ from bleach.css_sanitizer import CSSSanitizer
 
 
 def convert_markdown_to_html(markdown_text):
-    # 添加对banner的支持
+    # 更新告示（banner）组件的正则表达式，以支持Apifox的语法
     banner_patterns = {
-        'tip': r'::: tip\s*(.*?)\s*:::',
-        'info': r'::: info\s*(.*?)\s*:::',
-        'danger': r'::: danger\s*(.*?)\s*:::',
-        'warning': r'::: warning\s*(.*?)\s*:::'
+        'tip': r':::tip\s*(.*?)\s*:::',
+        'warning': r':::warning\s*(.*?)\s*:::',
+        'caution': r':::caution\s*(.*?)\s*:::',
+        'danger': r':::danger\s*(.*?)\s*:::',
+        'check': r':::check\s*(.*?)\s*:::',
+        'info': r':::info\s*(.*?)\s*:::',
+        'note': r':::note\s*(.*?)\s*:::'
     }
 
-    # 定义每种banner对应的Font图标
+    # 根据Apifox示例添加自定义标题和图标的正则支持
+    custom_banner_pattern = r':::(tip|warning|caution|danger|check|info|note)(\[(.*?)\])?(\{icon="(.*?)"\})?\s*(.*?)\s*:::'
+
+    # 定义每种告示类型对应的Font图标（可根据需要调整）
     banner_icons = {
         'tip': 'fa-lightbulb',
-        'info': 'fa-circle-info',
+        'warning': 'fa-exclamation-triangle',
+        'caution': 'fa-triangle-exclamation',
         'danger': 'fa-skull',
-        'warning': 'fa-circle-exclamation'
+        'check': 'fa-check-circle',
+        'info': 'fa-circle-info',
+        'note': 'fa-book'
     }
 
+    # 定义告示类型对应的颜色方案
+    banner_colors = {
+        'tip': {'bg': '#d4edda', 'border': '#155724', 'text': '#155724', 'title': '提示'},
+        'warning': {'bg': '#fff3cd', 'border': '#856404', 'text': '#856404', 'title': '警告'},
+        'caution': {'bg': '#fff3cd', 'border': '#856404', 'text': '#856404', 'title': '注意'},
+        'danger': {'bg': '#f8d7da', 'border': '#721c24', 'text': '#721c24', 'title': '危险'},
+        'check': {'bg': '#d4edda', 'border': '#155724', 'text': '#155724', 'title': '检查'},
+        'info': {'bg': '#d1ecf1', 'border': '#0c5460', 'text': '#0c5460', 'title': '信息'},
+        'note': {'bg': '#e2e3e5', 'border': '#6c757d', 'text': '#6c757d', 'title': '备注'}
+    }
+
+    # 处理自定义标题和图标
+    markdown_text = re.sub(
+        custom_banner_pattern,
+        lambda m: f'<div class="banner banner-{m.group(1)}">' +
+                  '<div class="banner-header">' +
+                  f'<i class="fa {m.group(5) if m.group(5) else banner_icons.get(m.group(1), "fa-exclamation-circle")}"></i> ' +
+                  f'<h4>{m.group(3) if m.group(3) else banner_colors[m.group(1)]["title"]}</h4>' +
+                  '</div>' +
+                  f'<div class="banner-content">{m.group(6)}</div></div>',
+        markdown_text,
+        flags=re.DOTALL
+    )
+
+    # 处理不带标题的告示
     for banner_type, pattern in banner_patterns.items():
-        icon_class = banner_icons.get(banner_type, 'fa-exclamation-circle')
         markdown_text = re.sub(
             pattern,
-            lambda m: f'<div class="banner banner-{banner_type}"><i class="fa {icon_class}"></i> {m.group(1)}</div>',
+            lambda m: f'<div class="banner banner-{banner_type}">' +
+                      '<div class="banner-header">' +
+                      f'<i class="fa {banner_icons.get(banner_type, "fa-exclamation-circle")}"></i> ' +
+                      f'<h4>{banner_colors[banner_type]["title"]}</h4>' +
+                      '</div>' +
+                      f'<div class="banner-content">{m.group(1)}</div></div>',
             markdown_text,
             flags=re.DOTALL
         )
@@ -140,37 +178,6 @@ def convert_markdown_to_html(markdown_text):
     .styled-table tr:hover {
         background-color: #f5f5f5;
     }
-    .banner {
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-    }
-    .banner i {
-        margin-right: 10px;
-    }
-    .banner-tip {
-        border-color: #e6f6e6;
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .banner-info {
-        border-color: #d1ecf1;
-        background-color: #d1ecf1;
-        color: #0c5460;
-    }
-    .banner-danger {
-        border-color: #f8d7da;
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-    .banner-warning {
-        border-color: #fff3cd;
-        background-color: #fff3cd;
-        color: #856404;
-    }
     .tiktok-embed {
         margin: 20px 0;
         border: 1px solid #ddd;
@@ -179,6 +186,38 @@ def convert_markdown_to_html(markdown_text):
         background-color: #f9f9f9;
     }
     '''
+
+    # 添加告示样式
+    for banner_type, colors in banner_colors.items():
+        style_tag.string += f'''
+        .banner.banner-{banner_type} {{
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid {colors['border']};
+            border-radius: 4px;
+            background-color: {colors['bg']};
+            color: {colors['text']};
+        }}
+        .banner.banner-{banner_type} .banner-header {{
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }}
+        .banner.banner-{banner_type} .banner-header i {{
+            margin-right: 10px;
+            font-size: 1.2em;
+        }}
+        .banner.banner-{banner_type} .banner-header h4 {{
+            margin: 0;
+            font-size: 1em;
+            font-weight: bold;
+        }}
+        .banner.banner-{banner_type} .banner-content {{
+            margin: 0;
+            word-break: break-word;
+        }}
+        '''
+
     if not soup.head:
         head_tag = soup.new_tag('head')
         soup.insert(0, head_tag)
