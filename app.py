@@ -24,7 +24,7 @@ from src.functions.service import monitor
 from src.functions.service.editor import editor_tool
 from src.functions.service.intstall import install_logic
 from src.functions.service.post_logic import create_post_logic, view_post_logic
-from src.functions.service.search_bp import search_bp  # 导入搜索蓝图
+from src.functions.service.search_bp import search_bp
 from src.functions.service.user_logic import register_logic, login_logic, logout_logic
 from src.functions.service.user_operations import reply_logic, like_post_logic, \
     like_comment_logic, upgrade_user_logic, downgrade_user_logic, edit_post_logic, \

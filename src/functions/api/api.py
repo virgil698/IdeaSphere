@@ -3,12 +3,14 @@ API
 @Dev virgil698
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from flask_wtf.csrf import generate_csrf, validate_csrf
+from werkzeug.security import generate_password_hash, check_password_hash
 
+from src.functions.service.user_routes import calculate_contributions
 from src.db_ext import db
 from src.functions.database.models import Post, Comment, Report, Like, Section, UserFollowerCount, \
-    UserFollowRelation, UserFollowingCount, ReplyComment
+    UserFollowRelation, UserFollowingCount, ReplyComment, User
 from src.functions.parser.markdown_parser import convert_markdown_to_html
 from src.functions.service.user_operations import reply_logic
 
@@ -21,7 +23,7 @@ def get_csrf_token():
     csrf_token = generate_csrf()
     return jsonify({'csrf_token': csrf_token})
 
-# 示例：获取所有帖子的API
+# 获取所有帖子的API
 @api_bp.route('/posts', methods=['GET'])
 def get_posts():
     posts = Post.query.all()
@@ -39,7 +41,7 @@ def get_posts():
         post_list.append(post_data)
     return jsonify(post_list)
 
-# 示例：获取单个帖子的API
+# 获取单个帖子的API
 @api_bp.route('/post/<int:post_id>', methods=['GET'])
 def get_post(post_id):
     post = Post.query.get(post_id)
@@ -56,7 +58,83 @@ def get_post(post_id):
     }
     return jsonify(post_data)
 
-# 示例：创建新帖子的API
+# 登录的API
+@api_bp.route('/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    if not data or 'username' not in data or 'password' not in data:
+        return jsonify({'message': 'Invalid data', 'success': False}), 400
+
+    username = data['username']
+    password = data['password']
+    user = User.query.filter_by(username=username).first()
+
+    if user and check_password_hash(user.password, password):
+        session['user_id'] = user.id
+        session['role'] = user.role
+
+        # 如果是新用户登录，计算并保存贡献数据
+        calculate_contributions(user.user_uid)
+
+        return jsonify({
+            'message': 'Login successful',
+            'success': True,
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'role': user.role
+            }
+        }), 200
+    return jsonify({'message': 'Invalid username or password', 'success': False}), 401
+
+
+# 注册的API
+@api_bp.route('/register', methods=['POST'])
+def api_register():
+    data = request.get_json()
+    if not data or 'username' not in data or 'password' not in data:
+        return jsonify({'message': 'Invalid data', 'success': False}), 400
+
+    username = data['username']
+    password = data['password']
+
+    if User.query.filter_by(username=username).first():
+        return jsonify({'message': 'Username already exists', 'success': False}), 400
+
+    last_user = User.query.order_by(User.user_uid.desc()).first()
+    new_uid = 1 if not last_user else last_user.user_uid + 1
+
+    new_user = User(
+        username=username,
+        password=generate_password_hash(password),
+        user_uid=new_uid
+    )
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Registration successful',
+        'success': True,
+        'user': {
+            'id': new_user.id,
+            'username': new_user.username,
+            'user_uid': new_user.user_uid
+        }
+    }), 201
+
+
+# 退出登录的API
+@api_bp.route('/logout', methods=['POST'])
+def api_logout():
+    if 'user_id' not in session:
+        return jsonify({'message': 'You are not logged in', 'success': False}), 401
+
+    session.pop('user_id', None)
+    session.pop('role', None)
+
+    return jsonify({'message': 'Logout successful', 'success': True}), 200
+
+# 创建新帖子的API
 @api_bp.route('/post', methods=['POST'])
 def create_post():
     data = request.get_json()
@@ -75,7 +153,7 @@ def create_post():
     db.session.commit()
     return jsonify({'message': 'Post created successfully', 'post_id': new_post.id}), 201
 
-# 示例：点赞帖子的API
+# 点赞帖子的API
 @api_bp.route('/post/<int:post_id>/like', methods=['POST'])
 def like_post(post_id):
     # 确保用户已登录
@@ -124,7 +202,7 @@ def report_comment(comment_id):
     db.session.commit()
     return jsonify({'message': 'Comment reported successfully'}), 200
 
-# 示例：评论帖子的API
+# 评论帖子的API
 @api_bp.route('/post/<int:post_id>/comment', methods=['POST'])
 def create_comment(post_id):
     # 确保用户已登录
@@ -375,7 +453,7 @@ def reply_to_comment(comment_id):
     result = reply_logic(comment_id, reply_content)
     return result
 
-# 获取评论的回复数量
+# 获取评论的回复数量 API
 @api_bp.route('/comment/<int:comment_id>/reply_count', methods=['GET'])
 def get_comment_reply_count(comment_id):
     reply_count = Comment.query.filter_by(target_comment_id=comment_id).count()
@@ -416,6 +494,7 @@ def get_comment_replies(comment_id):
         'next_num': paginated_replies.next_num if paginated_replies.has_next else None
     })
 
+# 默认排序回复 API
 @api_bp.route('/comment/<int:comment_id>/replies_summary', methods=['GET'])
 def get_comment_replies_summary(comment_id):
     # 获取回复总数
