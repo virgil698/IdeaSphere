@@ -7,6 +7,10 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 def convert_markdown_to_html(markdown_text):
+    # 限制输入长度，避免处理过长的恶意输入
+    if len(markdown_text) > 1000:  # 限制为 1000 字符
+        raise ValueError("Input markdown text is too long")
+
     # 更新告示（banner）组件的正则表达式，避免 ReDoS 攻击
     banner_patterns = {
         'tip': r':::tip\s+([^\n]+?)\s*:::',
@@ -50,30 +54,16 @@ def convert_markdown_to_html(markdown_text):
         flags=re.DOTALL
     )
 
-    # 自定义标题和图标处理逻辑
-    def process_custom_banner(match):
-        banner_type = match.group(1)
-        title = match.group(2)[1:-1] if match.group(2) else banner_colors[banner_type]["title"]
-        icon = match.group(4)[7:-2] if match.group(4) else banner_icons.get(banner_type, "fa-exclamation-circle")
-        content = match.group(5).strip() if match.group(5) else ""
-
-        # 字符串长度限制
-        max_length = 1000
-        if len(content) > max_length:
-            last_space_index = content.rfind(' ', 0, max_length)
-            if last_space_index != -1:
-                content = content[:last_space_index] + '...'
-            else:
-                content = content[:max_length] + '...'
-
-        return f'<div class="banner banner-{banner_type}">' \
-               '<div class="banner-header">' \
-               f'<i class="fa {icon}"></i> ' \
-               f'<h4>{title}</h4>' \
-               '</div>' \
-               f'<div class="banner-content">{content}</div></div>'
-
-    markdown_text = custom_banner_pattern.sub(process_custom_banner, markdown_text)
+    # 自定义标题和图标处理处理逻辑
+    markdown_text = custom_banner_pattern.sub(
+        lambda m: f'<div class="banner banner-{m.group(1)}">'
+                  '<div class="banner-header">'
+                  f'<i class="fa {m.group(4)[7:-2] if m.group(4) else banner_icons.get(m.group(1), "fa-exclamation-circle")}"></i> '
+                  f'<h4>{m.group(2)[1:-1] if m.group(2) else banner_colors[m.group(1)]["title"]}</h4>'
+                  '</div>'
+                  f'<div class="banner-content">{m.group(5).strip() if m.group(5) else ""}</div></div>',
+        markdown_text
+    )
 
     # 告示类型处理
     for banner_type in banner_patterns.keys():
@@ -81,27 +71,15 @@ def convert_markdown_to_html(markdown_text):
             rf':::{banner_type}\s+([^\n]+?)\s*:::',
             flags=re.DOTALL
         )
-
-        def process_banner_content(match, banner_type):
-            content = match.group(1).strip()
-            max_length = 1000  # 最大长度限制为 1000 字符
-
-            # 如果内容长度超过限制，进行截取
-            if len(content) > max_length:
-                last_space_index = content.rfind(' ', 0, max_length)
-                if last_space_index != -1:
-                    content = content[:last_space_index] + '...'
-                else:
-                    content = content[:max_length] + '...'
-
-            return f'<div class="banner banner-{banner_type}">' \
-                   '<div class="banner-header">' \
-                   f'<i class="fa {banner_icons.get(banner_type, "fa-exclamation-circle")}"></i> ' \
-                   f'<h4>{banner_colors[banner_type]["title"]}</h4>' \
-                   '</div>' \
-                   f'<div class="banner-content">{content}</div></div>'
-
-        markdown_text = pattern.sub(lambda m: process_banner_content(m, banner_type), markdown_text)
+        markdown_text = pattern.sub(
+            lambda m: f'<div class="banner banner-{banner_type}">'
+                      '<div class="banner-header">'
+                      f'<i class="fa {banner_icons.get(banner_type, "fa-exclamation-circle")}"></i> '
+                      f'<h4>{banner_colors[banner_type]["title"]}</h4>'
+                      '</div>'
+                      f'<div class="banner-content">{m.group(1)}</div></div>',
+            markdown_text
+        )
 
     # 预处理嵌套无序列表的缩进
     markdown_text = re.sub(r'(\n\s{2})(\*|\+|-)\s', r'\1    \2 ', markdown_text)
