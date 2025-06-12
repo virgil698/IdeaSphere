@@ -7,10 +7,6 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 def convert_markdown_to_html(markdown_text):
-    # 限制输入长度，避免处理过长的恶意输入
-    if len(markdown_text) > 1000:  # 限制为 1000 字符
-        raise ValueError("Input markdown text is too long")
-
     # 更新告示（banner）组件的正则表达式，避免 ReDoS 攻击
     banner_patterns = {
         'tip': r':::tip\s+([^\n]+?)\s*:::',
