@@ -1,10 +1,10 @@
 import re
+
 import bleach
+from bleach.css_sanitizer import CSSSanitizer
 from bs4 import BeautifulSoup
 from markdown import markdown
-from bleach.css_sanitizer import CSSSanitizer
-import threading
-from concurrent.futures import ThreadPoolExecutor
+
 
 def convert_markdown_to_html(markdown_text):
     # 更新告示（banner）组件的正则表达式，避免 ReDoS 攻击
@@ -306,34 +306,3 @@ def remove_markdown(text):
     text = re.sub(r'\n\d\.', '', text)
     text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
     return text
-
-
-# 多线程优化 Markdown 解析器
-class MultiThreadedMarkdownParser:
-    def __init__(self, max_workers=4):
-        self.max_workers = max_workers
-        self.executor = ThreadPoolExecutor(max_workers=max_workers)
-        self.lock = threading.Lock()
-        self.cache = {}
-
-    def parse(self, markdown_text):
-        # 检查缓存
-        with self.lock:
-            if markdown_text in self.cache:
-                return self.cache[markdown_text]
-
-        # 提交任务到线程池
-        future = self.executor.submit(convert_markdown_to_html, markdown_text)
-        result = future.result()
-
-        # 更新缓存
-        with self.lock:
-            self.cache[markdown_text] = result
-
-        return result
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.executor.shutdown(wait=True)
