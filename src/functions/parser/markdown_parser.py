@@ -3,24 +3,22 @@ import bleach
 from bs4 import BeautifulSoup
 from markdown import markdown
 from bleach.css_sanitizer import CSSSanitizer
-
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 def convert_markdown_to_html(markdown_text):
-    # 更新告示（banner）组件的正则表达式，以支持Apifox的语法
+    # 更新告示（banner）组件的正则表达式，避免 ReDoS 攻击
     banner_patterns = {
-        'tip': r':::tip\s*(.*?)\s*:::',
-        'warning': r':::warning\s*(.*?)\s*:::',
-        'caution': r':::caution\s*(.*?)\s*:::',
-        'danger': r':::danger\s*(.*?)\s*:::',
-        'check': r':::check\s*(.*?)\s*:::',
-        'info': r':::info\s*(.*?)\s*:::',
-        'note': r':::note\s*(.*?)\s*:::'
+        'tip': r':::tip\s+([^\n]+?)\s*:::',
+        'warning': r':::warning\s+([^\n]+?)\s*:::',
+        'caution': r':::caution\s+([^\n]+?)\s*:::',
+        'danger': r':::danger\s+([^\n]+?)\s*:::',
+        'check': r':::check\s+([^\n]+?)\s*:::',
+        'info': r':::info\s+([^\n]+?)\s*:::',
+        'note': r':::note\s+([^\n]+?)\s*:::'
     }
 
-    # 根据Apifox示例添加自定义标题和图标的正则支持
-    custom_banner_pattern = r':::(tip|warning|caution|danger|check|info|note)(\[(.*?)\])?(\{icon="(.*?)"\})?\s*(.*?)\s*:::'
-
-    # 定义每种告示类型对应的Font图标（可根据需要调整）
+    # 定义每种告示类型对应的 Font 图标（可根据需要调整）
     banner_icons = {
         'tip': 'fa-lightbulb',
         'warning': 'fa-exclamation-triangle',
@@ -42,20 +40,7 @@ def convert_markdown_to_html(markdown_text):
         'note': {'bg': '#e2e3e5', 'border': '#6c757d', 'text': '#6c757d', 'title': '备注'}
     }
 
-    # 处理自定义标题和图标
-    markdown_text = re.sub(
-        custom_banner_pattern,
-        lambda m: f'<div class="banner banner-{m.group(1)}">' +
-                  '<div class="banner-header">' +
-                  f'<i class="fa {m.group(5) if m.group(5) else banner_icons.get(m.group(1), "fa-exclamation-circle")}"></i> ' +
-                  f'<h4>{m.group(3) if m.group(3) else banner_colors[m.group(1)]["title"]}</h4>' +
-                  '</div>' +
-                  f'<div class="banner-content">{m.group(6)}</div></div>',
-        markdown_text,
-        flags=re.DOTALL
-    )
-
-    # 处理不带标题的告示
+    # 处理不带标题的告示（优化正则表达式）
     for banner_type, pattern in banner_patterns.items():
         markdown_text = re.sub(
             pattern,
@@ -72,7 +57,7 @@ def convert_markdown_to_html(markdown_text):
     # 预处理嵌套无序列表的缩进
     markdown_text = re.sub(r'(\n\s{2})(\*|\+|-)\s', r'\1    \2 ', markdown_text)
 
-    # 启用tables、breaks和fenced_code扩展
+    # 启用 tables、breaks 和 fenced_code 扩展
     html = markdown(
         markdown_text,
         extensions=['tables', 'nl2br', 'fenced_code']
@@ -308,7 +293,6 @@ def convert_markdown_to_html(markdown_text):
     cleaned_html = str(soup)
     return cleaned_html
 
-
 def remove_markdown(text):
     text = re.sub(r'\*\*', '', text)
     text = re.sub(r'\*', '', text)
@@ -320,3 +304,34 @@ def remove_markdown(text):
     text = re.sub(r'\n\d\.', '', text)
     text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
     return text
+
+
+# 多线程优化 Markdown 解析器
+class MultiThreadedMarkdownParser:
+    def __init__(self, max_workers=4):
+        self.max_workers = max_workers
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self.lock = threading.Lock()
+        self.cache = {}
+
+    def parse(self, markdown_text):
+        # 检查缓存
+        with self.lock:
+            if markdown_text in self.cache:
+                return self.cache[markdown_text]
+
+        # 提交任务到线程池
+        future = self.executor.submit(convert_markdown_to_html, markdown_text)
+        result = future.result()
+
+        # 更新缓存
+        with self.lock:
+            self.cache[markdown_text] = result
+
+        return result
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.executor.shutdown(wait=True)
