@@ -40,6 +40,22 @@ def convert_markdown_to_html(markdown_text):
         'note': {'bg': '#e2e3e5', 'border': '#6c757d', 'text': '#6c757d', 'title': '备注'}
     }
 
+    # 自定义标题和图标
+    custom_banner_pattern = r':::(tip|warning|caution|danger|check|info|note)(\[[^\]]*\])?(\{icon="[^"]*"\})?(\s+[^:]+)?:::'
+
+    # 处理自定义标题和图标
+    markdown_text = re.sub(
+        custom_banner_pattern,
+        lambda m: f'<div class="banner banner-{m.group(1)}">' +
+                  '<div class="banner-header">' +
+                  f'<i class="fa {m.group(5) if m.group(5) else banner_icons.get(m.group(1), "fa-exclamation-circle")}"></i> ' +
+                  f'<h4>{m.group(3) if m.group(3) else banner_colors[m.group(1)]["title"]}</h4>' +
+                  '</div>' +
+                  f'<div class="banner-content">{m.group(6)}</div></div>',
+        markdown_text,
+        flags=re.DOTALL
+    )
+
     # 处理不带标题的告示（优化正则表达式）
     for banner_type, pattern in banner_patterns.items():
         markdown_text = re.sub(
