@@ -2,7 +2,7 @@ from flask import session, redirect, url_for, request, flash, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.functions.database.models import User, db
-from src.functions.service.user_routes import calculate_contributions  # 导入贡献计算函数
+from src.functions.service.user_routes import calculate_contributions
 
 
 def register_logic():

@@ -25,17 +25,7 @@ IdeaSphere is an open-source social platform built with Python3 and Flask, that 
 
 # 🛠️ Quick Start
 
-See [wiki/install](https://github.com/IdeaSphere-team/IdeaSphere/wiki/Install)
-
-# ⬆️ Submit Contributions
-
-Your contributions to IdeaSphere are welcome. Follow these steps:
-
-1. Fork this repository to your GitHub account.
-2. Clone your forked repository locally:
-   `git clone https://github.com/your-username/IdeaSphere.git`
-3. Make changes, build and test the documentation locally. Push changes to your repository once everything works.
-4. On this repository, click Pull requests -> New pull request to submit a PR.
+See [docs](https://docs.ideasphere.org/user/Install/)
 
 # 🎫 License
 
@@ -65,7 +55,6 @@ If you like our work, you can donate via our [Open Collective](https://opencolle
 | **🚀 Admin Panel** | ✅         | v0.2.0  |
 | **📦 Emoji Support** | ✅         | v0.2.0  |
 | **🗑 Delete Posts** | ✅         | v0.2.5  |
-| **👤 Permission Groups** | ✅         | v0.2.5  |
 | **🎈 Post Sections** | ✅         | v0.3.0  |
 | **🎈 404 Page** | ✅         | v0.3.0  |
 | **🎈 API Transfer** | ✅         | v0.3.0  |
