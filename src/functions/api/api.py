@@ -532,75 +532,64 @@ def get_comment_replies_summary(comment_id):
         'top_replies': top_replies
     })
 
-# # 点赞回复的 API
-# @api_bp.route('/reply/<int:reply_id>/like', methods=['POST'])
-# def like_reply(reply_id):
-#     # 验证 CSRF Token
-#     csrf_token = request.headers.get('X-CSRFToken')
-#     if not csrf_token:
-#         return jsonify({'message': 'CSRF Token missing'}), 403
-#
-#     try:
-#         validate_csrf(csrf_token)
-#     except:
-#         return jsonify({'message': 'Invalid CSRF Token'}), 403
-#
-#     # 确保用户已登录
-#     if not request.user:
-#         return jsonify({'message': 'Unauthorized'}), 401
-#
-#     # 检查是否已经点赞
-#     existing_like = Like.query.filter_by(user_id=request.user.id, comment_id=reply_id).first()
-#     if existing_like:
-#         return jsonify({'message': 'You have already liked this reply', 'success': False}), 400
-#
-#     new_like = Like(user_id=request.user.id, comment_id=reply_id)
-#     db.session.add(new_like)
-#     db.session.commit()
-#
-#     # 获取更新后的点赞数
-#     updated_like_count = Like.query.filter_by(comment_id=reply_id).count()
-#
-#     return jsonify({
-#         'message': 'Reply liked successfully',
-#         'success': True,
-#         'like_count': updated_like_count
-#     }), 200
-#
-# # 举报回复的 API
-# @api_bp.route('/reply/<int:reply_id>/report', methods=['POST'])
-# def report_reply(reply_id):
-#     # 验证 CSRF Token
-#     csrf_token = request.headers.get('X-CSRFToken')
-#     if not csrf_token:
-#         return jsonify({'message': 'CSRF Token missing'}), 403
-#
-#     try:
-#         validate_csrf(csrf_token)
-#     except:
-#         return jsonify({'message': 'Invalid CSRF Token'}), 403
-#
-#     # 确保用户已登录
-#     if not request.user:
-#         return jsonify({'message': 'Unauthorized'}), 401
-#
-#     data = request.get_json()
-#     if not data or 'reason' not in data:
-#         return jsonify({'message': 'Invalid data', 'success': False}), 400
-#
-#     # 检查是否已经举报
-#     existing_report = Report.query.filter_by(user_id=request.user.id, comment_id=reply_id).first()
-#     if existing_report:
-#         return jsonify({'message': 'You have already reported this reply', 'success': False}), 400
-#
-#     new_report = Report(comment_id=reply_id, user_id=request.user.id, reason=data['reason'])
-#     db.session.add(new_report)
-#     db.session.commit()
-#
-#     return jsonify({
-#         'message': 'Reply reported successfully',
-#         'success': True
-#     }), 200
+# 点赞回复的 API
+@api_bp.route('/reply/<int:reply_id>/like', methods=['POST'])
+def like_reply(reply_id):
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized', 'success': False}), 401
+
+    # 检查是否已经点赞
+    existing_like = Like.query.filter_by(user_id=request.user.id, comment_id=reply_id).first()
+    if existing_like:
+        return jsonify({'message': 'You have already liked this reply', 'success': False}), 400
+
+    # 创建新的点赞记录
+    new_like = Like(user_id=request.user.id, comment_id=reply_id)
+    db.session.add(new_like)
+
+    # 更新回复的点赞数
+    db.session.query(ReplyComment).filter_by(id=reply_id).update({'like_count': ReplyComment.like_count + 1})
+
+    # 提交数据库事务
+    db.session.commit()
+
+    # 获取更新后的点赞数
+    updated_like_count = ReplyComment.query.get(reply_id).like_count
+
+    return jsonify({
+        'message': 'Reply liked successfully',
+        'success': True,
+        'like_count': updated_like_count
+    }), 200
+
+# 举报回复的 API
+@api_bp.route('/reply/<int:reply_id>/report', methods=['POST'])
+def report_reply(reply_id):
+    # 确保用户已登录
+    if not request.user:
+        return jsonify({'message': 'Unauthorized', 'success': False}), 401
+
+    data = request.get_json()
+    if not data or 'reason' not in data:
+        return jsonify({'message': 'Invalid data', 'success': False}), 400
+
+    # 检查是否已经举报
+    existing_report = Report.query.filter_by(user_id=request.user.id, comment_id=reply_id).first()
+    if existing_report:
+        return jsonify({'message': 'You have already reported this reply', 'success': False}), 400
+
+    # 创建新的举报记录
+    new_report = Report(comment_id=reply_id, user_id=request.user.id, reason=data['reason'])
+    db.session.add(new_report)
+
+    # 提交数据库事务
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Reply reported successfully',
+        'success': True
+    }), 200
 
 # 在API请求中验证CSRF Token
 @api_bp.before_request
