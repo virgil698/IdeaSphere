@@ -31,7 +31,7 @@ See [docs](https://docs.ideasphere.org/user/Install/)
 
 [![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
 
-IdeaSphere is open-sourced under the MIT License. Please comply with the license terms.
+IdeaSphere is open-sourced under the **GPL-3.0** License. Please comply with the license terms.
 
 # 📫 Donate to Us
 

@@ -31,7 +31,7 @@ IdeaSphere 是一个基于 Python3 和 Flask 构建的开源社交平台，旨�
 
 [![GitHub license](https://img.shields.io/github/license/IdeaSphere-team/IdeaSphere.svg?style=for-the-badge)](https://github.com/IdeaSphere-team/IdeaSphere/blob/main/LICENSE)
 
-IdeaSphere 使用 MIT 协议开源，请遵守开源协议。
+IdeaSphere 使用 **GPL-3.0** 协议开源，请遵守开源协议。
 
 # 📫 捐赠我们
 
