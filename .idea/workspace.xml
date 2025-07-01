@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="472ca41d-64c5-424c-918a-27e5309aa770" name="更改" comment="重写ideasphere后端">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README-EN.md" beforeDir="false" afterPath="$PROJECT_DIR$/README-EN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="472ca41d-64c5-424c-918a-27e5309aa770" name="更改" comment="重写ideasphere后端" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +61,7 @@
       <workItem from="1751383146662" duration="7000" />
       <workItem from="1751383167752" duration="4000" />
       <workItem from="1751383200290" duration="498000" />
-      <workItem from="1751383711222" duration="792000" />
+      <workItem from="1751383711222" duration="1534000" />
     </task>
     <task id="LOCAL-00001" summary="重写ideasphere后端">
       <option name="closed" value="true" />
@@ -83,7 +79,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751383841250</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="重写ideasphere后端">
+      <option name="closed" value="true" />
+      <created>1751384630210</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751384630210</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
