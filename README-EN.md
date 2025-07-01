@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/IdeaSphere-team/IdeaSphere/">
-    <img src="/static/img/logo-white.png" alt="Logo" width="80" height="80">
+    <img src="https://avatars.githubusercontent.com/u/202500153?s=200&v=4" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">IdeaSphere</h3>
@@ -21,7 +21,7 @@
 
 </div>
 
-IdeaSphere is an open-source social platform built with Python3 and Flask, that aims to provide easy deployment, optimize performance, deeply integrate centralized/decentralized features, and support extensive customization. Future versions will use Go, Python, and TypeScript to enhance stability and scalability.
+IdeaSphere is an open-source social platform developed on Java 21, SpringBoot, and React frameworks, designed to deliver streamlined deployment and configuration capabilities, optimized performance metrics, seamless integration of centralized and decentralized functionalities, and extensive support for customizable features.
 
 # 🛠️ Quick Start
 

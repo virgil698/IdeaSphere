@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/IdeaSphere-team/IdeaSphere/">
-    <img src="/static/img/logo-white.png" alt="Logo" width="80" height="80">
+    <img src="https://avatars.githubusercontent.com/u/202500153?s=200&v=4" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">IdeaSphere</h3>
@@ -21,7 +21,7 @@
 
 </div>
 
-IdeaSphere 是一个基于 Python3 和 Flask 构建的开源社交平台，旨在提供便捷的部署与配置能力、优化性能表现、实现中心化与去中心化功能的深度融合，并支持广泛的定制化功能。未来版本计划采用 Go、Python 和 TypeScript 进行开发，以进一步提升平台的稳定性和扩展性。
+IdeaSphere 是一个基于 Java21 、 SpringBoot 和 React 构建的开源社交平台，旨在提供便捷的部署与配置能力、优化性能表现、实现中心化与去中心化功能的深度融合，并支持广泛的定制化功能。
 
 # 🛠️ 快速开始
 
