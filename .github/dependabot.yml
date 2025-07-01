@@ -1,14 +1,15 @@
+# 文件类型：yml
+# 文件名称：dependabot.yml
 version: 2
 updates:
-  # 更新 Python 的依赖
-  - package-ecosystem: "pip"
-    directory: "/"
+  # 更新 Maven 的依赖
+  - package-ecosystem: "maven"
+    directory: "/"  # Maven 依赖文件（pom.xml）所在的目录
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
+      interval: "weekly"  # 每周检查一次更新
+    open-pull-requests-limit: 10  # 最大同时开启的 Pull Request 数量限制为 10
     allow:
-      # 允许更新所有依赖
-      - dependency-type: "all"
+      - dependency-type: "all"  # 允许更新所有依赖类型
 
   # 如果你使用了其他语言或包管理工具，可以添加更多配置项
   # 例如，JavaScript (npm) 的依赖更新
