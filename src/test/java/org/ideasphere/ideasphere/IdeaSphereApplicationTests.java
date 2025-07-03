@@ -1,13 +1,13 @@
-package ideasphere.ideasphere_Java;
+package org.ideasphere.ideasphere;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class IdeasphereJavaApplicationTests {
+class IdeaSphereApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
