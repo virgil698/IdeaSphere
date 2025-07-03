@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/这里放 React 、 Vue 、 Vite 等 NodeJS 为环境的论坛前端代码.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere_Java/IdeasphereJavaApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ideasphere/ideasphere_Java/IdeasphereJavaApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="更新 maven 依赖" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,13 +40,13 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RunManager">
     <configuration name="IdeaSphereApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="ideasphere-Java" />
+      <module name="ideasphere" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.ideasphere.ideasphere.IdeaSphereApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -82,11 +74,24 @@
       <workItem from="1751470363059" duration="1258000" />
       <workItem from="1751521802103" duration="12000" />
       <workItem from="1751522530278" duration="250000" />
-      <workItem from="1751522796631" duration="320000" />
+      <workItem from="1751522796631" duration="1155000" />
     </task>
+    <task id="LOCAL-00001" summary="更新 maven 依赖">
+      <option name="closed" value="true" />
+      <created>1751523185178</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1751523185178</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="更新 maven 依赖" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新 maven 依赖" />
   </component>
 </project>
