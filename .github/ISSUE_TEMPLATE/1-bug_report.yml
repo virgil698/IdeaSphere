@@ -7,8 +7,8 @@ body:
     id: miaoshu-1
     attributes:
       label: "错误描述 / Bug Description"
-      description: "简要描述错误现象。 / A brief description of the error."
-      placeholder: "简要描述错误现象。"
+      description: "简要描述错误现象 / A brief description of the error"
+      placeholder: "简要描述错误现象"
     validations:
       required: true
 
@@ -16,7 +16,7 @@ body:
     id: reproduce-steps
     attributes:
       label: "重现步骤 / Steps to Reproduce"
-      description: "请详细描述重现错误的步骤。 / Please describe the steps to reproduce the error."
+      description: "请详细描述重现错误的步骤 / Please describe the steps to reproduce the error"
       placeholder: "1. 第一步 / Step 1\n2. 第二步 / Step 2\n3. 第三步 / Step 3"
     validations:
       required: true
@@ -25,7 +25,7 @@ body:
     id: expected-behavior
     attributes:
       label: "预期行为 / Expected Behavior"
-      description: "描述你期望发生的行为。 / Describe what you expected to happen."
+      description: "描述你期望发生的行为 / Describe what you expected to happen"
       placeholder: "描述预期行为..."
     validations:
       required: true
@@ -34,7 +34,7 @@ body:
     id: actual-behavior
     attributes:
       label: "实际行为 / Actual Behavior"
-      description: "描述实际发生的行为。 / Describe what actually happened."
+      description: "描述实际发生的行为 / Describe what actually happened"
       placeholder: "描述实际行为..."
     validations:
       required: true
@@ -43,7 +43,7 @@ body:
     id: screenshots
     attributes:
       label: "截图 / Screenshots"
-      description: "如果可能，请提供截图或录屏。 / If possible, provide screenshots or screen recordings."
+      description: "如果可能，请提供截图或录屏 / If possible, provide screenshots or screen recordings"
       placeholder: "粘贴截图链接或描述..."
     validations:
       required: false
@@ -52,7 +52,7 @@ body:
     id: environment
     attributes:
       label: "环境信息 / Environment Information"
-      description: "请勾选适用的选项。 / Please check the applicable options."
+      description: "请勾选适用的选项 / Please check the applicable options"
       placeholder: "请在此填写你的运行环境信息..."
     validations:
       required: true
@@ -61,7 +61,7 @@ body:
     id: additional-information
     attributes:
       label: "附加信息 / Additional Information"
-      description: "其他可能有用的信息。 / Any other information that might be useful."
+      description: "其他可能有用的信息 / Any other information that might be useful"
       placeholder: "输入附加信息..."
     validations:
       required: false

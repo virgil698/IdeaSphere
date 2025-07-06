@@ -6,7 +6,7 @@ body:
   - type: input
     attributes:
       label: "问题描述 / Issue Description"
-      description: "简要描述你的问题或建议。 / A brief description of your issue or suggestion."
+      description: "简要描述你的问题或建议 / A brief description of your issue or suggestion"
       placeholder: "简要描述你的问题或建议。"
     validations:
       required: false
@@ -15,7 +15,7 @@ body:
     id: related-links
     attributes:
       label: "相关链接 / Related Links"
-      description: "如果有相关链接，请提供。 / If there are any related links, please provide them."
+      description: "如果有相关链接，请提供 / If there are any related links, please provide them"
       placeholder: "粘贴链接..."
     validations:
       required: false
@@ -24,7 +24,7 @@ body:
     id: additional-information
     attributes:
       label: "附加信息 / Additional Information"
-      description: "其他可能有用的信息。 / Any other information that might be useful."
+      description: "其他可能有用的信息 / Any other information that might be useful"
       placeholder: "输入附加信息..."
     validations:
       required: false
