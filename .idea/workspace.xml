@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="优化日志输出">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/ILogger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/Log4j2Logger.java" afterDir="false" />
+    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="新建日志接口，日志级别输出单独文件处理">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/ConfigChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/IdeaSphereApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/IdeaSphereApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/ILogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/ILogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/Log4j2Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/Log4j2Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,31 +67,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.IdeaSphereApplicationTests.executor": "Run",
-    "Maven.IdeaSphere [install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.IdeaSphereApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.IdeaSphereApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.IdeaSphere [install].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.IdeaSphereApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Spring Boot.IdeaSphereApplication">
     <configuration name="IdeaSphereApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ideasphere" />
@@ -162,7 +164,8 @@
       <workItem from="1751546889650" duration="308000" />
       <workItem from="1751780778877" duration="2176000" />
       <workItem from="1751786605656" duration="6492000" />
-      <workItem from="1752022998337" duration="4480000" />
+      <workItem from="1752022998337" duration="8191000" />
+      <workItem from="1752054382618" duration="3623000" />
     </task>
     <task id="LOCAL-00001" summary="更新 maven 依赖">
       <option name="closed" value="true" />
@@ -196,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751792515321</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="新建日志接口，日志级别输出单独文件处理">
+      <option name="closed" value="true" />
+      <created>1752028108056</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1752028108056</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +218,7 @@
     <MESSAGE value="准备更新代码" />
     <MESSAGE value="新增main函数，允许启动和stop、CTRL+C关闭" />
     <MESSAGE value="优化日志输出" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化日志输出" />
+    <MESSAGE value="新建日志接口，日志级别输出单独文件处理" />
+    <option name="LAST_COMMIT_MESSAGE" value="新建日志接口，日志级别输出单独文件处理" />
   </component>
 </project>
