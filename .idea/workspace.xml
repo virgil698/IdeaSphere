@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="新增main函数，允许启动和stop、CTRL+C关闭">
+    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="优化日志输出">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/ILogger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Logger/Log4j2Logger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/IdeaSphereApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/IdeaSphereApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +67,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.IdeaSphereApplicationTests.executor": "Run",
     "Maven.IdeaSphere [install].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -80,11 +83,29 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager" selected="Spring Boot.IdeaSphereApplication">
+    <configuration name="IdeaSphereApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ideasphere" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.ideasphere.ideasphere.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.ideasphere.ideasphere" />
+      <option name="MAIN_CLASS_NAME" value="org.ideasphere.ideasphere.IdeaSphereApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="hellobbs" type="Python.FlaskServer">
       <module name="IdeaSphere" />
       <option name="target" value="$PROJECT_DIR$/app.py" />
@@ -108,6 +129,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.IdeaSphereApplicationTests" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -135,7 +161,8 @@
       <workItem from="1751525648590" duration="768000" />
       <workItem from="1751546889650" duration="308000" />
       <workItem from="1751780778877" duration="2176000" />
-      <workItem from="1751786605656" duration="5585000" />
+      <workItem from="1751786605656" duration="6492000" />
+      <workItem from="1752022998337" duration="4480000" />
     </task>
     <task id="LOCAL-00001" summary="更新 maven 依赖">
       <option name="closed" value="true" />
@@ -161,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751783978245</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="优化日志输出">
+      <option name="closed" value="true" />
+      <created>1751792515321</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1751792515321</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +206,7 @@
     <MESSAGE value="更新 maven 依赖" />
     <MESSAGE value="准备更新代码" />
     <MESSAGE value="新增main函数，允许启动和stop、CTRL+C关闭" />
-    <option name="LAST_COMMIT_MESSAGE" value="新增main函数，允许启动和stop、CTRL+C关闭" />
+    <MESSAGE value="优化日志输出" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化日志输出" />
   </component>
 </project>

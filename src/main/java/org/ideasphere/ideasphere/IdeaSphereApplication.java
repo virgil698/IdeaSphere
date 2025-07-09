@@ -1,54 +1,49 @@
 package org.ideasphere.ideasphere;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.ideasphere.ideasphere.Logger.ILogger;
+import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 @SpringBootApplication
 public class IdeaSphereApplication {
 
-    private static final Logger logger = LogManager.getLogger(IdeaSphereApplication.class);
+    static final ILogger logger = new Log4j2Logger(IdeaSphereApplication.class);
 
     public static void main(String[] args) {
         // 服务输出测试
         logger.info("Loading libraries, please wait...");
 
+        long startTime = System.currentTimeMillis();
         // 启动 Spring 应用
         SpringApplication app = new SpringApplication(IdeaSphereApplication.class);
         app.run(args);
 
         // 提示服务启动
-        long startTime = System.currentTimeMillis();
-        logger.info("Done ({} sec)! For help, type \"help\"", (System.currentTimeMillis() - startTime) / 1000);
+        logger.info("Done (%d sec)! For help, type \"help\"", (System.currentTimeMillis() - startTime) / 1000);
 
         // 处理用户输入停止服务
         new Thread(() -> {
-            while (true) {
-                try {
-                    // 监听用户输入
-                    int input = System.in.read();
-                    if (input == 's' || input == 'S') {
-                        // 获取下一个字符判断是否是 'top'
-                        int nextChar = System.in.read();
-                        if (nextChar == 't' || nextChar == 'T') {
-                            int nextNextChar = System.in.read();
-                            if (nextNextChar == 'o' || nextNextChar == 'O') {
-                                int nextNextNextChar = System.in.read();
-                                if (nextNextNextChar == 'p' || nextNextNextChar == 'P') {
-                                    logger.info("Server has been stopped.");
-                                    System.exit(0);
-                                }
-                            }
-                        }
-                    } else if (input == 3) { // 判断是否是 Ctrl + C
-                        logger.info("Server has been stopped.");
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                String input;
+                while ((input = reader.readLine()) != null) {
+                    if ("stop".equalsIgnoreCase(input)) {
+                        logger.info("Stopping the server...");
                         System.exit(0);
                     }
-                } catch (Exception e) {
-                    logger.error("Error reading input", e);
                 }
+            } catch (IOException e) {
+                logger.error("Error reading input", e);
             }
         }).start();
+
+        // 添加 ShutdownHook 处理优雅关闭
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.info("Shutting down the server...");
+            // 可以在这里添加资源释放等逻辑
+        }));
     }
 }
