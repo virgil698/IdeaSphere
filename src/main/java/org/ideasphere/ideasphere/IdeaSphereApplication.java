@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 @SpringBootApplication
 public class IdeaSphereApplication {
 
-    static final ILogger logger = new Log4j2Logger(IdeaSphereApplication.class);
+    public static final ILogger logger = new Log4j2Logger(IdeaSphereApplication.class);
 
     public static void main(String[] args) {
         // 服务输出测试

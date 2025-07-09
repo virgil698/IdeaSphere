@@ -21,6 +21,11 @@ public class Log4j2Logger implements ILogger {
     }
 
     @Override
+    public void error(String message) {
+        logger.error(message);
+    }
+
+    @Override
     public void error(String message, Throwable t) {
         logger.error(message, t);
     }
@@ -53,9 +58,13 @@ public class Log4j2Logger implements ILogger {
 
     @Override
     public void info(String methodType, String format, Object... args) {
-        // 合并 methodType 和 format，然后将 args 参数传递给 String.format
         String combinedFormat = methodType + ": " + format;
         logger.info(String.format(combinedFormat, args));
+    }
+
+    @Override
+    public void error(String methodType, String message) {
+        logger.error(String.format("%s: %s", methodType, message));
     }
 
     @Override
