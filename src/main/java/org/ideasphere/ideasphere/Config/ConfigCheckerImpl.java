@@ -20,7 +20,7 @@ public class ConfigCheckerImpl implements ConfigChecker {
                 Files.write(configFilePath, content.getBytes());
                 return true;
             } catch (IOException e) {
-                logger.error("Error creating config file: " + configFilePath);
+                logger.error("Error creating config file: " + configFilePath, e);
                 return false;
             }
         }
@@ -71,6 +71,17 @@ public class ConfigCheckerImpl implements ConfigChecker {
             checkPropertyExists(props, configFilePath, "db.postgresql.password");
         } else if (dbType.toLowerCase().equals("sqlite")) {
             checkPropertyExists(props, configFilePath, "db.sqlite.url");
+        }
+
+        // 检查数据库是否已初始化
+        String dbInitialized = props.getProperty("db.initialized");
+        if (dbInitialized == null || dbInitialized.isEmpty()) {
+            logger.error("Missing property: db.initialized in config file: " + configFilePath);
+        } else {
+            if (!dbInitialized.toLowerCase().equals("true") && !dbInitialized.toLowerCase().equals("false")) {
+                logger.error("Invalid value for db.initialized: " + dbInitialized + " in config file: " + configFilePath +
+                        ". It should be either 'true' or 'false'. Unless you know what you are doing, do not modify this configuration.");
+            }
         }
     }
 

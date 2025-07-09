@@ -29,9 +29,13 @@ public class ApplicationConfig implements ConfigChecker {
     // 创建应用配置文件
     public static void createApplicationConfigFile(String configDirPath) {
         String fileName = "application.properties";
-        String content = "server.port=8080\n" +
+        String content = "# 网站释放端口\n" +
+                "server.port=8080\n" +
+                "# 站点名称\n" +
                 "spring.application.name=IdeaSphere\n" +
+                "# 服务时区\n" +
                 "application.timezone=UTC\n" +
+                "# DEBUG模式\n" +
                 "debug.mode=false";
 
         Path configFilePath = Paths.get(configDirPath, fileName);

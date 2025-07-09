@@ -8,4 +8,7 @@ public interface ConfigChecker {
 
     // 检查配置文件内容是否正确
     void checkConfigFileContent(Path configFilePath);
+
+    // 读取配置文件节点的接口
+    String readConfigProperty(Path configFilePath, String key);
 }

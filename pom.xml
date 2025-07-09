@@ -82,6 +82,31 @@
 			    <artifactId>maven-site-plugin</artifactId>
 			    <version>4.0.0-M16</version>
 		   </dependency>
+
+		<!-- MySQL 驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+		</dependency>
+		<!-- MariaDB 驱动 -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>3.3.3</version>
+		</dependency>
+		<!-- PostgreSQL 驱动 -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.6.0</version>
+		</dependency>
+		<!-- SQLite 驱动 -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.43.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
