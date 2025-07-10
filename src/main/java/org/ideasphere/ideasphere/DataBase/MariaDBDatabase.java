@@ -4,12 +4,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class MariaDBDatabase implements Database {
     private Connection connection;
 
     @Override
-    public void connect(String url, String username, String password) throws SQLException {
+    public void connect(Properties dbProperties) throws SQLException {
+        String url = dbProperties.getProperty("url");
+        String username = dbProperties.getProperty("username");
+        String password = dbProperties.getProperty("password");
         connection = DriverManager.getConnection(url, username, password);
     }
 
@@ -40,7 +44,7 @@ public class MariaDBDatabase implements Database {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
-                return rowMapper.mapRow(rs);
+                return rowMapper.mapRow(rs, "mariadb");
             }
             return null;
         }
@@ -51,5 +55,10 @@ public class MariaDBDatabase implements Database {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }
+    }
+
+    @Override
+    public String getDbType() {
+        return "mariadb";
     }
 }

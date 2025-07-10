@@ -4,6 +4,7 @@ import org.ideasphere.ideasphere.Config.DatabaseConfig;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseManager {
     private Database database;
@@ -17,11 +18,12 @@ public class DatabaseManager {
     private void initializeDatabase() {
         Path dbConfigPath = Paths.get(configDirPath, "db_config.properties");
         DatabaseConfig configChecker = new DatabaseConfig();
+        Properties dbProperties = new Properties();
 
         String dbType = configChecker.readConfigProperty(dbConfigPath, "db.type");
-        String dbUrl = configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".url");
-        String dbUsername = configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".username");
-        String dbPassword = configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".password");
+        dbProperties.setProperty("url", configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".url"));
+        dbProperties.setProperty("username", configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".username"));
+        dbProperties.setProperty("password", configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".password"));
 
         try {
             switch (dbType) {
@@ -36,12 +38,15 @@ public class DatabaseManager {
                     break;
                 case "sqlite":
                     database = new SQLiteDatabase();
+                    // SQLite 的配置处理
+                    String dbFile = configChecker.readConfigProperty(dbConfigPath, "db." + dbType + ".file");
+                    dbProperties.setProperty("dbFile", dbFile);
                     break;
                 default:
                     throw new SQLException("Unsupported database type: " + dbType);
             }
 
-            database.connect(dbUrl, dbUsername, dbPassword);
+            database.connect(dbProperties);
             database.initialize();
         } catch (Exception e) {
             System.err.println("Error initializing database: " + e.getMessage());
@@ -56,5 +61,9 @@ public class DatabaseManager {
         if (database != null) {
             database.close();
         }
+    }
+
+    public String getDbType() {
+        return database.getDbType();
     }
 }

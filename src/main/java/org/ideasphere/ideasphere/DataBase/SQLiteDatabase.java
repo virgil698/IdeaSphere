@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class SQLiteDatabase implements Database {
     private Connection connection;
 
     @Override
-    public void connect(String url, String username, String password) throws SQLException {
-        // SQLite 通常不需要用户名和密码
-        connection = DriverManager.getConnection(url);
+    public void connect(Properties dbProperties) throws SQLException {
+        String dbFile = dbProperties.getProperty("dbFile");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class SQLiteDatabase implements Database {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
-                return rowMapper.mapRow(rs);
+                return rowMapper.mapRow(rs, "sqlite");
             }
             return null;
         }
@@ -52,5 +53,10 @@ public class SQLiteDatabase implements Database {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }
+    }
+
+    @Override
+    public String getDbType() {
+        return "sqlite";
     }
 }
