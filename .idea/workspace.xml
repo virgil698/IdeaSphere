@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="新增数据库部分（未完待续）">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/MariaDBDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/MariaDBDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/MySQLDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/MySQLDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/PostgreSQLDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/PostgreSQLDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/RowMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/RowMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/SQLiteDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/SQLiteDatabase.java" afterDir="false" />
-    </list>
+    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="数据库处理部分" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -170,7 +161,7 @@
       <workItem from="1752022998337" duration="8191000" />
       <workItem from="1752054382618" duration="8965000" />
       <workItem from="1752071257802" duration="2000" />
-      <workItem from="1752112644673" duration="2542000" />
+      <workItem from="1752112644673" duration="2923000" />
     </task>
     <task id="LOCAL-00001" summary="更新 maven 依赖">
       <option name="closed" value="true" />
@@ -244,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752074837240</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="数据库处理部分">
+      <option name="closed" value="true" />
+      <created>1752115578675</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1752115578675</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,6 +269,7 @@
     <MESSAGE value="新建指定执行函数的日志接口，新增config创建接口" />
     <MESSAGE value="新建 Config 服务总配置文件，优化 ILogger 接口" />
     <MESSAGE value="新增数据库部分（未完待续）" />
-    <option name="LAST_COMMIT_MESSAGE" value="新增数据库部分（未完待续）" />
+    <MESSAGE value="数据库处理部分" />
+    <option name="LAST_COMMIT_MESSAGE" value="数据库处理部分" />
   </component>
 </project>
