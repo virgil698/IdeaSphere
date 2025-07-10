@@ -13,10 +13,8 @@ public class ConfigCheckerImpl implements ConfigChecker {
 
     @Override
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
-        // 检查文件是否存在
         if (!Files.exists(configFilePath)) {
             try {
-                // 创建文件并写入内容
                 Files.write(configFilePath, content.getBytes());
                 return true;
             } catch (IOException e) {
@@ -30,16 +28,12 @@ public class ConfigCheckerImpl implements ConfigChecker {
     @Override
     public void checkConfigFileContent(Path configFilePath) {
         try {
-            // 读取配置文件内容
             Properties props = new Properties();
             props.load(Files.newInputStream(configFilePath));
 
-            // 检查数据库配置文件
             if (configFilePath.toString().endsWith("db_config.properties")) {
                 checkDatabaseConfig(props, configFilePath);
-            }
-            // 检查应用配置文件
-            else if (configFilePath.toString().endsWith("application.properties")) {
+            } else if (configFilePath.toString().endsWith("application.properties")) {
                 checkApplicationConfig(props, configFilePath);
             }
         } catch (IOException e) {
@@ -47,47 +41,40 @@ public class ConfigCheckerImpl implements ConfigChecker {
         }
     }
 
-    // 检查数据库配置文件内容
     private void checkDatabaseConfig(Properties props, Path configFilePath) {
-        // 检查 db.type 是否在支持的数据库类型中
         String dbType = props.getProperty("db.type");
+        if (dbType == null || dbType.isEmpty()) {
+            logger.error("Missing property: db.type in config file: " + configFilePath);
+            return;
+        }
+
         if (!dbType.toLowerCase().equals("mysql") && !dbType.toLowerCase().equals("mariadb") &&
                 !dbType.toLowerCase().equals("postgresql") && !dbType.toLowerCase().equals("sqlite")) {
             logger.error("Invalid database type: " + dbType + " in config file: " + configFilePath);
+            return;
         }
 
-        // 检查对应数据库的连接配置是否存在
-        if (dbType.toLowerCase().equals("mysql")) {
-            checkPropertyExists(props, configFilePath, "db.mysql.url");
-            checkPropertyExists(props, configFilePath, "db.mysql.username");
-            checkPropertyExists(props, configFilePath, "db.mysql.password");
-        } else if (dbType.toLowerCase().equals("mariadb")) {
-            checkPropertyExists(props, configFilePath, "db.mariadb.url");
-            checkPropertyExists(props, configFilePath, "db.mariadb.username");
-            checkPropertyExists(props, configFilePath, "db.mariadb.password");
-        } else if (dbType.toLowerCase().equals("postgresql")) {
-            checkPropertyExists(props, configFilePath, "db.postgresql.url");
-            checkPropertyExists(props, configFilePath, "db.postgresql.username");
-            checkPropertyExists(props, configFilePath, "db.postgresql.password");
+        if (dbType.toLowerCase().equals("mysql") || dbType.toLowerCase().equals("mariadb") || dbType.toLowerCase().equals("postgresql")) {
+            checkPropertyExists(props, configFilePath, "db.host");
+            checkPropertyExists(props, configFilePath, "db.port");
+            checkPropertyExists(props, configFilePath, "db.name");
+            checkPropertyExists(props, configFilePath, "db.username");
+            checkPropertyExists(props, configFilePath, "db.password");
         } else if (dbType.toLowerCase().equals("sqlite")) {
-            checkPropertyExists(props, configFilePath, "db.sqlite.url");
+            checkPropertyExists(props, configFilePath, "db.sqlite.file");
         }
 
-        // 检查数据库是否已初始化
         String dbInitialized = props.getProperty("db.initialized");
         if (dbInitialized == null || dbInitialized.isEmpty()) {
             logger.error("Missing property: db.initialized in config file: " + configFilePath);
         } else {
             if (!dbInitialized.toLowerCase().equals("true") && !dbInitialized.toLowerCase().equals("false")) {
-                logger.error("Invalid value for db.initialized: " + dbInitialized + " in config file: " + configFilePath +
-                        ". It should be either 'true' or 'false'. Unless you know what you are doing, do not modify this configuration.");
+                logger.error("Invalid value for db.initialized: " + dbInitialized + " in config file: " + configFilePath + ". It should be either 'true' or 'false'. Unless you know what you are doing, do not modify this configuration.");
             }
         }
     }
 
-    // 检查应用配置文件内容
     private void checkApplicationConfig(Properties props, Path configFilePath) {
-        // 检查 server.port 是否是有效的数字
         String serverPort = props.getProperty("server.port");
         try {
             int port = Integer.parseInt(serverPort);
@@ -98,29 +85,38 @@ public class ConfigCheckerImpl implements ConfigChecker {
             logger.error("Invalid port format: " + serverPort + " in config file: " + configFilePath, e);
         }
 
-        // 检查 spring.application.name 是否为空
         String appName = props.getProperty("spring.application.name");
         if (appName == null || appName.isEmpty()) {
             logger.error("Application name is empty in config file: " + configFilePath);
         }
 
-        // 检查 application.timezone 是否是有效的时区
         String timezone = props.getProperty("application.timezone");
         if (timezone == null || timezone.isEmpty()) {
             logger.error("Timezone is empty in config file: " + configFilePath);
         }
 
-        // 检查 debug.mode 是否是布尔值
         String debugMode = props.getProperty("debug.mode");
         if (!debugMode.toLowerCase().equals("true") && !debugMode.toLowerCase().equals("false")) {
             logger.error("Invalid debug mode: " + debugMode + " in config file: " + configFilePath);
         }
     }
 
-    // 检查属性是否存在
     private void checkPropertyExists(Properties props, Path configFilePath, String key) {
         if (props.getProperty(key) == null || props.getProperty(key).isEmpty()) {
             logger.error("Missing property: " + key + " in config file: " + configFilePath);
         }
+    }
+
+    @Override
+    public String readConfigProperty(Path configFilePath, String key) {
+        Properties props = new Properties();
+        try (java.io.InputStream inputStream = Files.newInputStream(configFilePath)) {
+            if (Files.exists(configFilePath)) {
+                props.load(inputStream);
+            }
+        } catch (IOException e) {
+            logger.error("Error reading config file: " + configFilePath, e);
+        }
+        return props.getProperty(key);
     }
 }

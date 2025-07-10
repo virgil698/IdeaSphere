@@ -30,23 +30,18 @@ public class DatabaseConfig implements ConfigChecker {
     // 创建数据库配置文件
     public static void createDatabaseConfigFile(String configDirPath) {
         String fileName = "db_config.properties";
-        String content = "# 使用哪种数据库，可选：mysql、mariadb、postgresql或者sqlite，仅只能选择一个\n" +
+        String content = "# 数据库类型，可选：mysql、mariadb、postgresql或者sqlite\n" +
                 "db.type=mysql\n" +
-                "# MySQL连接\n" +
-                "db.mysql.url=jdbc:mysql://localhost:3306/ideasphere\n" +
-                "db.mysql.username=root\n" +
-                "db.mysql.password=root\n" +
-                "# MariaDB连接\n" +
-                "db.mariadb.url=jdbc:mariadb://localhost:3306/ideasphere\n" +
-                "db.mariadb.username=root\n" +
-                "db.mariadb.password=root\n" +
-                "# PostgreSQL连接\n" +
-                "db.postgresql.url=jdbc:postgresql://localhost:5432/ideasphere\n" +
-                "db.postgresql.username=postgres\n" +
-                "db.postgresql.password=postgres\n" +
-                "# SQLite连接\n" +
-                "db.sqlite.url=jdbc:sqlite:./ideasphere.db\n" +
-                "# 是否已初始化数据库，除非您知道自己在做什么，否则不要修改此配置\n" +
+                "# 数据库连接配置\n" +
+                "# MySQL、MariaDB、PostgreSQL通用配置\n" +
+                "db.host=localhost\n" +
+                "db.port=3306\n" +
+                "db.name=ideasphere\n" +
+                "db.username=root\n" +
+                "db.password=root\n" +
+                "# SQLite配置\n" +
+                "db.sqlite.file=ideasphere.db\n" +
+                "# 数据库是否已初始化\n" +
                 "db.initialized=false\n";
 
         Path configFilePath = Paths.get(configDirPath, fileName);

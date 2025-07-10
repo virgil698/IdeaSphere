@@ -13,6 +13,12 @@ public interface Database {
     // 执行查询操作并返回结果
     <T> T query(String sql, RowMapper<T> rowMapper) throws SQLException;
 
+    // 执行修改操作（如插入、更新、删除）
+    int update(String sql) throws SQLException;
+
+    // 执行删除操作
+    int delete(String sql) throws SQLException;
+
     // 关闭数据库连接
     void close() throws SQLException;
 

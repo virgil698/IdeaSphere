@@ -7,16 +7,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 public class ApplicationConfig implements ConfigChecker {
     private static final ILogger logger = new Log4j2Logger(ApplicationConfig.class);
 
     @Override
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
-        // 检查文件是否存在
         if (!Files.exists(configFilePath)) {
             try {
-                // 创建文件并写入内容
                 Files.write(configFilePath, content.getBytes());
                 return true;
             } catch (IOException e) {
@@ -26,7 +25,6 @@ public class ApplicationConfig implements ConfigChecker {
         return false;
     }
 
-    // 创建应用配置文件
     public static void createApplicationConfigFile(String configDirPath) {
         String fileName = "application.properties";
         String content = "# 网站释放端口\n" +
@@ -49,9 +47,20 @@ public class ApplicationConfig implements ConfigChecker {
 
     @Override
     public void checkConfigFileContent(Path configFilePath) {
-        // 实现检查配置文件内容的逻辑
-        // 例如，可以调用 ConfigCheckerImpl 的实现
         ConfigCheckerImpl checker = new ConfigCheckerImpl();
         checker.checkConfigFileContent(configFilePath);
+    }
+
+    @Override
+    public String readConfigProperty(Path configFilePath, String key) {
+        Properties props = new Properties();
+        try (java.io.InputStream inputStream = Files.newInputStream(configFilePath)) {
+            if (Files.exists(configFilePath)) {
+                props.load(inputStream);
+            }
+        } catch (IOException e) {
+            logger.error("Error reading config file: " + configFilePath, e);
+        }
+        return props.getProperty(key);
     }
 }
