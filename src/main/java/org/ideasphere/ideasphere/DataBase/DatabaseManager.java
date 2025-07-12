@@ -82,8 +82,6 @@ public class DatabaseManager {
             logger.info("database", "Connected to database.");
         } catch (Exception e) {
             logger.error("database", "Error initializing database", e);
-            // 打印详细的堆栈信息
-            e.printStackTrace();
             // 终止进程
             System.exit(1);
         }
