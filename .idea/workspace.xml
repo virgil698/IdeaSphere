@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="数据库处理部分">
+    <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="修复SQLite数据库配置无法正常读取问题+配置文件使用UTF-8生成">
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/Config/DatabaseConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/DataBase/DatabaseManagerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/ApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/DatabaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/ideasphere/ideasphere/IdeaSphereApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +79,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.IdeaSphereApplication.executor": "Debug",
+    "Spring Boot.IdeaSphereApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -170,7 +171,7 @@
       <workItem from="1752071257802" duration="2000" />
       <workItem from="1752112644673" duration="16848000" />
       <workItem from="1752323744995" duration="2801000" />
-      <workItem from="1752626083826" duration="1117000" />
+      <workItem from="1752626083826" duration="2216000" />
     </task>
     <task id="LOCAL-00001" summary="更新 maven 依赖">
       <option name="closed" value="true" />
@@ -268,7 +269,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752326178987</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="修复SQLite数据库配置无法正常读取问题+配置文件使用UTF-8生成">
+      <option name="closed" value="true" />
+      <created>1752627358331</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1752627358331</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,6 +304,7 @@
     <MESSAGE value="新建 Config 服务总配置文件，优化 ILogger 接口" />
     <MESSAGE value="新增数据库部分（未完待续）" />
     <MESSAGE value="数据库处理部分" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据库处理部分" />
+    <MESSAGE value="修复SQLite数据库配置无法正常读取问题+配置文件使用UTF-8生成" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复SQLite数据库配置无法正常读取问题+配置文件使用UTF-8生成" />
   </component>
 </project>

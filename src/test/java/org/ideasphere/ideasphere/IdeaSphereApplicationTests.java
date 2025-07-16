@@ -1,5 +1,7 @@
 package org.ideasphere.ideasphere;
 
+import org.ideasphere.ideasphere.Config.Config;
+import org.ideasphere.ideasphere.Config.DatabaseConfig;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +68,7 @@ class IdeaSphereApplicationTest {
 
         // 验证 logger 是否被调用
         verify(loggerMock).info("Loading libraries, please wait...");
-        verify(loggerMock).info(anyString(), any());
+        verify(loggerMock).info(anyString(), Optional.ofNullable(any()));
         verify(loggerMock).info("Stopping the server...");
         verify(loggerMock).info("Shutting down the server...");
     }
@@ -83,7 +88,7 @@ class IdeaSphereApplicationTest {
         IdeaSphereApplication.logger.info("Test message with arg: %s", "test");
 
         // 验证 logger 是否被调用
-        verify(loggerMock).info(anyString(), any());
+        verify(loggerMock).info(anyString(), Optional.ofNullable(any()));
     }
 
     @Test
@@ -118,4 +123,32 @@ class IdeaSphereApplicationTest {
         // 验证 ShutdownHook 是否被调用
         verify(loggerMock).info("Shutting down the server...");
     }
-}
+
+    // 在现有类中添加以下测试方法
+
+    @Test
+    void testConfigDirCreation() throws Exception {
+        // 模拟主目录路径
+        String testDir = "testConfigDir";
+
+        // 调用配置检查方法
+        Config.checkAndCreateConfigDir(testDir);
+
+        // 验证日志输出
+        verify(loggerMock).info(eq("config"), contains("Created config directory"));
+
+        // 清理测试目录
+        Files.deleteIfExists(Paths.get(testDir, "config"));
+    }
+
+    @Test
+    void testInvalidDatabaseType() throws IOException {
+        // 模拟错误配置
+        Path invalidConfig = Files.createTempFile("invalid_db", ".properties");
+        Files.write(invalidConfig, "db.type=invalid".getBytes());
+
+        DatabaseConfig config = new DatabaseConfig();
+        config.checkConfigFileContent(invalidConfig);
+
+        verify(loggerMock).error(contains("Invalid database type"));
+    }}
