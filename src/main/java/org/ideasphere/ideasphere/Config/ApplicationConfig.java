@@ -4,6 +4,7 @@ import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;   // 新增
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +17,8 @@ public class ApplicationConfig implements ConfigChecker {
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
         if (!Files.exists(configFilePath)) {
             try {
-                Files.write(configFilePath, content.getBytes());
+                // 明确指定 UTF-8 编码
+                Files.write(configFilePath, content.getBytes(StandardCharsets.UTF_8));
                 return true;
             } catch (IOException e) {
                 logger.error("Error creating application config file: " + configFilePath, e);
@@ -54,9 +56,9 @@ public class ApplicationConfig implements ConfigChecker {
     @Override
     public String readConfigProperty(Path configFilePath, String key) {
         Properties props = new Properties();
-        try (java.io.InputStream inputStream = Files.newInputStream(configFilePath)) {
+        try (var inputStream = Files.newInputStream(configFilePath)) {
             if (Files.exists(configFilePath)) {
-                props.load(inputStream);
+                props.load(inputStream); // 读取时默认 ISO-8859-1
             }
         } catch (IOException e) {
             logger.error("Error reading config file: " + configFilePath, e);

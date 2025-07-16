@@ -17,14 +17,12 @@ public class GenericDatabase implements Database {
         this.dbType = dbType;
     }
 
-    @Override
     public void connect(Properties dbProperties) throws SQLException {
         String url;
         String username = dbProperties.getProperty("username");
         String password = dbProperties.getProperty("password");
 
         if ("sqlite".equalsIgnoreCase(dbType)) {
-            // 显式加载 SQLite JDBC 驱动程序并记录日志
             try {
                 Class.forName("org.sqlite.JDBC");
                 logger.info("database", "Loaded SQLite JDBC driver.");
@@ -34,15 +32,18 @@ public class GenericDatabase implements Database {
             }
 
             String dbFile = dbProperties.getProperty("dbFile");
-            if (dbFile == null || dbFile.isEmpty()) {
+            if (dbFile == null || dbFile.trim().isEmpty()) { // 检查 dbFile 是否为空
                 throw new SQLException("SQLite database file must be specified.");
             }
-            // 检查 SQLite 数据库文件是否存在，如果不存在则创建
+
             Path dbFilePath = Paths.get(dbFile);
             if (!Files.exists(dbFilePath)) {
                 try {
-                    Files.createDirectories(dbFilePath.getParent());
-                    Files.createFile(dbFilePath);
+                    // 确保父目录存在
+                    if (dbFilePath.getParent() != null && !Files.exists(dbFilePath.getParent())) {
+                        Files.createDirectories(dbFilePath.getParent()); // 创建父目录
+                    }
+                    Files.createFile(dbFilePath); // 创建文件
                     logger.info("database", "Created SQLite database file: " + dbFilePath);
                 } catch (IOException e) {
                     logger.error("database", "Failed to create SQLite database file: " + dbFilePath, e);

@@ -4,6 +4,7 @@ import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;   // 新增
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,11 +15,10 @@ public class DatabaseConfig implements ConfigChecker {
 
     @Override
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
-        // 检查文件是否存在
         if (!Files.exists(configFilePath)) {
             try {
-                // 创建文件并写入内容
-                Files.write(configFilePath, content.getBytes());
+                // 明确指定 UTF-8 编码
+                Files.write(configFilePath, content.getBytes(StandardCharsets.UTF_8));
                 return true;
             } catch (IOException e) {
                 logger.error("Error creating database config file: " + configFilePath, e);
@@ -27,7 +27,6 @@ public class DatabaseConfig implements ConfigChecker {
         return false;
     }
 
-    // 创建数据库配置文件
     public static void createDatabaseConfigFile(String configDirPath) {
         String fileName = "db_config.properties";
         String content = "# 数据库类型，可选：mysql、mariadb、postgresql或者sqlite\n" +
@@ -55,8 +54,6 @@ public class DatabaseConfig implements ConfigChecker {
 
     @Override
     public void checkConfigFileContent(Path configFilePath) {
-        // 实现检查配置文件内容的逻辑
-        // 例如，可以调用 ConfigCheckerImpl 的实现
         ConfigCheckerImpl checker = new ConfigCheckerImpl();
         checker.checkConfigFileContent(configFilePath);
     }
@@ -64,7 +61,7 @@ public class DatabaseConfig implements ConfigChecker {
     @Override
     public String readConfigProperty(Path configFilePath, String key) {
         Properties props = new Properties();
-        try (java.io.InputStream inputStream = Files.newInputStream(configFilePath)) {
+        try (var inputStream = Files.newInputStream(configFilePath)) {
             if (Files.exists(configFilePath)) {
                 props.load(inputStream);
             }

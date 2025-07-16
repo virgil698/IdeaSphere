@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2bfcec75-b323-453a-a893-38f9b098a257" name="更改" comment="数据库处理部分">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/ApplicationConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/Config/DatabaseConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/GenericDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/ideasphere/ideasphere/DataBase/GenericDatabase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +169,8 @@
       <workItem from="1752054382618" duration="8965000" />
       <workItem from="1752071257802" duration="2000" />
       <workItem from="1752112644673" duration="16848000" />
-      <workItem from="1752323744995" duration="2368000" />
+      <workItem from="1752323744995" duration="2801000" />
+      <workItem from="1752626083826" duration="1117000" />
     </task>
     <task id="LOCAL-00001" summary="更新 maven 依赖">
       <option name="closed" value="true" />
@@ -260,7 +260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752115606712</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="数据库处理部分">
+      <option name="closed" value="true" />
+      <created>1752326178987</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1752326178987</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
