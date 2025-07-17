@@ -1,6 +1,8 @@
 package org.ideasphere.ideasphere;
 
+import org.ideasphere.ideasphere.Config.ApplicationConfig;
 import org.ideasphere.ideasphere.Config.Config;
+import org.ideasphere.ideasphere.Config.ConfigCheckerImpl;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 import org.ideasphere.ideasphere.DataBase.DatabaseManager;
@@ -36,12 +38,23 @@ public class IdeaSphereApplication {
         // 调用 Config 模块检查并创建 config 文件夹
         Config.checkAndCreateConfigDir(mainDirPath);
 
+        // 调用 ApplicationConfig 复制配置文件
+        ApplicationConfig.copyConfigFilesIfNeeded(mainDirPath);
+
         // 验证 config 文件夹是否创建成功
         Path configPath = Paths.get(mainDirPath, "config");
         if (!Files.exists(configPath)) {
             logger.error("main", "Failed to create config directory: " + configPath);
             return;
         }
+
+        // 调用 ConfigCheckerImpl 检查配置文件内容
+        ConfigCheckerImpl checker = new ConfigCheckerImpl();
+        Path dbConfigPath = Paths.get(configPath.toString(), "database.properties");
+        Path appConfigPath = Paths.get(configPath.toString(), "config.properties");
+
+        checker.checkConfigFileContent(dbConfigPath);
+        checker.checkConfigFileContent(appConfigPath);
 
         // 初始化数据库管理器
         databaseManager = new DatabaseManager(mainDirPath);

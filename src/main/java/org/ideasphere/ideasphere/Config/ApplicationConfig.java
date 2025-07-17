@@ -4,10 +4,10 @@ import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;   // 新增
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 
 public class ApplicationConfig implements ConfigChecker {
@@ -15,36 +15,7 @@ public class ApplicationConfig implements ConfigChecker {
 
     @Override
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
-        if (!Files.exists(configFilePath)) {
-            try {
-                // 明确指定 UTF-8 编码
-                Files.write(configFilePath, content.getBytes(StandardCharsets.UTF_8));
-                return true;
-            } catch (IOException e) {
-                logger.error("Error creating application config file: " + configFilePath, e);
-            }
-        }
-        return false;
-    }
-
-    public static void createApplicationConfigFile(String configDirPath) {
-        String fileName = "application.properties";
-        String content = "# 网站释放端口\n" +
-                "server.port=8080\n" +
-                "# 站点名称\n" +
-                "spring.application.name=IdeaSphere\n" +
-                "# 服务时区\n" +
-                "application.timezone=UTC\n" +
-                "# DEBUG模式\n" +
-                "debug.mode=false";
-
-        Path configFilePath = Paths.get(configDirPath, fileName);
-        ConfigChecker checker = new ApplicationConfig();
-        if (checker.checkAndCreateConfigFile(configFilePath, content)) {
-            logger.info("config", "Created application config file: " + configFilePath);
-        } else {
-            logger.info("config", "Application config file already exists: " + configFilePath);
-        }
+        throw new UnsupportedOperationException("This method is no longer supported");
     }
 
     @Override
@@ -58,11 +29,44 @@ public class ApplicationConfig implements ConfigChecker {
         Properties props = new Properties();
         try (var inputStream = Files.newInputStream(configFilePath)) {
             if (Files.exists(configFilePath)) {
-                props.load(inputStream); // 读取时默认 ISO-8859-1
+                props.load(inputStream);
             }
         } catch (IOException e) {
             logger.error("Error reading config file: " + configFilePath, e);
         }
         return props.getProperty(key);
+    }
+
+    public static void copyConfigFilesIfNeeded(String projectMainDirPath) {
+        String configDirPath = Paths.get(projectMainDirPath, "config").toString();
+        Path targetConfigDir = Paths.get(projectMainDirPath, "config");
+
+        // 检查目标配置目录是否存在
+        if (!Files.exists(targetConfigDir)) {
+            try {
+                // 创建目标目录
+                Files.createDirectories(targetConfigDir);
+
+                // 拷贝 config.properties
+                Path sourceConfig = Paths.get("src", "main", "resources", "config", "config.properties");
+                Path targetConfig = Paths.get(configDirPath, "config.properties");
+                copyFile(sourceConfig, targetConfig);
+
+                // 拷贝 database.properties
+                Path sourceDatabase = Paths.get("src", "main", "resources", "config", "database.properties");
+                Path targetDatabase = Paths.get(configDirPath, "database.properties");
+                copyFile(sourceDatabase, targetDatabase);
+
+                logger.info("config", "Successfully copied config files to: " + configDirPath);
+            } catch (Exception e) {
+                logger.error("config", "Failed to copy config files to: " + configDirPath, e);
+            }
+        } else {
+            logger.info("config", "Config directory already exists: " + targetConfigDir);
+        }
+    }
+
+    private static void copyFile(Path sourcePath, Path targetPath) throws IOException {
+        Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 }

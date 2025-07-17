@@ -13,16 +13,7 @@ public class ConfigCheckerImpl implements ConfigChecker {
 
     @Override
     public boolean checkAndCreateConfigFile(Path configFilePath, String content) {
-        if (!Files.exists(configFilePath)) {
-            try {
-                Files.write(configFilePath, content.getBytes());
-                return true;
-            } catch (IOException e) {
-                logger.error("Error creating config file: " + configFilePath, e);
-                return false;
-            }
-        }
-        return false;
+        throw new UnsupportedOperationException("This method is no longer supported");
     }
 
     @Override
@@ -31,9 +22,9 @@ public class ConfigCheckerImpl implements ConfigChecker {
             Properties props = new Properties();
             props.load(Files.newInputStream(configFilePath));
 
-            if (configFilePath.toString().endsWith("db_config.properties")) {
+            if (configFilePath.toString().endsWith("database.properties")) {
                 checkDatabaseConfig(props, configFilePath);
-            } else if (configFilePath.toString().endsWith("application.properties")) {
+            } else if (configFilePath.toString().endsWith("config.properties")) {
                 checkApplicationConfig(props, configFilePath);
             }
         } catch (IOException e) {

@@ -4,7 +4,6 @@ import org.ideasphere.ideasphere.Config.DatabaseConfig;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +22,7 @@ public class DatabaseManager {
     }
 
     public void initializeDatabase() {
-        Path dbConfigPath = Paths.get(configDirPath, "config", "db_config.properties");
+        Path dbConfigPath = Paths.get(configDirPath, "config", "database.properties");
         DatabaseConfig configChecker = new DatabaseConfig();
 
         if (!Files.exists(dbConfigPath)) {
@@ -49,8 +48,57 @@ public class DatabaseManager {
                 return;
             }
             dbProperties.setProperty("dbFile", sqliteFile); // 确保 dbFile 是有效的
+        } else if ("mysql".equalsIgnoreCase(dbType)) {
+            String host = configChecker.readConfigProperty(dbConfigPath, "db.mysql.host");
+            String port = configChecker.readConfigProperty(dbConfigPath, "db.mysql.port");
+            String name = configChecker.readConfigProperty(dbConfigPath, "db.mysql.name");
+            String user = configChecker.readConfigProperty(dbConfigPath, "db.mysql.user");
+            String password = configChecker.readConfigProperty(dbConfigPath, "db.mysql.password");
+
+            if (host == null || port == null || name == null || user == null || password == null) {
+                logger.error("config", "Missing required MySQL database configurations.");
+                return;
+            }
+            dbProperties.setProperty("host", host);
+            dbProperties.setProperty("port", port);
+            dbProperties.setProperty("name", name);
+            dbProperties.setProperty("username", user);
+            dbProperties.setProperty("password", password);
+        } else if ("mariadb".equalsIgnoreCase(dbType)) {
+            String host = configChecker.readConfigProperty(dbConfigPath, "db.mariadb.host");
+            String port = configChecker.readConfigProperty(dbConfigPath, "db.mariadb.port");
+            String name = configChecker.readConfigProperty(dbConfigPath, "db.mariadb.name");
+            String user = configChecker.readConfigProperty(dbConfigPath, "db.mariadb.user");
+            String password = configChecker.readConfigProperty(dbConfigPath, "db.mariadb.password");
+
+            if (host == null || port == null || name == null || user == null || password == null) {
+                logger.error("config", "Missing required MariaDB database configurations.");
+                return;
+            }
+            dbProperties.setProperty("host", host);
+            dbProperties.setProperty("port", port);
+            dbProperties.setProperty("name", name);
+            dbProperties.setProperty("username", user);
+            dbProperties.setProperty("password", password);
+        } else if ("postgresql".equalsIgnoreCase(dbType)) {
+            String host = configChecker.readConfigProperty(dbConfigPath, "db.postgresql.host");
+            String port = configChecker.readConfigProperty(dbConfigPath, "db.postgresql.port");
+            String name = configChecker.readConfigProperty(dbConfigPath, "db.postgresql.name");
+            String user = configChecker.readConfigProperty(dbConfigPath, "db.postgresql.user");
+            String password = configChecker.readConfigProperty(dbConfigPath, "db.postgresql.password");
+
+            if (host == null || port == null || name == null || user == null || password == null) {
+                logger.error("config", "Missing required PostgreSQL database configurations.");
+                return;
+            }
+            dbProperties.setProperty("host", host);
+            dbProperties.setProperty("port", port);
+            dbProperties.setProperty("name", name);
+            dbProperties.setProperty("username", user);
+            dbProperties.setProperty("password", password);
         } else {
-            // 其他数据库类型的逻辑保持不变
+            logger.error("config", "Unsupported database type: " + dbType);
+            return;
         }
 
         database = new GenericDatabase(dbType);

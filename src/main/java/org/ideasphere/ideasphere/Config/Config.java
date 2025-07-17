@@ -4,7 +4,6 @@ import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,33 +27,18 @@ public class Config {
         } else {
             logger.info("config", "Config directory already exists: " + configDirPath);
         }
-
-        // 检查并创建配置文件
-        checkAndCreateConfigFiles(configDirPath);
-    }
-
-    // 检查并创建配置文件
-    private static void checkAndCreateConfigFiles(String configDirPath) {
-        // 创建数据库配置文件
-        DatabaseConfig.createDatabaseConfigFile(configDirPath);
-
-        // 创建应用配置文件
-        ApplicationConfig.createApplicationConfigFile(configDirPath);
-
-        // 检查配置文件内容
-        checkConfigFilesContent(configDirPath);
     }
 
     // 检查配置文件内容
-    private static void checkConfigFilesContent(String configDirPath) {
+    public static void checkConfigFilesContent(String configDirPath) {
         ConfigChecker checker = new ConfigCheckerImpl();
 
         // 检查数据库配置文件内容
-        Path dbConfigPath = Paths.get(configDirPath, "db_config.properties");
+        Path dbConfigPath = Paths.get(configDirPath, "database.properties");
         checker.checkConfigFileContent(dbConfigPath);
 
         // 检查应用配置文件内容
-        Path appConfigPath = Paths.get(configDirPath, "application.properties");
+        Path appConfigPath = Paths.get(configDirPath, "config.properties");
         checker.checkConfigFileContent(appConfigPath);
     }
 }
