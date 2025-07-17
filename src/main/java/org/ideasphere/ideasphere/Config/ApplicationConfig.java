@@ -38,7 +38,6 @@ public class ApplicationConfig implements ConfigChecker {
     }
 
     public static void copyConfigFilesIfNeeded(String projectMainDirPath) {
-        String configDirPath = Paths.get(projectMainDirPath, "config").toString();
         Path targetConfigDir = Paths.get(projectMainDirPath, "config");
 
         // 检查目标配置目录是否存在
@@ -47,26 +46,27 @@ public class ApplicationConfig implements ConfigChecker {
                 // 创建目标目录
                 Files.createDirectories(targetConfigDir);
 
-                // 拷贝 config.properties
-                Path sourceConfig = Paths.get("src", "main", "resources", "config", "config.properties");
-                Path targetConfig = Paths.get(configDirPath, "config.properties");
-                copyFile(sourceConfig, targetConfig);
+                // 拷贝配置文件
+                copyConfigFile("config.properties", projectMainDirPath);
+                copyConfigFile("database.properties", projectMainDirPath);
 
-                // 拷贝 database.properties
-                Path sourceDatabase = Paths.get("src", "main", "resources", "config", "database.properties");
-                Path targetDatabase = Paths.get(configDirPath, "database.properties");
-                copyFile(sourceDatabase, targetDatabase);
-
-                logger.info("config", "Successfully copied config files to: " + configDirPath);
+                logger.info("Successfully copied config files to: " + targetConfigDir.toString());
             } catch (Exception e) {
-                logger.error("config", "Failed to copy config files to: " + configDirPath, e);
+                logger.error("Failed to copy config files to: " + targetConfigDir.toString(), e);
             }
         } else {
-            logger.info("config", "Config directory already exists: " + targetConfigDir);
+            logger.info("Config directory already exists: " + targetConfigDir.toString());
         }
     }
 
-    private static void copyFile(Path sourcePath, Path targetPath) throws IOException {
+    private static void copyConfigFile(String fileName, String projectMainDirPath) throws IOException {
+        // 构建源文件路径（从main/resources）
+        Path sourcePath = Paths.get("src", "main", "resources", fileName);
+
+        // 构建目标文件路径
+        Path targetPath = Paths.get(projectMainDirPath, "config", fileName);
+
+        // 复制文件
         Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 }

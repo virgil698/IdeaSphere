@@ -27,6 +27,7 @@ public class IdeaSphereApplication {
         logger.info("main", "Loading libraries, please wait...");
 
         long startTime = System.currentTimeMillis();
+
         // 启动 Spring 应用
         SpringApplication app = new SpringApplication(IdeaSphereApplication.class);
         app.run(args);
@@ -35,10 +36,10 @@ public class IdeaSphereApplication {
         String mainDirPath = Paths.get(".").toAbsolutePath().normalize().toString();
         logger.info("main", "Main directory path: " + mainDirPath);
 
-        // 调用 Config 模块检查并创建 config 文件夹
+        // 检查并创建 config 文件夹
         Config.checkAndCreateConfigDir(mainDirPath);
 
-        // 调用 ApplicationConfig 复制配置文件
+        // 复制默认配置文件
         ApplicationConfig.copyConfigFilesIfNeeded(mainDirPath);
 
         // 验证 config 文件夹是否创建成功
@@ -47,14 +48,6 @@ public class IdeaSphereApplication {
             logger.error("main", "Failed to create config directory: " + configPath);
             return;
         }
-
-        // 调用 ConfigCheckerImpl 检查配置文件内容
-        ConfigCheckerImpl checker = new ConfigCheckerImpl();
-        Path dbConfigPath = Paths.get(configPath.toString(), "database.properties");
-        Path appConfigPath = Paths.get(configPath.toString(), "config.properties");
-
-        checker.checkConfigFileContent(dbConfigPath);
-        checker.checkConfigFileContent(appConfigPath);
 
         // 初始化数据库管理器
         databaseManager = new DatabaseManager(mainDirPath);
