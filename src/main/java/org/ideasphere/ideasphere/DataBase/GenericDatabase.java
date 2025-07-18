@@ -132,6 +132,31 @@ public class GenericDatabase implements Database {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sqlScript);
         }
+
+        // 针对 SQLite 进行特定处理
+        if ("sqlite".equalsIgnoreCase(dbType)) {
+            String dbConfigPath = "config/database.properties"; // 根据实际路径调整
+            Properties dbProperties = new Properties();
+            try (InputStream input = new FileInputStream(dbConfigPath)) {
+                dbProperties.load(input);
+            } catch (IOException e) {
+                logger.error("config", "Error reading database configuration file.", e);
+                throw e;
+            }
+
+            // 检查并更新 db.initialized 属性
+            if (dbProperties.getProperty("db.initialized") != null &&
+                    dbProperties.getProperty("db.initialized").equalsIgnoreCase("false")) {
+                dbProperties.setProperty("db.initialized", "true");
+                try (OutputStream output = new FileOutputStream(dbConfigPath)) {
+                    dbProperties.store(output, null);
+                } catch (IOException e) {
+                    logger.error("config", "Error updating database configuration file.", e);
+                    throw e;
+                }
+                logger.info("database", "Database initialized and configuration updated.");
+            }
+        }
     }
 
     public <T> T query(String sql, RowMapper<T> rowMapper) throws SQLException {
