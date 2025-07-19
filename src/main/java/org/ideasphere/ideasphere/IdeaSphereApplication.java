@@ -2,10 +2,8 @@ package org.ideasphere.ideasphere;
 
 import org.ideasphere.ideasphere.Config.ApplicationConfig;
 import org.ideasphere.ideasphere.Config.Config;
-import org.ideasphere.ideasphere.Config.ConfigCheckerImpl;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
-import org.ideasphere.ideasphere.DataBase.DatabaseManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -20,7 +18,6 @@ import java.nio.file.Paths;
 public class IdeaSphereApplication {
 
     public static final ILogger logger = new Log4j2Logger(IdeaSphereApplication.class);
-    private static DatabaseManager databaseManager;
 
     public static void main(String[] args) {
         // 服务输出测试
@@ -49,9 +46,6 @@ public class IdeaSphereApplication {
             return;
         }
 
-        // 初始化数据库管理器
-        databaseManager = new DatabaseManager(mainDirPath);
-
         // 提示服务启动
         double elapsedTime = ((System.currentTimeMillis() - startTime) / 1000.0); // 确保是 double 类型
         logger.info("main", "Done (%.2f sec)! For help, type \"help\"", elapsedTime);
@@ -70,18 +64,5 @@ public class IdeaSphereApplication {
                 logger.error("main", "Error reading input", e);
             }
         }).start();
-
-        // 添加 ShutdownHook 处理优雅关闭
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("main", "Shutting down the server...");
-            // 可以在这里添加资源释放等逻辑
-            if (databaseManager != null) {
-                try {
-                    databaseManager.close();
-                } catch (Exception e) {
-                    logger.error("database", "Error closing database", e);
-                }
-            }
-        }));
     }
 }

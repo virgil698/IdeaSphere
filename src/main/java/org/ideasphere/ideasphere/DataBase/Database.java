@@ -1,27 +1,12 @@
 package org.ideasphere.ideasphere.DataBase;
 
-import java.sql.SQLException;
-import java.util.Properties;
+import org.ideasphere.ideasphere.Logger.ILogger;
 
-public interface Database {
-    // 连接数据库
-    void connect(Properties dbProperties) throws SQLException;
-
-    // 初始化数据库（执行 SQL 脚本）
-    void initialize() throws Exception;
-
-    // 执行查询操作并返回结果
-    <T> T query(String sql, RowMapper<T> rowMapper) throws SQLException;
-
-    // 执行修改操作（如插入、更新、删除）
-    int update(String sql) throws SQLException;
-
-    // 执行删除操作
-    int delete(String sql) throws SQLException;
-
-    // 关闭数据库连接
-    void close() throws SQLException;
-
-    // 获取数据库类型
-    String getDbType();
+public interface DataBase {
+    void connect(ILogger logger); // 数据库连接方法，带日志记录
+    void disconnect(ILogger logger); // 数据库断开连接方法，带日志记录
+    void insert(ILogger logger, String table, String columns, String values); // 插入数据，带日志记录
+    void update(ILogger logger, String table, String set, String where); // 更新数据，带日志记录
+    void delete(ILogger logger, String table, String where); // 删除数据，带日志记录
+    void query(ILogger logger, String sql); // 查询数据，带日志记录
 }
