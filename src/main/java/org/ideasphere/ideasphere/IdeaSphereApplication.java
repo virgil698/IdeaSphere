@@ -1,7 +1,5 @@
 package org.ideasphere.ideasphere;
 
-import org.ideasphere.ideasphere.Config.ApplicationConfig;
-import org.ideasphere.ideasphere.Config.Config;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 import org.springframework.boot.SpringApplication;
@@ -32,12 +30,6 @@ public class IdeaSphereApplication {
         // 获取主目录路径
         String mainDirPath = Paths.get(".").toAbsolutePath().normalize().toString();
         logger.info("main", "Main directory path: " + mainDirPath);
-
-        // 检查并创建 config 文件夹
-        Config.checkAndCreateConfigDir(mainDirPath);
-
-        // 复制默认配置文件
-        ApplicationConfig.copyConfigFilesIfNeeded(mainDirPath);
 
         // 验证 config 文件夹是否创建成功
         Path configPath = Paths.get(mainDirPath, "config");

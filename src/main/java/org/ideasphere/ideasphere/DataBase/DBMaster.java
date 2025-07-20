@@ -1,6 +1,6 @@
 package org.ideasphere.ideasphere.DataBase;
 
-import org.ideasphere.ideasphere.Config.DatabaseConfig;
+import org.ideasphere.ideasphere.Config.ConfigMaster;
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
 
@@ -8,22 +8,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class DBMaster implements DataBase {
     private Connection connection;
-    private final Path CONFIG_FILE_PATH = Paths.get("config", "database.properties"); // 配置文件路径
-    private final DatabaseConfig dbConfig = new DatabaseConfig(); // 配置文件读取工具
+    private final ConfigMaster configMaster = ConfigMaster.getInstance(); // 配置文件读取工具
     private final ILogger logger = new Log4j2Logger(DBMaster.class); // 日志记录工具
 
     @Override
     public void connect(ILogger logger) {
         try {
             // 从配置文件中读取数据库文件路径
-            String dbFilePath = dbConfig.readConfigProperty(CONFIG_FILE_PATH, "db.sqlite.file");
-            String dbType = dbConfig.readConfigProperty(CONFIG_FILE_PATH, "db.type");
-            boolean isInitialized = Boolean.parseBoolean(dbConfig.readConfigProperty(CONFIG_FILE_PATH, "db.initialized"));
+            String dbFilePath = configMaster.getProperty("db.sqlite.file");
+            String dbType = configMaster.getProperty("db.type");
+            boolean isInitialized = Boolean.parseBoolean(configMaster.getProperty("db.initialized"));
 
             // 如果数据库类型不是 sqlite 则抛出异常（目前仅支持 sqlite）
             if (!"sqlite".equals(dbType)) {
@@ -34,7 +31,7 @@ public class DBMaster implements DataBase {
             if (!isInitialized) {
                 logger.info("database", "Database is not initialized, initializing now...");
                 SQL.initializeDB(dbFilePath);
-                dbConfig.setConfigProperty(CONFIG_FILE_PATH, "db.initialized", "true"); // 设置已初始化
+                configMaster.setProperty("db.initialized", "true"); // 设置已初始化
             }
 
             // 检查数据库文件是否存在于指定路径
