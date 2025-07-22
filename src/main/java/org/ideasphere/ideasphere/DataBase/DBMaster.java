@@ -43,9 +43,9 @@ public class DBMaster implements DataBase {
             // 加载 SQLite 驱动并建立连接
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
-            logger.info("database","Database connection successful!");
+            logger.info("DataBase","Database connection successful!");
         } catch (Exception e) {
-            logger.error("database","Database connection failed", e);
+            logger.error("DataBase","Database connection failed", e);
         }
     }
 
@@ -54,10 +54,10 @@ public class DBMaster implements DataBase {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                logger.info("database","Database connection closed");
+                logger.info("DataBase","Database connection closed");
             }
         } catch (SQLException e) {
-            logger.error("database","Failed to close database connection", e);
+            logger.error("DataBase","Failed to close database connection", e);
         }
     }
 
@@ -67,9 +67,9 @@ public class DBMaster implements DataBase {
             String sql = "INSERT INTO " + table + " (" + columns + ") VALUES (" + values + ")";
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
-            logger.info("database","Data inserted successfully!");
+            logger.info("DataBase","Data inserted successfully!");
         } catch (SQLException e) {
-            logger.error("database","Failed to insert data", e);
+            logger.error("DataBase","Failed to insert data", e);
         }
     }
 
@@ -79,9 +79,9 @@ public class DBMaster implements DataBase {
             String sql = "UPDATE " + table + " SET " + set + " WHERE " + where;
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
-            logger.info("database","Data updated successfully!");
+            logger.info("DataBase","Data updated successfully!");
         } catch (SQLException e) {
-            logger.error("database","Failed to update data", e);
+            logger.error("DataBase","Failed to update data", e);
         }
     }
 
@@ -91,9 +91,9 @@ public class DBMaster implements DataBase {
             String sql = "DELETE FROM " + table + " WHERE " + where;
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
-            logger.info("database","Data deleted successfully!");
+            logger.info("DataBase","Data deleted successfully!");
         } catch (SQLException e) {
-            logger.error("database","Failed to delete data", e);
+            logger.error("DataBase","Failed to delete data", e);
         }
     }
 
@@ -109,9 +109,9 @@ public class DBMaster implements DataBase {
                 }
                 result.append("\n");
             }
-            logger.info("database","Query result:\n%s", result.toString());
+            logger.info("DataBase","Query result:\n%s", result.toString());
         } catch (SQLException e) {
-            logger.error("database","Failed to execute query", e);
+            logger.error("DataBase","Failed to execute query", e);
         }
     }
 }

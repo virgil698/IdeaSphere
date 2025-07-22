@@ -20,13 +20,13 @@ public class SQL {
             Path dbDirPath = Paths.get(dbFilePath).getParent();
             if (!Files.exists(dbDirPath)) {
                 Files.createDirectories(dbDirPath);
-                logger.info("database","Created database directory: " + dbDirPath);
+                logger.info("DataBase","Created database directory: " + dbDirPath);
             }
 
             // 加载 SQLite 驱动并建立连接
             Class.forName("org.sqlite.JDBC");
             Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
-            logger.info("database","Initializing database...");
+            logger.info("DataBase","Initializing database...");
 
             // 创建 post 表
             String createPostTable = "CREATE TABLE IF NOT EXISTS post (" +
@@ -44,10 +44,10 @@ public class SQL {
                     "name TEXT)";
             stmt.execute(createUserTable);
 
-            logger.info("database","Database initialization complete!");
+            logger.info("DataBase","Database initialization complete!");
             connection.close();
         } catch (Exception e) {
-            logger.error("database","Database initialization failed", e);
+            logger.error("DataBase","Database initialization failed", e);
         }
     }
 }

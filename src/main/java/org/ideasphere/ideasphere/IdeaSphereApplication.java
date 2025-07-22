@@ -21,7 +21,7 @@ public class IdeaSphereApplication {
 
     public static void main(String[] args) {
         // 服务输出测试
-        logger.info("main", "Loading libraries, please wait...");
+        logger.info("Main", "Loading libraries, please wait...");
 
         long startTime = System.currentTimeMillis();
 
@@ -31,12 +31,12 @@ public class IdeaSphereApplication {
 
         // 获取主目录路径
         String mainDirPath = Paths.get(".").toAbsolutePath().normalize().toString();
-        logger.info("main", "Main directory path: " + mainDirPath);
+        logger.info("Main", "Main directory path: " + mainDirPath);
 
         // 验证 config 文件夹是否创建成功
         Path configPath = Paths.get(mainDirPath, "config");
         if (!Files.exists(configPath)) {
-            logger.error("main", "Failed to create config directory: " + configPath);
+            logger.error("Main", "Failed to create config directory: " + configPath);
             return;
         }
 
@@ -50,7 +50,7 @@ public class IdeaSphereApplication {
 
         // 提示服务启动
         double elapsedTime = ((System.currentTimeMillis() - startTime) / 1000.0); // 确保是 double 类型
-        logger.info("main", "Done (%.2f sec)! For help, type \"help\"", elapsedTime);
+        logger.info("Main", "Done (%.2f sec)! For help, type \"help\"", elapsedTime);
 
         // 处理用户输入停止服务
         new Thread(() -> {
@@ -58,13 +58,13 @@ public class IdeaSphereApplication {
                 String input;
                 while ((input = reader.readLine()) != null) {
                     if ("stop".equalsIgnoreCase(input)) {
-                        logger.info("main", "Stopping the server...");
+                        logger.info("Main", "Stopping the server...");
                         db.disconnect(logger); // 断开数据库连接
                         System.exit(0);
                     }
                 }
             } catch (IOException e) {
-                logger.error("main", "Error reading input", e);
+                logger.error("Main", "Error reading input", e);
             }
         }).start();
     }
