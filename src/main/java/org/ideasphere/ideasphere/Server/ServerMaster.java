@@ -1,4 +1,4 @@
 package org.ideasphere.ideasphere.Server;
 
-public interface Server {
+public class ServerMaster {
 }

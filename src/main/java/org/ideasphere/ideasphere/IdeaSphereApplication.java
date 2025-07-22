@@ -2,6 +2,8 @@ package org.ideasphere.ideasphere;
 
 import org.ideasphere.ideasphere.Logger.ILogger;
 import org.ideasphere.ideasphere.Logger.Log4j2Logger;
+import org.ideasphere.ideasphere.Config.ConfigMaster;
+import org.ideasphere.ideasphere.DataBase.DBMaster;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -38,6 +40,14 @@ public class IdeaSphereApplication {
             return;
         }
 
+        // 调用 ConfigMaster 进行配置初始化
+        ConfigMaster config = ConfigMaster.getInstance();
+        config.initialize();
+
+        // 调用 DBMaster 进行数据库连接
+        DBMaster db = new DBMaster();
+        db.connect(logger);
+
         // 提示服务启动
         double elapsedTime = ((System.currentTimeMillis() - startTime) / 1000.0); // 确保是 double 类型
         logger.info("main", "Done (%.2f sec)! For help, type \"help\"", elapsedTime);
@@ -49,6 +59,7 @@ public class IdeaSphereApplication {
                 while ((input = reader.readLine()) != null) {
                     if ("stop".equalsIgnoreCase(input)) {
                         logger.info("main", "Stopping the server...");
+                        db.disconnect(logger); // 断开数据库连接
                         System.exit(0);
                     }
                 }

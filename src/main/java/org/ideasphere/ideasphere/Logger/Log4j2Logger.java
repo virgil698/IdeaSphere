@@ -10,7 +10,6 @@ public class Log4j2Logger implements ILogger {
         this.logger = LogManager.getLogger(clazz);
     }
 
-    // 实现不带方法类型标识的日志方法
     @Override
     public void info(String message) {
         logger.info(message);

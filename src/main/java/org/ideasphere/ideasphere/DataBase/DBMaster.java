@@ -11,8 +11,8 @@ import java.sql.Statement;
 
 public class DBMaster implements DataBase {
     private Connection connection;
-    private final ConfigMaster configMaster = ConfigMaster.getInstance(); // 配置文件读取工具
-    private final ILogger logger = new Log4j2Logger(DBMaster.class); // 日志记录工具
+    private final ConfigMaster configMaster = ConfigMaster.getInstance();
+    private final ILogger logger = new Log4j2Logger(DBMaster.class);
 
     @Override
     public void connect(ILogger logger) {

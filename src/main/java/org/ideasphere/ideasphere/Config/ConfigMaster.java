@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class ConfigMaster implements Config {
     private static ConfigMaster instance;
-    private ConfigReading configReading = ConfigReading.getInstance();
+    private final ConfigReading configReading = ConfigReading.getInstance();
     private static final String CONFIG_PROPERTIES_PATH = "config/config.properties";
     private static final String DATABASE_PROPERTIES_PATH = "config/database.properties";
     private final ILogger logger = new Log4j2Logger(this.getClass()); // 日志记录工具
@@ -117,20 +117,5 @@ public class ConfigMaster implements Config {
             logger.error("Config", "Missing required configuration: db.sqlite.file for db.type=sqlite");
             throw new IllegalStateException("Missing required configuration: db.sqlite.file for db.type=sqlite");
         }
-    }
-
-    public static void main(String[] args) {
-        ConfigMaster configMaster = ConfigMaster.getInstance();
-        configMaster.initialize();
-
-        // 测试读取配置
-        System.out.println("server.port: " + configMaster.getProperty("server.port"));
-        System.out.println("db.type: " + configMaster.getProperty("db.type"));
-        System.out.println("application.timezone: " + configMaster.getProperty("application.timezone"));
-        System.out.println("db.sqlite.file: " + configMaster.getProperty("db.sqlite.file"));
-
-        // 测试修改配置
-        configMaster.setProperty("db.initialized", "true");
-        System.out.println("Modified db.initialized: " + configMaster.getProperty("db.initialized"));
     }
 }
